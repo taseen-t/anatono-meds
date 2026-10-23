@@ -429,7 +429,8 @@
   /* ---------- final CTA + footer ---------- */
   /* ---------- section 10: final call to action ---------- */
   .final2 { position: relative; overflow: hidden; margin: 40px 10px 0; min-height: 700px; border-radius: 48px; display: grid; place-items: center; text-align: center; color: #fff; }
-  .final2 .sky { position: absolute; inset: 0; background: radial-gradient(55% 50% at 24% 30%, rgba(255,169,70,.8), transparent 70%),
+  .final2 .sky { position: absolute; inset: 0; background: url(clouds.jpg) center / cover; }   /* "Sky clouds", StockSnap, CC0 */
+  .final2 .sky::after { content: ""; position: absolute; inset: 0; opacity: .72; background: radial-gradient(55% 50% at 24% 30%, rgba(255,169,70,.8), transparent 70%),
                  radial-gradient(50% 45% at 78% 22%, rgba(255,138,107,.65), transparent 70%), radial-gradient(70% 55% at 50% 95%, rgba(159,227,196,.55), transparent 70%),
                  linear-gradient(180deg, #2c6a5d, #1b453e); }
   .final2 .hills { position: absolute; left: 0; bottom: 0; width: 100%; height: 260px; }
