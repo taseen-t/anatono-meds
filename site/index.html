@@ -346,23 +346,34 @@
   @keyframes bob { 50% { transform: translateY(-10px) rotate(-2deg); } }
 
   /* ---------- medicine check ---------- */
-  .check { padding: 140px 0 40px; display: grid; grid-template-columns: 1.1fr .9fr; gap: 60px; align-items: center; }
-  .shot { border-radius: 28px; min-height: 460px; padding: 34px; display: flex; align-items: flex-end;
-          background: radial-gradient(120% 90% at 30% 20%, #FFE2D8, #CDEFE0 55%, #9FE3C4); position: relative; overflow: hidden; }
-  .shot .strip { position: absolute; left: 50px; top: 46px; width: 300px; height: 150px; border-radius: 16px; background: #fff;
-                 border: 2px solid #1a1a1a; transform: rotate(-6deg); padding: 16px; font: 600 13px Figtree; }
-  .shot .strip .dots { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-top: 16px; }
-  .shot .strip .dots i { height: 30px; border-radius: 15px; background: #F3F3F3; border: 1.5px solid #ccc; }
-  .shot .strip .scan { position: absolute; left: 0; right: 0; height: 3px; background: var(--coral); box-shadow: 0 0 14px var(--coral); animation: scan 2.4s ease-in-out infinite; }
-  @keyframes scan { 0%, 100% { top: 10%; } 50% { top: 88%; } }
-  .result { position: relative; width: 100%; background: var(--deep); color: #fff; border-radius: 20px; padding: 20px; }
-  .result .r { display: flex; gap: 10px; align-items: center; padding: 9px 0; border-bottom: 1px solid rgba(255,255,255,.1); font: 500 15px Figtree; }
-  .result .r:last-child { border: 0; }
-  .result .r svg.lucide { color: var(--mint); flex: none; }
-  .result .r.warn svg.lucide { color: var(--sun); }
-  .check .txt .lead { margin-top: 20px; }
-  .check .txt h2 { font-size: clamp(42px, 5vw, 72px); }
-  .check .txt h2 svg { width: 44px; height: 44px; color: var(--coral); vertical-align: -4px; }
+  /* ---------- section 7: medicine check ---------- */
+  .check2 { padding: 130px 0 60px; display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+  .check2 h2 { margin-top: 14px; font-size: clamp(44px, 5.4vw, 76px); }
+  .check2 .lead { margin-top: 18px; max-width: 500px; }
+  .cl { display: grid; gap: 12px; margin-top: 28px; }
+  .cl > div { display: flex; align-items: center; gap: 12px; font: 600 17px Figtree; }
+  .cl .ic { width: 38px; height: 38px; flex: none; border-radius: 11px; border: 2px solid #1a1a1a; display: grid; place-items: center; color: #1a1a1a; }
+  .cl .ic svg.lucide { width: 19px; height: 19px; }
+  .honest { display: flex; gap: 10px; align-items: flex-start; max-width: 500px; margin: 26px 0 28px; padding: 12px 14px; background: #FFE7A8;
+            border: 2px solid #1a1a1a; border-radius: 8px; box-shadow: 3px 3px 0 #1a1a1a; transform: rotate(-1deg); font: 500 15px/1.45 Figtree; color: #1a1a1a; }
+  .honest svg.lucide { flex: none; margin-top: 2px; }
+  .check2 .btn { display: flex; width: fit-content; }
+  .deck { position: relative; height: 460px; }
+  .vc { position: absolute; left: 50%; top: 50%; width: 360px; height: 330px; margin: -150px 0 0 -180px; padding: 22px; border-radius: 22px; color: #1a1a1a;
+        background: #FFFDF6; border: 2px solid #1a1a1a; box-shadow: 8px 8px 0 #1a1a1a; transition: transform .7s cubic-bezier(.2, .8, .2, 1); }
+  .vc.p0 { z-index: 3; transform: rotate(-2deg); }
+  .vc.p1 { z-index: 2; transform: translate(36px, -26px) rotate(5deg); }
+  .vc.p2 { z-index: 1; transform: translate(-32px, -40px) rotate(-8deg); }
+  .pack { position: relative; height: 104px; border: 2px solid #1a1a1a; border-radius: 14px; background: #fff; overflow: hidden; padding: 38px 16px 0; }
+  .pack::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 26px; background: var(--band); border-bottom: 2px solid #1a1a1a; }
+  .pack b { display: block; font: 800 26px Figtree; letter-spacing: -.5px; } .pack span { font: 600 13px Figtree; opacity: .65; }
+  .fd { display: flex; align-items: center; gap: 9px; margin-top: 16px; font: 600 15px Figtree; }
+  .fd svg.lucide { width: 20px; height: 20px; flex: none; stroke-width: 2.5; }
+  .fd.g svg { color: #1F8A5B; } .fd.a svg { color: #C77C0E; } .fd.r svg { color: #D9532E; }
+  .vstamp { position: absolute; right: 20px; bottom: 26px; transform: rotate(-12deg); border: 3px solid; border-radius: 10px; padding: 6px 14px;
+            font: 800 20px Figtree; letter-spacing: .1em; text-transform: uppercase; }
+  .ok .vstamp { color: #1F8A5B; } .careful .vstamp { color: #C77C0E; } .stop .vstamp { color: #D9532E; }
+  .vc.p0 .vstamp { animation: stamp .45s .35s backwards cubic-bezier(.2, 1.6, .4, 1); }
   .check .txt .btn { margin-top: 26px; }
 
   /* ---------- feature grid ---------- */
@@ -451,7 +462,8 @@
     .easy-grid { grid-template-columns: 1fr; gap: 10px; margin-top: 50px; } .easy-demo { top: 80px; z-index: 2; width: 100%; max-width: 400px; justify-self: center; }
     .ef { min-height: 40vh; } .trust2 { grid-template-columns: 1fr; padding: 32px 24px; }
     .race2 { grid-template-columns: 1fr; } .rc { height: 280px; }
-    .check, .grid, .duo, .faq, .stats { grid-template-columns: 1fr; padding-left: 22px; padding-right: 22px; }
+    .check2 { grid-template-columns: 1fr; gap: 30px; padding: 90px 0 40px; } .deck { height: 420px; } .vc { width: 300px; margin-left: -150px; }
+    .grid, .duo, .faq, .stats { grid-template-columns: 1fr; padding-left: 22px; padding-right: 22px; }
     .feat:nth-child(even) { margin-top: 0; }
     .mascot { right: 2%; top: 560px; width: 90px; } .bubble { display: none; }
     footer .cols { grid-template-columns: 1fr 1fr; }
@@ -633,22 +645,25 @@
   </div>
 </section>
 
-<!-- MEDICINE CHECK -->
-<section class="wrap check" id="check">
-  <div class="shot reveal">
-    <div class="strip">Amoxil 500 mg · Batch AX2391 · Exp 06/2027<div class="dots"><i></i><i></i><i></i><i></i><i></i></div><div class="scan"></div></div>
-    <div class="result">
-      <div class="r"><i data-lucide="badge-check"></i>Amoxil 500 mg (amoxicillin), matches your prescription</div>
-      <div class="r"><i data-lucide="calendar-check"></i>In date until June 2027</div>
-      <div class="r"><i data-lucide="shield-check"></i>Batch, maker and registration number are printed</div>
-      <div class="r warn"><i data-lucide="triangle-alert"></i>You also take Augmentin: same ingredient. Ask your doctor.</div>
+<!-- SECTION 7: medicine check -->
+<section class="wrap check2" id="check">
+  <div class="reveal">
+    <div class="eyebrow">Medicine check</div>
+    <h2>Is it safe <em>to take?</em></h2>
+    <p class="lead">Before you take it, Anatono reads the pack and checks it against your routine. You see the reason for every warning.</p>
+    <div class="cl">
+      <div><i class="ic" style="background:#FFB49C"><i data-lucide="calendar-x"></i></i>Expired, or dated in the future</div>
+      <div><i class="ic" style="background:#FFD08A"><i data-lucide="scan-barcode"></i></i>No batch or registration number</div>
+      <div><i class="ic" style="background:#E4C9FF"><i data-lucide="spell-check"></i></i>Odd printing or spelling, spotted by Gemma 4</div>
+      <div><i class="ic" style="background:#A9EBCB"><i data-lucide="copy"></i></i>The same medicine twice, under two names</div>
     </div>
-  </div>
-  <div class="txt reveal">
-    <h2><i data-lucide="scan-line"></i> Medicine <em>check</em></h2>
-    <p class="lead">Before you take it, Anatono reads the pack. Expired? Missing a batch number? The same medicine under two names? You'll know, with the reason shown.</p>
-    <p class="lead" style="font-size:15px;margin-top:12px">It can't prove a medicine is genuine. It flags the warning signs, so you can ask your pharmacist.</p>
+    <div class="honest"><i data-lucide="info"></i>No app can prove a medicine is genuine from a photo. Anatono shows the warning signs, so you can ask your pharmacist.</div>
     <a class="btn" href="app.html"><i data-lucide="scan-line"></i>Check a medicine</a>
+  </div>
+  <div class="deck">
+    <div class="vc ok p0" data-level="ok"><div class="pack" style="--band:#9FE3C4"><b>Panadol</b><span>500 mg · paracetamol</span></div><div class="fd g"><i data-lucide="circle-check"></i>In date until June 2027</div><div class="fd g"><i data-lucide="circle-check"></i>Batch, maker and reg. no. printed</div><div class="vstamp">OK</div></div>
+    <div class="vc careful p1" data-level="careful"><div class="pack" style="--band:#FFD08A"><b>Brufen</b><span>400 mg · ibuprofen</span></div><div class="fd g"><i data-lucide="circle-check"></i>In date until May 2027</div><div class="fd a"><i data-lucide="triangle-alert"></i>No registration number on the pack</div><div class="vstamp">Careful</div></div>
+    <div class="vc stop p2" data-level="stop"><div class="pack" style="--band:#FFB49C"><b>Amoxil</b><span>500 mg · amoxicillin</span></div><div class="fd r"><i data-lucide="circle-x"></i>Expired in March 2026</div><div class="fd a"><i data-lucide="triangle-alert"></i>Same medicine as your Augmentin</div><div class="vstamp">Stop</div></div>
   </div>
 </section>
 
@@ -881,6 +896,13 @@ let gi = 0, gAuto = setInterval(() => { if (!$("foryou").classList.contains("off
 $("tags").onclick = e => { const b = e.target.closest("button"); if (!b) return; clearInterval(gAuto); showGroup(gi = +b.dataset.i); };
 showGroup(0);
 io.observe($("foryou"));
+
+/* section 7: the deck of checked medicines; the front card changes every 3 s and gets its stamp */
+const vcs = [...document.querySelectorAll(".vc")];
+let vk = 0;
+setInterval(() => { if ($("check").classList.contains("off")) return;
+  vk = (vk + 1) % vcs.length; vcs.forEach((c, i) => c.className = `vc ${c.dataset.level} p${(i - vk + vcs.length) % vcs.length}`); }, 3000);
+io.observe($("check"));
 
 /* languages on a curve */
 $("wk").innerHTML = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map((d, i) =>
