@@ -6,7 +6,10 @@ details, double doses, dose patterns) before it becomes a reminder, and the pers
 """
 import base64
 import calendar
+import copy
+import hashlib
 import io
+import os
 import json
 import re
 import time
@@ -21,6 +24,8 @@ from PIL import Image
 load_dotenv(Path(__file__).with_name(".env"))
 MODEL = "gemma-4-26b-a4b-it"
 MODEL_BACKUP = "gemma-4-31b-it"            # used only if the 26B model fails twice
+# optional second engine, picked with the switch in the app: Claude Haiku through the Anthropic API (ANTHROPIC_API_KEY)
+CLAUDE_MODEL = "claude-haiku-5-5"
 # Gemma 4 on the API refuses audio ("Audio input modality is not enabled"), so Gemini Flash-Lite only writes down
 # what was said (as Taseen's Uplink bot does); Gemma 4 does all the understanding.
 HEARING = "gemini-3.5-flash-lite"
@@ -61,19 +66,57 @@ Reply with JSON only:
 
 # ---------- Gemma ----------
 
-def ask(contents):
-    """One Gemma 4 call that must return JSON. The API sometimes answers 500 or loose JSON: try the 26B model twice,
-    then the 31B one (both Gemma 4)."""
+_answers = {}   # ponytail: in memory per server process (lost on restart / a new Vercel instance); the app keeps its own copy
+
+
+def ask(contents, engine="gemma"):
+    """One model call that must return JSON. The same question (same text, same photo, same engine) is answered once
+    and then served from memory, so a prescription that was already read isn't read again."""
+    key = hashlib.sha256(engine.encode())
+    for c in contents:
+        key.update(c.tobytes() if isinstance(c, Image.Image) else str(c).encode())
+    key = key.hexdigest()
+    if key not in _answers:
+        _answers[key] = (ask_claude if engine == "claude" else ask_gemma)(contents)
+    return copy.deepcopy(_answers[key])
+
+
+def as_json(text):
+    return json.loads(re.search(r"\{.*\}", text or "", re.S).group(0))
+
+
+def ask_gemma(contents):
+    """Gemma 4 through the Gemini API. It sometimes answers 500 or loose JSON: try the 26B model twice, then the 31B
+    one (both Gemma 4)."""
     client = genai.Client()                       # keep a reference: a dropped client closes its connection
     tries = [MODEL, MODEL, MODEL_BACKUP]
     for attempt, model in enumerate(tries):
         try:
-            text = client.models.generate_content(model=model, contents=contents).text or ""
-            return json.loads(re.search(r"\{.*\}", text, re.S).group(0))
+            return as_json(client.models.generate_content(model=model, contents=contents).text)
         except Exception:  # noqa: BLE001
             if attempt == len(tries) - 1:
                 raise
             time.sleep(2 * (attempt + 1))
+
+
+def ask_claude(contents):
+    """Claude Haiku through the Anthropic API: photos go as JPEG blocks, text as text."""
+    if not os.environ.get("ANTHROPIC_API_KEY"):
+        raise ValueError("Claude isn't set up on this server: add ANTHROPIC_API_KEY to .env, or switch back to Gemma 4.")
+    import anthropic
+    blocks = []
+    for c in contents:
+        if isinstance(c, Image.Image):
+            buf = io.BytesIO()
+            c.save(buf, "JPEG", quality=88)
+            blocks.append({"type": "image", "source": {"type": "base64", "media_type": "image/jpeg",
+                                                       "data": base64.standard_b64encode(buf.getvalue()).decode()}})
+        else:
+            blocks.append({"type": "text", "text": str(c)})
+    r = anthropic.Anthropic().messages.create(model=CLAUDE_MODEL, max_tokens=8000, messages=[{"role": "user", "content": blocks}])
+    if r.stop_reason == "refusal":
+        raise ValueError("Claude wouldn't read this one. Try Gemma 4.")
+    return as_json("".join(b.text for b in r.content if b.type == "text"))
 
 
 def image_from(data_url_or_bytes):
@@ -94,14 +137,14 @@ def pieces(img):
     return [img.crop((0, 0, w, int(h * .58))), img.crop((0, int(h * .42), w, h))]
 
 
-def read_photo(image, routine=(), today=None, piece=None):
+def read_photo(image, routine=(), today=None, piece=None, engine="gemma"):
     """Gemma reads the medicine or prescription; code checks it against today's date and the person's routine.
     piece=None reads every piece at once; piece=0, 1 reads just that one (the app shows part 1 and offers the rest)."""
     img = image if isinstance(image, Image.Image) else image_from(image)
     cut = pieces(img)
     todo = cut if piece is None else [cut[min(int(piece), len(cut) - 1)]]
     with ThreadPoolExecutor() as pool:
-        parts = list(pool.map(lambda p: ask([READ_PROMPT, p]), todo))
+        parts = list(pool.map(lambda p: ask([READ_PROMPT, p], engine), todo))
     meds, seen = [], set()
     for part in parts:                            # a medicine in the overlap is read twice: keep it once
         for m in part.get("medicines") or []:
@@ -111,13 +154,18 @@ def read_photo(image, routine=(), today=None, piece=None):
                 meds.append(m)
     d = {"kind": next((p["kind"] for p in parts if p.get("kind") == "prescription"), parts[0].get("kind")),
          "medicines": meds, "warning_signs": sorted({w for p in parts for w in p.get("warning_signs") or []})}
-    return {**d, "pieces": len(cut), "checks": [check_medicine(m, d, routine, today) for m in meds]}
+    return checked({**d, "pieces": len(cut)}, routine, today)
 
 
-def explain(medicines):
+def checked(d, routine=(), today=None):
+    """The code checks on what was read. Run again on every cached read, because they depend on today and the routine."""
+    return {**d, "checks": [check_medicine(m, d, routine, today) for m in d.get("medicines") or []]}
+
+
+def explain(medicines, engine="gemma"):
     """What each medicine is usually for, in English and Urdu (a second, quick call after the photo is read)."""
     names = "; ".join(" ".join(x for x in (m.get("name"), m.get("salt")) if x) for m in medicines)
-    got = ask([EXPLAIN_PROMPT.format(meds=names)]).get("medicines") or []
+    got = ask([EXPLAIN_PROMPT.format(meds=names)], engine).get("medicines") or []
     return [got[i] if i < len(got) else {} for i in range(len(medicines))]
 
 
@@ -130,14 +178,14 @@ def hear(audio, mime="audio/webm"):
     return (r.text or "").strip()
 
 
-def understand_dose(medicine, text=None, audio=None, mime="audio/webm"):
+def understand_dose(medicine, text=None, audio=None, mime="audio/webm", engine="gemma"):
     """Gemma understands how the person takes it, typed or spoken; code checks the routine."""
     if audio is not None:
         text = hear(audio, mime)
         if not text:
             raise ValueError("I couldn't hear any words. Try again a little closer to the phone.")
     med = " ".join(x for x in (medicine.get("name"), medicine.get("strength")) if x) or "this medicine"
-    d = ask([DOSE_PROMPT.format(med=med, said=f"They said or typed: {text!r}")])
+    d = ask([DOSE_PROMPT.format(med=med, said=f"They said or typed: {text!r}")], engine)
     return {"dose": d, "check": check_dose(d), "heard": text}
 
 
@@ -279,4 +327,12 @@ if __name__ == "__main__":
                 "times": ["08:00", "21:00"], "days": 5}], today)
     assert cal.count("BEGIN:VEVENT") == 2 and "COUNT=5" in cal
     assert len(pieces(Image.new("RGB", (800, 1600)))) == 2 and len(pieces(Image.new("RGB", (1600, 900)))) == 1
+    calls = []                                   # the same question is asked once, and a cached answer can't be changed
+    ask_gemma = lambda c: calls.append(c) or {"medicines": [{"name": "Panadol"}]}  # noqa: E731
+    pic = Image.new("RGB", (40, 40))
+    ask([READ_PROMPT, pic])["medicines"].clear()
+    assert ask([READ_PROMPT, pic])["medicines"] and len(calls) == 1
+    ask([READ_PROMPT, Image.new("RGB", (40, 40), "red")])
+    assert len(calls) == 2
+    assert checked({"medicines": [{"name": "Calpol", "salt": "paracetamol"}]}, [{"name": "Panadol", "salt": "Paracetamol"}], today)["checks"][0]["flags"]
     print("self-check ok")

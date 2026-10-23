@@ -1,6 +1,7 @@
 """Anatono server: the website + app in site/, and three API routes. Run: python3 server.py  (http://localhost:8600)
-The Gemini API key stays here on the server; the browser never sees it."""
+The Gemini (and optional Anthropic) API key stays here on the server; the browser never sees it."""
 import json
+import os
 from pathlib import Path
 
 import uvicorn
@@ -14,6 +15,11 @@ import anatono as A
 MAX_BODY = 12 * 2**20          # a phone photo as base64
 
 
+def engine(b):
+    """Which model reads: Gemma 4 (default) or Claude Haiku, from the switch in the app."""
+    return "claude" if b.get("engine") == "claude" else "gemma"
+
+
 async def body(request):
     raw = await request.body()
     if len(raw) > MAX_BODY:
@@ -22,12 +28,15 @@ async def body(request):
 
 
 async def read(request):
-    """Photo of a medicine or prescription -> what Gemma read + code checks."""
+    """Photo of a medicine or prescription -> what Gemma read + code checks.
+    A photo the app has read before comes back as "cached" (what was read): only the code checks run again."""
     try:
         b = await body(request)
+        if isinstance(b.get("cached"), dict) and isinstance(b["cached"].get("medicines"), list):
+            return JSONResponse(A.checked(b["cached"], b.get("routine") or []))
         if not str(b.get("image", "")).startswith("data:image/"):
             return JSONResponse({"error": "Send a photo (data:image/...)."}, 400)
-        return JSONResponse(A.read_photo(b["image"], b.get("routine") or [], piece=b.get("piece")))
+        return JSONResponse(A.read_photo(b["image"], b.get("routine") or [], piece=b.get("piece"), engine=engine(b)))
     except Exception as e:  # noqa: BLE001 - tell the app what went wrong
         return JSONResponse({"error": str(e)}, 500)
 
@@ -35,7 +44,8 @@ async def read(request):
 async def explain(request):
     """The medicines Gemma read -> what each is usually for, in English and Urdu."""
     try:
-        return JSONResponse({"medicines": A.explain((await body(request)).get("medicines") or [])})
+        b = await body(request)
+        return JSONResponse({"medicines": A.explain(b.get("medicines") or [], engine(b))})
     except Exception as e:  # noqa: BLE001
         return JSONResponse({"error": str(e)}, 500)
 
@@ -49,12 +59,17 @@ async def dose(request):
             if not str(audio).startswith("data:audio/"):
                 return JSONResponse({"error": "Send the recording as data:audio/..."}, 400)
             mime = str(audio)[5:].split(";")[0]
-            return JSONResponse(A.understand_dose(b.get("medicine") or {}, audio=audio, mime=mime))
+            return JSONResponse(A.understand_dose(b.get("medicine") or {}, audio=audio, mime=mime, engine=engine(b)))
         if not text:
             return JSONResponse({"error": "Type or say how you take it."}, 400)
-        return JSONResponse(A.understand_dose(b.get("medicine") or {}, text))
+        return JSONResponse(A.understand_dose(b.get("medicine") or {}, text, engine=engine(b)))
     except Exception as e:  # noqa: BLE001
         return JSONResponse({"error": str(e)}, 500)
+
+
+async def engines(request):
+    """Which engines this server can use, so the app's switch knows whether Claude is set up."""
+    return JSONResponse({"gemma": bool(os.environ.get("GEMINI_API_KEY")), "claude": bool(os.environ.get("ANTHROPIC_API_KEY"))})
 
 
 async def calendar(request):
@@ -66,7 +81,7 @@ async def calendar(request):
 
 api_routes = [Route("/api/read", read, methods=["POST"]), Route("/api/explain", explain, methods=["POST"]),
               Route("/api/dose", dose, methods=["POST"]),
-              Route("/api/calendar", calendar, methods=["POST"])]
+              Route("/api/calendar", calendar, methods=["POST"]), Route("/api/engines", engines)]
 app = Starlette(routes=api_routes + [Mount("/", StaticFiles(directory=Path(__file__).parent / "site", html=True, check_dir=False))])
 
 if __name__ == "__main__":

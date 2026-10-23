@@ -1,0 +1,31 @@
+WEBVTT
+
+00:00.262 --> 00:05.692
+This is Anatono. It helps elders and their families never miss a dose.
+
+00:06.848 --> 00:12.518
+Snap a medicine or a prescription, and Gemma 4 reads it, through the Gemini API.
+
+00:13.429 --> 00:21.419
+Then plain code, not the model, checks every medicine: the dates, missing details, the same ingredient twice.
+
+00:22.063 --> 00:24.693
+Type how you take it, even in Roman Urdu.
+
+00:25.483 --> 00:29.473
+Gemma 4 understands it, and code sets the exact times.
+
+00:30.405 --> 00:34.475
+Confirm, and calendar alarms ring even when the app is closed.
+
+00:36.335 --> 00:39.685
+An expired pack? Code says: don't take it.
+
+00:43.020 --> 00:53.170
+Gemma 4 does all the reading and understanding. Gemini Flash-Lite only turns speech into text. It's also an agent skill, and open source under MIT.
+
+00:54.424 --> 00:57.014
+It's live at anatono dot site.
+
+01:00.029 --> 01:03.779
+Gemma 4 reads. Code checks. You confirm.
