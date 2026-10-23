@@ -433,16 +433,26 @@
   .stat a { font-size: 12px; opacity: .6; text-decoration: underline; }
 
   /* ---------- FAQ ---------- */
-  .faq { padding: 120px 0 60px; display: grid; grid-template-columns: .8fr 1.2fr; gap: 50px; }
-  details { border-bottom: 1.5px solid color-mix(in srgb, var(--ink) 16%, transparent); padding: 22px 0; }
-  summary { cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center; font: 600 19px Figtree; }
-  summary::-webkit-details-marker { display: none; }
-  summary svg.lucide { transition: transform .3s; flex: none; }
-  details[open] summary svg.lucide { transform: rotate(45deg); }
-  :root { interpolate-size: allow-keywords; }
-  details::details-content { block-size: 0; overflow: hidden; transition: block-size .35s ease, content-visibility .35s allow-discrete; }
-  details[open]::details-content { block-size: auto; }
-  details p { margin-top: 14px; font: 500 16px/1.5 Figtree; color: var(--sub); max-width: 640px; }
+  /* ---------- section 9: FAQ ---------- */
+  .faq2 { padding: 120px 0 60px; }
+  .faq2 h2 { margin-top: 14px; font-size: clamp(44px, 5.6vw, 80px); }
+  .faq-box { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; max-width: 880px; margin: 44px auto 0; padding: 16px; border-radius: 28px; background: var(--sand); }
+  .faq-box h4 { margin: 0 12px 12px; font: 400 21px "EB Garamond", serif; }
+  .faq-q { background: var(--ink); color: #EAF6EF; border-radius: 18px; padding: 20px 10px 10px; max-height: 470px; overflow: auto; }
+  .qi { display: block; width: 100%; text-align: left; background: none; border: 0; color: inherit; cursor: pointer;
+        font: 500 15px/1.35 Figtree; padding: 13px 12px; border-radius: 10px; transition: background .2s; }
+  @media (hover: hover) { .qi:hover { background: rgba(255,255,255,.06); } }
+  .qi.on { background: rgba(255,255,255,.15); }
+  .qi p { display: none; }
+  .faq-a { padding: 20px 12px; }
+  .chat { display: flex; flex-direction: column; gap: 12px; }
+  .chat .me { align-self: flex-end; max-width: 82%; text-align: right; font: 500 14px/1.4 Figtree; color: var(--sub); }
+  .chat .bot { align-self: flex-start; max-width: 94%; padding: 13px 15px; border-radius: 16px 16px 16px 4px; background: #fff; color: #1a1a1a;
+               border: 2px solid #1a1a1a; box-shadow: 3px 3px 0 #1a1a1a; font: 500 15px/1.45 Figtree; animation: pop .35s; }
+  .chat .ava { width: 34px; height: 44px; }
+  .dots3 i { display: inline-block; width: 7px; height: 7px; margin-right: 4px; border-radius: 50%; background: var(--ink); animation: dot3 1s infinite; }
+  .dots3 i:nth-child(2) { animation-delay: .15s; } .dots3 i:nth-child(3) { animation-delay: .3s; }
+  @keyframes dot3 { 0%, 80%, 100% { opacity: .25; transform: none; } 40% { opacity: 1; transform: translateY(-3px); } }
 
   /* ---------- final CTA + footer ---------- */
   .final { margin-top: 40px; border-radius: 40px; min-height: 640px; position: relative; overflow: hidden; display: grid; place-items: center; text-align: center;
@@ -475,7 +485,9 @@
     .check2 { grid-template-columns: 1fr; gap: 30px; padding: 90px 0 40px; } .deck { height: 420px; } .vc { width: 300px; margin-left: -150px; }
     .collage { height: auto; display: grid; gap: 18px; } .rv { position: relative; inset: auto; width: auto; } .rv .sample { bottom: auto; top: 14px; }
     .reviews { margin: 30px 6px 0; border-radius: 32px; padding: 80px 0; }
-    .grid, .duo, .faq, .stats { grid-template-columns: 1fr; padding-left: 22px; padding-right: 22px; }
+    .faq-box { grid-template-columns: 1fr; } .faq-a { display: none; } .faq-q { max-height: none; }
+    .qi.on p { display: block; margin-top: 10px; color: #BFD8CF; font-size: 14px; }
+    .grid, .duo, .stats { grid-template-columns: 1fr; padding-left: 22px; padding-right: 22px; }
     .feat:nth-child(even) { margin-top: 0; }
     .mascot { right: 2%; top: 560px; width: 90px; } .bubble { display: none; }
     footer .cols { grid-template-columns: 1fr 1fr; }
@@ -694,10 +706,13 @@
   </div>
 </section>
 
-<!-- FAQ -->
-<section class="wrap faq" id="faq">
-  <div><div class="eyebrow">FAQs</div><h2 style="margin-top:14px">Good <em>questions.</em></h2></div>
-  <div id="faqs"></div>
+<!-- SECTION 9: FAQ (after Wispr's "Good questions": a question list, and the answer as a chat reply). On phones it's an accordion -->
+<section class="wrap faq2" id="faq">
+  <div class="center reveal"><div class="eyebrow">FAQs</div><h2>Good <em>questions.</em></h2></div>
+  <div class="faq-box reveal">
+    <div class="faq-q"><h4>Questions</h4><div id="faqList"></div></div>
+    <div class="faq-a"><h4>Answer</h4><div class="chat" id="faqChat"></div></div>
+  </div>
 </section>
 
 <!-- FINAL CTA -->
@@ -913,8 +928,21 @@ const faqs = [["Is Anatono free?", "Yes. Anatono is free and open source (MIT li
   ["Can it tell if a medicine is fake?", "No app can prove that from a photo. Anatono flags warning signs: expired, missing batch or registration number, spelling mistakes on the pack. If anything looks wrong, ask your pharmacist."],
   ["Will reminders ring when the app is closed?", "Yes. Add the reminders to your phone's calendar with one tap, and the alarms ring like any other calendar alarm."],
   ["Does it replace my doctor?", "No. Anatono only helps you remember what your doctor prescribed. It never changes a dose."],
+  ["Which phones does it work on?", "Any phone with a browser, Android or iPhone. Add it to your home screen and it opens like an app."],
+  ["Does it need the internet?", "Reading a photo and understanding what you said needs the internet. Reminders you add to your calendar ring without it."],
   ["What happens to my photos?", "The photo is sent to Gemma 4 through the Gemini API to be read, and Anatono keeps your routine on your own phone."]];
-$("faqs").innerHTML = faqs.map(([q, a], i) => `<details name="faq"${i ? "" : " open"}><summary>${q}<i data-lucide="plus"></i></summary><p>${a}</p></details>`).join("");
+$("faqList").innerHTML = faqs.map(([q, a], i) => `<button class="qi${i ? "" : " on"}" data-i="${i}"><span>${q}</span><p>${a}</p></button>`).join("");
+// pick a question: it shows as your message, Anatono "types" for a moment, then answers
+let faqT;
+function faqShow(i) {
+  document.querySelectorAll(".qi").forEach((b, k) => b.classList.toggle("on", k === i));
+  const [q, a] = faqs[i];
+  $("faqChat").innerHTML = `<div class="me">${q}</div><div class="bot"><span class="dots3"><i></i><i></i><i></i></span></div>
+    <svg class="ava" viewBox="0 0 140 180" aria-hidden="true"><use href="#anatono"/></svg>`;
+  clearTimeout(faqT); faqT = setTimeout(() => { $("faqChat").querySelector(".bot").textContent = a; }, 650);
+}
+$("faqList").onclick = e => { const b = e.target.closest(".qi"); if (b) faqShow(+b.dataset.i); };
+faqShow(0);
 
 lucide.createIcons();
 
