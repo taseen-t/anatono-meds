@@ -60,6 +60,7 @@
   .for { margin-top: 10px; font-size: 15px; } .for .ur { display: block; direction: rtl; font-size: 16px; margin-top: 4px; color: var(--sub); }
   label.lbl { display: block; font: 700 14px Figtree; margin: 16px 0 6px; }
   .say { display: flex; gap: 8px; }
+  input.field { flex: 1; min-width: 0; border: 2px solid var(--ink); border-radius: 14px; padding: 12px; font: 600 16px Figtree; color: var(--ink); background: var(--bg); }
   textarea { flex: 1; min-height: 64px; resize: vertical; border: 2px solid var(--ink); border-radius: 14px; padding: 12px; font: 500 16px Figtree; color: var(--ink); background: var(--bg); }
   .mic { width: 58px; flex: none; border-radius: 14px; border: 2px solid var(--ink); background: var(--mint); display: grid; place-items: center; cursor: pointer; }
   .mic.rec { background: var(--coral); animation: rec 1s ease-in-out infinite; }
@@ -79,8 +80,8 @@
   .empty { text-align: center; padding: 10px 0 4px; color: var(--sub); }
   .stack { display: grid; gap: 10px; margin-top: 14px; }
   .toast { position: fixed; left: 50%; bottom: 24px; transform: translate(-50%, 140%); background: var(--ink); color: #fff; padding: 13px 18px; border-radius: 14px;
-           font: 600 15px Figtree; transition: transform .3s; z-index: 9; max-width: calc(100% - 32px); display: flex; gap: 10px; align-items: center; }
-  .toast.on { transform: translate(-50%, 0); }
+           font: 600 15px Figtree; transition: transform .3s, opacity .3s; opacity: 0; pointer-events: none; z-index: 9; max-width: calc(100% - 32px); display: flex; gap: 10px; align-items: center; }
+  .toast.on { transform: translate(-50%, 0); opacity: 1; }
   .err { color: var(--stop); font-weight: 600; margin-top: 12px; }
   footer { text-align: center; font-size: 12px; color: var(--sub); margin-top: 26px; line-height: 1.5; }
 </style></head>
@@ -174,10 +175,15 @@ async function readPhoto(dataUrl) {
 }
 $("cam").onchange = $("gal").onchange = async e => { const f = e.target.files[0]; e.target.value = ""; if (f) readPhoto(await shrink(f)); };
 $("sample").onclick = async () => { const b = await (await fetch("samples/prescription.jpg")).blob(); readPhoto(await shrink(b)); };
+/* no photo: our own name box (not the browser's pop-up) */
 $("typeName").onclick = () => {
-  const name = prompt("Medicine name and strength, e.g. Panadol 500 mg"); if (!name) return;
-  found = [{ name, strength: "", salt: "" }];
-  $("out").innerHTML = medCard(found[0], { level: "ok", flags: [], good: [], typed: true }, 0); icons();
+  $("out").innerHTML = `<form class="card med" id="nameForm"><label class="lbl" for="typedName" style="margin-top:0">Medicine name and strength</label>
+    <div class="say"><input class="field" id="typedName" placeholder="e.g. Panadol 500 mg" autocomplete="off" required>
+      <button class="btn" type="submit"><i data-lucide="arrow-right"></i>Next</button></div></form>`;
+  icons(); $("typedName").focus();
+  $("nameForm").onsubmit = e => { e.preventDefault(); const name = $("typedName").value.trim(); if (!name) return;
+    found = [{ name, strength: "", salt: "" }];
+    $("out").innerHTML = medCard(found[0], { level: "ok", flags: [], good: [], typed: true }, 0); icons(); $("say0").focus(); };
 };
 
 /* ---------- 2. what Gemma read, the code checks, and the dose (typed or spoken) ---------- */
