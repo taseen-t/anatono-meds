@@ -46,6 +46,12 @@
   .logo { display: flex; align-items: center; gap: 8px; font: 500 25px "EB Garamond", serif; letter-spacing: -.3px; }
   .logo svg { width: 24px; height: 32px; }
   .logo svg.wm { width: auto; height: 27px; }
+  /* the big footer logo's pulse: a light runs along the line like a heart monitor, and the spike beats twice as it passes */
+  footer .glint { animation: glint 1.8s linear infinite; }
+  footer .beat { transform-origin: 264px 84px; animation: beat 1.8s ease-in-out infinite; }
+  @keyframes glint { 0% { stroke-dashoffset: 10; } 45%, 100% { stroke-dashoffset: -100; } }
+  @keyframes beat { 0%, 12%, 32%, 100% { transform: scaleY(1); } 17% { transform: scaleY(1.14); } 22% { transform: scaleY(.92); } 27% { transform: scaleY(1.07); } }
+  @media (prefers-reduced-motion: reduce) { footer .glint, footer .beat { animation: none; } footer .glint { display: none; } }
   footer svg.word { display: block; width: min(100%, 1100px); height: auto; margin: 60px auto 0; }
   .seg { display: flex; background: color-mix(in srgb, var(--ink) 8%, transparent); border-radius: 10px; padding: 3px; }
   .seg a { font: 600 13px Figtree; padding: 7px 12px; border-radius: 8px; }
@@ -225,13 +231,13 @@
   .strip2 .bl { display: grid; grid-template-columns: repeat(3, 42px); gap: 10px 22px; margin-top: 10px; }
   .strip2 .bl i { height: 24px; border-radius: 12px; background: #fff; border: 2px solid #1a1a1a; }
   .strip2 em { position: absolute; right: 12px; bottom: 8px; font: 700 9px Figtree; font-style: normal; letter-spacing: .04em; }
-  .note { position: absolute; display: inline-flex; align-items: center; gap: 5px; padding: 6px 11px; background: #FFE7A8; border: 2px solid #1a1a1a; border-radius: 6px;
+  .note { position: absolute; z-index: 2; display: inline-flex; align-items: center; gap: 5px; padding: 6px 11px; background: #FFE7A8; border: 2px solid #1a1a1a; border-radius: 6px;
           font: italic 500 18px "EB Garamond", serif; color: #1a1a1a; box-shadow: 3px 3px 0 #1a1a1a; }
   .note svg.lucide { width: 15px; height: 15px; color: #1F8A5B; stroke-width: 3; }
-  .n1 { right: 16px; top: 22px; transform: rotate(4deg); } .n2 { left: 26px; top: 300px; transform: rotate(-3deg); background: #CFF3E2; }
+  .n1 { right: 40px; top: 12px; transform: rotate(4deg); } .n2 { left: 26px; top: 300px; transform: rotate(-3deg); background: #CFF3E2; }
   .n3 { right: 30px; top: 342px; transform: rotate(2.5deg); background: #FFD8CC; }
   .st.on .note { animation: pop .45s backwards; } .st.on .n2 { animation-delay: .3s; } .st.on .n3 { animation-delay: .6s; }
-  .arrows { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+  .arrows { position: absolute; z-index: 1; inset: 0; width: 100%; height: 100%; pointer-events: none; }
   .peek { position: absolute; right: 14px; bottom: -34px; width: 86px; transform: rotate(-8deg); }
   .tag { position: absolute; left: 22px; bottom: 22px; display: inline-flex; align-items: center; gap: 7px; padding: 8px 13px; border-radius: 20px;
          background: #fff; border: 2px solid #1a1a1a; font: 700 13px Figtree; color: #1a1a1a; }
@@ -311,14 +317,32 @@
                 gap: 5px; text-align: center; font: 600 12px/1.2 Figtree; box-shadow: inset 0 0 0 5px var(--sand), inset 0 0 0 6.5px color-mix(in srgb, var(--ink) 35%, transparent); }
 
   /* ---------- made for you ---------- */
-  .foryou { margin-top: 100px; padding: 80px 64px; display: grid; grid-template-columns: 1.2fr .8fr; gap: 40px; position: relative; overflow: hidden; }
-  .foryou .tags { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 34px; max-width: 560px; }
-  .tagp { padding: 10px 16px; border-radius: 30px; border: 1.5px solid rgba(255,255,255,.25); font: 600 15px Figtree; cursor: pointer; transition: .2s; }
-  .tagp.on, .tagp:hover { background: var(--mint); color: var(--ink); border-color: var(--mint); }
-  .foryou .panel { align-self: end; }
-  .foryou .panel h3 { margin-top: 18px; }
-  .foryou .panel p { margin-top: 14px; color: #BFD8CF; font: 500 17px/1.4 Figtree; }
-  .foryou .sign { position: absolute; right: 70px; top: 50px; width: 190px; animation: bob 3.2s ease-in-out infinite; }
+  /* ---------- section 6: made for you ---------- */
+  .foryou2 { margin: 40px 10px 0; padding: 100px 6% 100px; border-radius: 48px; background: var(--ink); color: #EAF6EF;
+             display: grid; grid-template-columns: 1.1fr .9fr; gap: 70px; align-items: center; }
+  .foryou2 h2 { margin-top: 14px; font-size: clamp(44px, 5.6vw, 80px); }
+  .foryou2 .lead { color: #BFD8CF; margin-top: 16px; max-width: 460px; }
+  .tags2 { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 34px; max-width: 580px; }
+  .tags2 button { display: inline-flex; align-items: center; gap: 8px; padding: 10px 16px; border-radius: 30px; cursor: pointer; font: 600 15px Figtree;
+                  color: #EAF6EF; background: transparent; border: 1.5px solid rgba(255,255,255,.28); transition: background .2s, color .2s, border-color .2s; }
+  .tags2 button svg.lucide { width: 16px; height: 16px; }
+  .tags2 button:hover { border-color: #EAF6EF; }
+  .tags2 button.on { background: #FFFDF6; color: #1a1a1a; border-color: #1a1a1a; box-shadow: 3px 3px 0 #1a1a1a; }
+  .fy-card { position: relative; overflow: hidden; min-height: 420px; padding: 30px 30px 34px; border-radius: 22px; color: #1a1a1a;
+             background: #FFFDF6; border: 2px solid #1a1a1a; box-shadow: 8px 8px 0 #000; transform: rotate(1.2deg); }
+  .fy-top { display: flex; align-items: center; gap: 10px; }
+  .fy-ic { width: 46px; height: 46px; border-radius: 14px; border: 2px solid #1a1a1a; display: grid; place-items: center; background: var(--mint); }
+  .fy-ic svg.lucide { width: 24px; height: 24px; }
+  .fy-chip { font: 700 12px Figtree; letter-spacing: .1em; text-transform: uppercase; opacity: .6; }
+  .fy-card h3 { margin-top: 20px; font-size: 40px; color: var(--ink); }
+  .fy-card p { margin-top: 12px; font: 500 17px/1.45 Figtree; color: var(--sub); max-width: 400px; }
+  .fy-note { display: inline-flex; align-items: center; gap: 8px; margin: 22px 0 26px; padding: 8px 12px; background: #FFE7A8; border: 2px solid #1a1a1a;
+             border-radius: 6px; box-shadow: 3px 3px 0 #1a1a1a; transform: rotate(-1.5deg); font: italic 500 18px "EB Garamond", serif; }
+  .fy-note b { font: 700 12px Figtree; font-style: normal; background: var(--ink); color: #fff; border-radius: 7px; padding: 4px 7px; }
+  .fy-card .btn { display: flex; width: fit-content; }
+  .fy-card .peek { right: 22px; bottom: -40px; width: 96px; }
+  .fy-swap { animation: fyIn .45s cubic-bezier(.2, .8, .2, 1); }
+  @keyframes fyIn { from { opacity: 0; transform: translateY(10px); } }
   @keyframes bob { 50% { transform: translateY(-10px) rotate(-2deg); } }
 
   /* ---------- medicine check ---------- */
@@ -418,7 +442,8 @@
 
   .reveal { opacity: 0; transform: translateY(40px); }
   @media (max-width: 900px) {
-    .links, .seg, .foryou .sign { display: none; }
+    .links, .seg { display: none; }
+    .foryou2 { grid-template-columns: 1fr; gap: 40px; padding: 70px 22px; margin: 30px 6px 0; border-radius: 32px; } .fy-card { transform: none; }
     .stage { height: 560px; } .phone2 { transform: scale(.84); } .tile { width: 72px; height: 72px; border-radius: 19px; } .tile svg.lucide { width: 32px; height: 32px; }
     .apps { margin: 10px 6px 0; border-radius: 32px; padding-top: 80px; }
     .how { height: 240vh; } .how-pin { grid-template-columns: 1fr; gap: 18px; padding: 70px 20px 20px; align-content: center; } .how-nav { display: none; }
@@ -426,7 +451,7 @@
     .easy-grid { grid-template-columns: 1fr; gap: 10px; margin-top: 50px; } .easy-demo { top: 80px; z-index: 2; width: 100%; max-width: 400px; justify-self: center; }
     .ef { min-height: 40vh; } .trust2 { grid-template-columns: 1fr; padding: 32px 24px; }
     .race2 { grid-template-columns: 1fr; } .rc { height: 280px; }
-    .foryou, .check, .grid, .duo, .faq, .stats { grid-template-columns: 1fr; padding-left: 22px; padding-right: 22px; }
+    .check, .grid, .duo, .faq, .stats { grid-template-columns: 1fr; padding-left: 22px; padding-right: 22px; }
     .feat:nth-child(even) { margin-top: 0; }
     .mascot { right: 2%; top: 560px; width: 90px; } .bubble { display: none; }
     footer .cols { grid-template-columns: 1fr 1fr; }
@@ -537,7 +562,7 @@
         <div class="vf"><i></i><i></i><i></i><i></i></div>
         <div class="strip2"><b>Amoxil</b><span>500 mg · Amoxicillin</span><div class="bl"><i></i><i></i><i></i><i></i><i></i><i></i></div><em>EXP 03/2027 · B2231</em></div>
         <span class="note n1">Amoxil, 500 mg</span><span class="note n2">expires 03/2027 <i data-lucide="check"></i></span><span class="note n3">batch B2231</span>
-        <svg class="arrows" viewBox="0 0 360 500" aria-hidden="true"><path fill="none" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M262 58 C 250 80, 200 82, 150 92 M150 92 l9 -7 M150 92 l10 4"/><path fill="none" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M120 300 C 112 284, 140 268, 186 252 M186 252 l-11 0 M186 252 l-6 9"/></svg>
+        <svg class="arrows" viewBox="0 0 360 500" aria-hidden="true"><path fill="none" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M238 62 C 232 82, 196 90, 152 99 M152 99 l9.5 3.2 M152 99 l7.5 -6.6"/><path fill="none" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M120 300 C 112 284, 140 268, 186 252 M186 252 l-11 0 M186 252 l-6 9"/></svg>
         <svg class="peek" viewBox="0 0 140 180" aria-hidden="true"><use href="#anatono"/></svg>
         <div class="tag"><i data-lucide="scan-line"></i>Gemma 4 is reading it</div>
       </div>
@@ -590,16 +615,22 @@
     <div class="seals"><span><i data-lucide="smartphone"></i>On your<br>phone</span><span><i data-lucide="user-x"></i>No<br>account</span><span><i data-lucide="github"></i>Open<br>source</span></div></div>
 </section>
 
-<!-- MADE FOR YOU -->
-<section class="wrap dark foryou reveal" id="foryou">
-  <div>
-    <h2>Anatono is <em>made for you</em></h2>
-    <div class="tags" id="tags"></div>
+<!-- SECTION 6: made for you (after Wispr's "Flow is made for you") -->
+<section class="foryou2" id="foryou">
+  <div class="fy-left reveal">
+    <div class="eyebrow">Who it's for</div>
+    <h2>Anatono is<br><em>made for you</em></h2>
+    <p class="lead">Whoever takes the medicine, and whoever looks after them.</p>
+    <div class="tags2" id="tags"></div>
   </div>
-  <div class="panel"><span class="chip" id="tagChip">For elders</span><h3 id="tagTitle">Anatono for elders</h3>
-    <p id="tagText">Big text, one button, and Urdu. Anatono reads the strip so Ammi and Abbu don't have to, and gently reminds them, every time.</p>
-    <a class="btn light" style="margin-top:22px" href="app.html"><i data-lucide="heart-handshake"></i>Set it up for them</a></div>
-  <svg class="sign" viewBox="0 0 140 180"><use href="#anatono"/></svg>
+  <div class="fy-card reveal">
+    <div class="fy-top"><span class="fy-ic" id="tagIcon"></span><span class="fy-chip" id="tagChip">For elders</span></div>
+    <h3 id="tagTitle">Anatono for elders</h3>
+    <p id="tagText"></p>
+    <div class="fy-note" id="tagNote"></div>
+    <a class="btn" href="app.html"><i data-lucide="camera"></i>Set it up in one photo</a>
+    <svg class="peek" viewBox="0 0 140 180" aria-hidden="true"><use href="#anatono"/></svg>
+  </div>
 </section>
 
 <!-- MEDICINE CHECK -->
@@ -669,7 +700,9 @@
     <div><h5>Open source</h5><a href="https://github.com/taseen-t/anatono">GitHub</a><a href="https://ai.google.dev/gemma">Gemma 4</a><a href="#faq">How it works</a></div>
     <div><h5>Help</h5><a href="#faq">FAQ</a><a href="#faq">Privacy</a><a href="#faq">Safety</a></div>
   </div>
-  <svg class="word" viewBox="4 18 532 154" role="img" aria-label="Anatono"><use href="#wordmark"/></svg>
+  <svg class="word" viewBox="4 18 532 154" role="img" aria-label="Anatono"><g font-family="Figtree" font-weight="700" font-size="132" letter-spacing="-4" fill="#0B3B36"><text x="10" y="150">ana</text><text x="314" y="150">ono</text></g>
+    <g fill="none" stroke-linecap="round" stroke-linejoin="round"><path class="beat" d="M222 84 H244 L256 24.6 L272 164 L284 84 H308" stroke="#FF8A6B" stroke-width="10"/>
+      <path class="glint" d="M222 84 H244 L256 24.6 L272 164 L284 84 H308" stroke="#fff" stroke-width="5" pathLength="100" stroke-dasharray="10 100" stroke-dashoffset="10"/></g></svg>
   <div class="legal"><span>MIT licence · Anatono is a reminder tool, not medical advice</span><span>© 2026 Anatono</span></div>
 </footer>
 
@@ -824,23 +857,30 @@ function typeByHand() {
 }
 typeByHand();
 
-/* made for you */
-const groups = {
-  "Elders": ["Anatono for elders", "Big text, one button, and Urdu. Anatono reads the strip so Ammi and Abbu don't have to, and gently reminds them, every time."],
-  "Carers": ["Anatono for carers", "Set it up for someone you look after, and get their reminders in your calendar too."],
-  "Busy parents": ["Anatono for parents", "Syrups, drops and antibiotics for the kids: the right spoonful at the right time, for the right number of days."],
-  "Long-term care": ["Anatono for long-term care", "Diabetes, BP, thyroid: months of daily tablets, with a heads-up before a strip runs out."],
-  "Students": ["Anatono for students", "Exam weeks and late nights: the reminder still rings, even when the app is closed."],
-  "After surgery": ["Anatono after surgery", "Five new medicines at once, each with its own rhythm. One photo of the prescription sets them all."],
-  "Travellers": ["Anatono for travellers", "Your routine comes with you, in your phone's calendar, in any time zone."],
-  "Pharmacists": ["Anatono for pharmacists", "Show customers how to take it: one photo and they leave with reminders set."]
-};
-$("tags").innerHTML = Object.keys(groups).map((g, i) => `<span class="tagp${i ? "" : " on"}">${g}</span>`).join("");
-$("tags").onclick = e => { const g = e.target.closest(".tagp"); if (!g) return;
-  document.querySelectorAll(".tagp").forEach(x => x.classList.toggle("on", x === g));
-  const [title, text] = groups[g.textContent]; $("tagChip").textContent = "For " + g.textContent.toLowerCase();
-  gsap.fromTo([$("tagTitle"), $("tagText")], { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: .4, stagger: .06 });
-  $("tagTitle").textContent = title; $("tagText").textContent = text; };
+/* section 6: made for you. Each group has an icon, a line, and a sample reminder; it rotates until someone taps a tag */
+const groups = [
+  ["Elders", "armchair", "Big text, one button, and Urdu. Anatono reads the strip so Ammi and Abbu don't have to, and gently reminds them, every time.", "8:00 am", "Glucophage 500 mg, with breakfast"],
+  ["Carers", "hand-heart", "Set it up for someone you look after, and get their reminders in your own calendar too.", "9:00 pm", "Abbu's Concor 5 mg"],
+  ["Busy parents", "baby", "Syrups, drops and antibiotics for the kids: the right spoonful at the right time, for the right number of days.", "2:00 pm", "Calpol syrup, 5 ml"],
+  ["Long-term care", "heart-pulse", "Diabetes, BP, thyroid: months of daily tablets, with a heads-up before a strip runs out.", "in 3 days", "Glucophage strip runs out"],
+  ["Students", "graduation-cap", "Exam weeks and late nights: the reminder still rings, even when the app is closed.", "11:00 pm", "Vitamin D, with milk"],
+  ["After surgery", "bandage", "Five new medicines at once, each with its own rhythm. One photo of the prescription sets them all.", "5 set", "from 1 photo of the prescription"],
+  ["Travellers", "plane", "Your routine comes with you, in your phone's calendar, in any time zone.", "9:00 pm", "Dubai time · Concor 5 mg"],
+  ["Pharmacists", "pill-bottle", "Show customers how to take it: one photo, and they leave with the reminders set.", "1 photo", "and the customer's reminders are set"]];
+$("tags").innerHTML = groups.map(([g, icon], i) => `<button class="${i ? "" : "on"}" data-i="${i}"><i data-lucide="${icon}"></i>${g}</button>`).join("");
+function showGroup(i) {
+  const [g, icon, text, when, what] = groups[i];
+  document.querySelectorAll("#tags button").forEach((b, k) => b.classList.toggle("on", k === i));
+  $("tagIcon").innerHTML = `<i data-lucide="${icon}"></i>`; $("tagChip").textContent = "For " + g.toLowerCase();
+  $("tagTitle").textContent = g === "After surgery" ? "Anatono after surgery" : "Anatono for " + g.toLowerCase();
+  $("tagText").textContent = text; $("tagNote").innerHTML = `<b>${when}</b>${what}`;
+  lucide.createIcons();
+  const card = document.querySelector(".fy-card"); card.classList.remove("fy-swap"); void card.offsetWidth; card.classList.add("fy-swap");
+}
+let gi = 0, gAuto = setInterval(() => { if (!$("foryou").classList.contains("off")) showGroup(gi = (gi + 1) % groups.length); }, 3500);
+$("tags").onclick = e => { const b = e.target.closest("button"); if (!b) return; clearInterval(gAuto); showGroup(gi = +b.dataset.i); };
+showGroup(0);
+io.observe($("foryou"));
 
 /* languages on a curve */
 $("wk").innerHTML = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map((d, i) =>
@@ -897,5 +937,16 @@ let ln = 0; setInterval(() => { $("langName").textContent = langNames[++ln % lan
 
 gsap.from(".hero h1", { y: 40, opacity: 0, duration: 1, ease: "power3.out" });
 gsap.from(".hero .lead, .avail", { y: 20, opacity: 0, duration: .8, stagger: .1, delay: .2 });   // not the button: its hover transition fights the tween and it ends up on top of the line below
+/* the browser-tab icon beats with the footer logo: Chrome won't animate an SVG favicon by itself, so redraw it */
+const fav = document.querySelector('link[rel="icon"]'), FD = "M12 54 H30 L40 18 L55 84 L65 54 H88";
+let ft = 0;
+setInterval(() => {
+  if (document.hidden) return;
+  ft = (ft + 90) % 1800; const k = ft / 1800, b = (k - .12) / .2;
+  const off = k < .45 ? 10 - 110 * k / .45 : -100, sy = b > 0 && b < 1 ? 1 + .14 * Math.sin(b * Math.PI * 2) * (1 - b) : 1;
+  fav.href = "data:image/svg+xml," + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" rx="24" fill="#0B3B36"/>` +
+    `<g fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="${FD}" stroke="#FF8A6B" stroke-width="9" transform="translate(0 54) scale(1 ${sy.toFixed(3)}) translate(0 -54)"/>` +
+    `<path d="${FD}" stroke="#fff" stroke-width="7" pathLength="100" stroke-dasharray="14 100" stroke-dashoffset="${off.toFixed(1)}"/></g></svg>`);
+}, 90);
 </script>
 </body></html>
