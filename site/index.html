@@ -139,8 +139,7 @@
   .lock .date { text-align: center; font: 500 15px Figtree; color: #D8EBE3; margin: 8px 0 24px; }
   .pnote { background: rgba(255,255,255,.93); color: #111; border-radius: 20px; overflow: hidden; margin-bottom: 9px; }
   .pnote .in { padding: 12px 13px; display: flex; gap: 10px; }
-  .pnote .ic { width: 36px; height: 36px; border-radius: 10px; background: var(--mint); display: grid; place-items: center; flex: none; }
-  .pnote .ic svg { width: 24px; height: 30px; }
+  .pnote .ic { width: 36px; height: 36px; border-radius: 10px; flex: none; }
   .pnote .txt { flex: 1; }
   .pnote b { display: flex; justify-content: space-between; font: 700 11px Figtree; letter-spacing: .06em; opacity: .55; }
   .pnote p { font: 500 14px/1.3 Figtree; margin-top: 3px; }
@@ -863,7 +862,7 @@ function addNote() {
   const [t, m, d] = pn[pi++ % pn.length], box = $("pnotes");
   $("ptime").textContent = t;
   box.querySelectorAll("b span").forEach(x => x.textContent = "earlier");
-  box.insertAdjacentHTML("afterbegin", `<div class="pnote"><div class="in"><div class="ic"><svg viewBox="30 10 80 90"><use href="#anatono"/></svg></div>
+  box.insertAdjacentHTML("afterbegin", `<div class="pnote"><div class="in"><img class="ic" src="favicon.svg" alt="">
     <div class="txt"><b>ANATONO <span>now</span></b><p><strong>${m}</strong> · ${d}</p><div class="acts"><span>Taken</span><span>Snooze 10 min</span></div></div></div></div>`);
   gsap.from(box.firstElementChild, { height: 0, opacity: 0, y: -24, duration: .55, ease: "power3.out", clearProps: "height" });
   [...box.children].slice(3).forEach(x => x.remove());
