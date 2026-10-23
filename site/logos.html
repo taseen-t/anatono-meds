@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Anatono · logo options</title>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Figtree:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+  body { margin: 0; background: #F2FAF5; color: #0B3B36; font-family: Figtree, sans-serif; }
+  .opt { padding: 60px 40px 50px; border-bottom: 1.5px solid #cfe3d8; display: grid; grid-template-columns: 1fr 300px; gap: 40px; align-items: center; }
+  .opt.dark { background: #0E2A27; color: #EAF6EF; }
+  .label { font: 700 12px Figtree; letter-spacing: .1em; opacity: .6; margin-bottom: 18px; grid-column: 1 / -1; }
+  .word { font: 500 120px/1 "EB Garamond", serif; letter-spacing: -3px; display: flex; align-items: baseline; }
+  .word.sans { font: 800 112px/1 Figtree; letter-spacing: -5px; }
+  /* a capsule that stands in for an "o": sits on the baseline at x-height */
+  .cap { display: inline-block; width: .5em; height: .44em; margin: 0 .03em; position: relative; transform: rotate(-35deg) translateY(-.02em);
+         border-radius: .22em; border: .045em solid currentColor; overflow: hidden;
+         background: linear-gradient(90deg, #FF8A6B 0 50%, #fff 50%); }
+  .cap::after { content: ""; position: absolute; left: 50%; top: 0; bottom: 0; border-left: .04em solid currentColor; }
+  .cap.mint { background: linear-gradient(90deg, #9FE3C4 0 50%, #fff 50%); }
+  .clock { display: inline-block; width: .46em; height: .46em; border-radius: 50%; border: .05em solid currentColor; position: relative; margin: 0 .02em; background: #fff; }
+  .clock::before, .clock::after { content: ""; position: absolute; left: 50%; top: 50%; background: #FF8A6B; border-radius: .02em; transform-origin: 0 0; }
+  .clock::before { width: .04em; height: .15em; transform: translate(-50%, 0) rotate(180deg); }          /* minute hand: 12 */
+  .clock::after { width: .04em; height: .11em; transform: translate(-50%, 0) rotate(60deg); }           /* hour hand: 8 */
+  .dot { color: #FF8A6B; }
+  .marks { display: flex; gap: 22px; align-items: center; justify-content: flex-end; }
+  .marks svg { width: 96px; height: 96px; }
+  .marks svg.s { width: 48px; height: 48px; } .marks svg.xs { width: 20px; height: 20px; }
+  .in-nav { grid-column: 1 / -1; display: flex; align-items: center; gap: 10px; margin-top: 16px; padding: 10px 16px; width: fit-content;
+            border-radius: 14px; border: 1px solid #cfe3d8; background: #F2FAF5; color: #0B3B36; }
+  .in-nav .word { font-size: 28px; letter-spacing: -.6px; } .in-nav .word.sans { font-size: 26px; letter-spacing: -1px; }
+  .in-nav small { font: 600 13px Figtree; opacity: .6; margin-left: 10px; }
+</style></head>
+<body>
+
+
+<style>
+  .opt svg.big { width: 100%; max-width: 640px; height: auto; overflow: visible; }
+  .opt text.w { font-family: "EB Garamond", serif; font-weight: 500; fill: currentColor; }
+  .in-nav svg { height: 44px; width: auto; overflow: visible; }
+  .replay { grid-column: 1 / -1; font: 600 13px Figtree; opacity: .6; cursor: pointer; background: none; border: 0; color: inherit; text-align: left; padding: 0; }
+</style>
+
+
+<style>
+  /* H: the word is a capsule, split in two colours down the seam */
+  .capword { width: 100%; max-width: 620px; height: auto; }
+  /* I: the "t" is a medical cross */
+  .word .plus { display: inline-block; position: relative; width: .4em; height: .6em; margin: 0 .035em; align-self: baseline; transform: translateY(.02em); }
+  .word .plus::before, .word .plus::after { content: ""; position: absolute; background: #FF8A6B; border-radius: .05em; }
+  .word .plus::before { left: 50%; top: 0; bottom: 0; width: .1em; margin-left: -.05em; }
+  .word .plus::after { left: 0; right: 0; top: .17em; height: .1em; }
+  /* J: seven letters, seven days: a weekly pill strip */
+  .strip { display: flex; gap: 10px; padding: 14px; border-radius: 26px; background: #E1EEE6; border: 2px solid #0B3B36; width: fit-content; }
+  .cell { width: 86px; text-align: center; }
+  .cell b { display: grid; place-items: center; height: 96px; border-radius: 43px; background: #fff; border: 2px solid #0B3B36;
+            font: 500 64px/1 "EB Garamond", serif; color: #0B3B36; box-shadow: inset 0 -8px 0 #9FE3C4; animation: pop .5s cubic-bezier(.3,1.6,.5,1) both; }
+  .cell small { display: block; margin-top: 8px; font: 700 12px Figtree; letter-spacing: .1em; opacity: .55; }
+  .cell.today b { background: #FF8A6B; box-shadow: inset 0 -8px 0 rgba(0,0,0,.12); color: #fff; }
+  @keyframes pop { from { transform: scale(.3); opacity: 0; } }
+  .strip.mini { gap: 3px; padding: 4px; border-radius: 9px; border-width: 1.5px; }
+  .strip.mini .cell { width: 15px; } .strip.mini .cell b { height: 20px; border-radius: 8px; border-width: 1px; font-size: 14px; box-shadow: inset 0 -2px 0 #9FE3C4; }
+  .strip.mini .cell.today b { box-shadow: none; } .strip.mini small { display: none; }
+</style>
+
+<section class="opt">
+  <div class="label">H · THE WORD IS THE CAPSULE: "ANAT" IN CORAL, "ONO" IN WHITE, SPLIT DOWN THE SEAM, INSIDE ONE PILL OUTLINE</div>
+  <svg class="capword" viewBox="0 0 620 180">
+    <defs><clipPath id="hL"><rect x="0" y="0" width="318" height="180"/></clipPath><clipPath id="hR"><rect x="318" y="0" width="302" height="180"/></clipPath></defs>
+    <rect x="6" y="6" width="608" height="168" rx="84" fill="#fff" stroke="#0B3B36" stroke-width="6"/>
+    <path d="M318 6 H90 A84 84 0 0 0 90 174 H318 Z" fill="#FF8A6B"/>
+    <rect x="6" y="6" width="608" height="168" rx="84" fill="none" stroke="#0B3B36" stroke-width="6"/>
+    <line x1="318" y1="6" x2="318" y2="174" stroke="#0B3B36" stroke-width="6"/>
+    <g font-family="Figtree" font-weight="800" font-size="118" letter-spacing="-4" text-anchor="middle">
+      <text x="310" y="128" clip-path="url(#hL)" fill="#fff">anatono</text>
+      <text x="310" y="128" clip-path="url(#hR)" fill="#0B3B36">anatono</text></g>
+  </svg>
+  <div class="marks">
+    <svg viewBox="0 0 100 100"><rect width="100" height="100" rx="24" fill="#0B3B36"/><g transform="rotate(-35 50 50)"><rect x="16" y="32" width="68" height="36" rx="18" fill="#fff"/><path d="M50 32 H34 A18 18 0 0 0 34 68 H50 Z" fill="#FF8A6B"/></g></svg>
+    <svg class="s" viewBox="0 0 100 100"><rect width="100" height="100" rx="24" fill="#0B3B36"/><g transform="rotate(-35 50 50)"><rect x="16" y="32" width="68" height="36" rx="18" fill="#fff"/><path d="M50 32 H34 A18 18 0 0 0 34 68 H50 Z" fill="#FF8A6B"/></g></svg>
+    <svg class="xs" viewBox="0 0 100 100"><rect width="100" height="100" rx="24" fill="#0B3B36"/><g transform="rotate(-35 50 50)"><rect x="16" y="32" width="68" height="36" rx="18" fill="#fff"/><path d="M50 32 H34 A18 18 0 0 0 34 68 H50 Z" fill="#FF8A6B"/></g></svg>
+  </div>
+  <div class="in-nav"><svg viewBox="0 0 620 180" style="height:34px;width:auto">
+    <defs><clipPath id="hLn"><rect x="0" y="0" width="318" height="180"/></clipPath><clipPath id="hRn"><rect x="318" y="0" width="302" height="180"/></clipPath></defs>
+    <rect x="6" y="6" width="608" height="168" rx="84" fill="#fff" stroke="#0B3B36" stroke-width="10"/>
+    <path d="M318 6 H90 A84 84 0 0 0 90 174 H318 Z" fill="#FF8A6B"/>
+    <rect x="6" y="6" width="608" height="168" rx="84" fill="none" stroke="#0B3B36" stroke-width="10"/>
+    <line x1="318" y1="6" x2="318" y2="174" stroke="#0B3B36" stroke-width="10"/>
+    <g font-family="Figtree" font-weight="800" font-size="118" letter-spacing="-4" text-anchor="middle">
+      <text x="310" y="128" clip-path="url(#hLn)" fill="#fff">anatono</text><text x="310" y="128" clip-path="url(#hRn)" fill="#0B3B36">anatono</text></g></svg><small>in the nav bar</small></div>
+</section>
+
+<section class="opt">
+  <div class="label">I · THE "T" IS A MEDICAL CROSS (A LOWERCASE T ALREADY IS ONE, JUST TURNED CORAL)</div>
+  <div class="word">ana<span class="plus"></span>ono</div>
+  <div class="marks">
+    <svg viewBox="0 0 100 100"><rect width="100" height="100" rx="24" fill="#0B3B36"/><rect x="44" y="20" width="12" height="60" rx="5" fill="#FF8A6B"/><rect x="24" y="38" width="52" height="12" rx="5" fill="#FF8A6B"/></svg>
+    <svg class="s" viewBox="0 0 100 100"><rect width="100" height="100" rx="24" fill="#0B3B36"/><rect x="42" y="18" width="16" height="64" rx="6" fill="#FF8A6B"/><rect x="22" y="36" width="56" height="16" rx="6" fill="#FF8A6B"/></svg>
+    <svg class="xs" viewBox="0 0 100 100"><rect width="100" height="100" rx="24" fill="#0B3B36"/><rect x="40" y="16" width="20" height="68" rx="7" fill="#FF8A6B"/><rect x="20" y="34" width="60" height="20" rx="7" fill="#FF8A6B"/></svg>
+  </div>
+  <div class="in-nav"><div class="word">ana<span class="plus"></span>ono</div><small>in the nav bar</small></div>
+</section>
+
+<section class="opt">
+  <div class="label">J · SEVEN LETTERS, SEVEN DAYS: "ANATONO" IS A WEEKLY PILL STRIP, ONE LETTER PER DAY, TODAY'S IS CORAL</div>
+  <div class="strip"><div class="cell"><b style="animation-delay:0.00s">a</b><small>MON</small></div><div class="cell"><b style="animation-delay:0.12s">n</b><small>TUE</small></div><div class="cell"><b style="animation-delay:0.24s">a</b><small>WED</small></div><div class="cell"><b style="animation-delay:0.36s">t</b><small>THU</small></div><div class="cell"><b style="animation-delay:0.48s">o</b><small>FRI</small></div><div class="cell"><b style="animation-delay:0.60s">n</b><small>SAT</small></div><div class="cell today"><b style="animation-delay:0.72s">o</b><small>SUN</small></div></div>
+  <div class="marks"><div class="strip mini"><div class="cell"><b>a</b></div><div class="cell"><b>n</b></div><div class="cell"><b>a</b></div><div class="cell"><b>t</b></div><div class="cell"><b>o</b></div><div class="cell"><b>n</b></div><div class="cell today"><b>o</b></div></div></div>
+</section>
+
+<section class="opt">
+  <div class="label">D · ARC TEXT: THE WORD ARCHES OVER THE CAPSULE, LIKE A BADGE</div>
+  <svg class="big" viewBox="0 0 400 250"><path id="arcD" d="M 72 205 A 128 128 0 0 1 328 205" fill="none"/>
+    <text class="w" font-size="72" letter-spacing="3" text-anchor="middle"><textPath href="#arcD" startOffset="50%">anatono</textPath></text><g transform="translate(200 168) rotate(-35) scale(1.15)"><rect x="-38" y="-18" width="76" height="36" rx="18" fill="#fff" stroke="#0B3B36" stroke-width="5"/><path d="M0 -18 H-20 A18 18 0 0 0 -20 18 H0 Z" fill="#FF8A6B" stroke="#0B3B36" stroke-width="5" stroke-linejoin="round"/></g></svg>
+  <div class="marks">
+    <svg viewBox="0 0 100 100"><rect width="100" height="100" rx="24" fill="#0B3B36"/><path id="arcDs" d="M 18 68 A 32 32 0 0 1 82 68" fill="none"/>
+      <text font-family="EB Garamond" font-size="21" fill="#F2FAF5" text-anchor="middle" letter-spacing="1"><textPath href="#arcDs" startOffset="50%">anatono</textPath></text><g transform="translate(50 64) rotate(-35) scale(0.48)"><rect x="-38" y="-18" width="76" height="36" rx="18" fill="#fff" stroke="#0B3B36" stroke-width="6"/><path d="M0 -18 H-20 A18 18 0 0 0 -20 18 H0 Z" fill="#FF8A6B" stroke="#0B3B36" stroke-width="6" stroke-linejoin="round"/></g></svg>
+    <svg class="s" viewBox="0 0 100 100"><rect width="100" height="100" rx="24" fill="#0B3B36"/><g transform="translate(50 50) rotate(-35) scale(0.95)"><rect x="-38" y="-18" width="76" height="36" rx="18" fill="#fff" stroke="#0B3B36" stroke-width="5"/><path d="M0 -18 H-20 A18 18 0 0 0 -20 18 H0 Z" fill="#FF8A6B" stroke="#0B3B36" stroke-width="5" stroke-linejoin="round"/></g></svg>
+    <svg class="xs" viewBox="0 0 100 100"><rect width="100" height="100" rx="24" fill="#0B3B36"/><g transform="translate(50 50) rotate(-35) scale(0.95)"><rect x="-38" y="-18" width="76" height="36" rx="18" fill="#fff" stroke="#0B3B36" stroke-width="5"/><path d="M0 -18 H-20 A18 18 0 0 0 -20 18 H0 Z" fill="#FF8A6B" stroke="#0B3B36" stroke-width="5" stroke-linejoin="round"/></g></svg>
+  </div>
+  <div class="in-nav"><svg viewBox="0 0 400 250"><path id="arcDn" d="M 72 205 A 128 128 0 0 1 328 205" fill="none"/>
+    <text class="w" font-size="80" letter-spacing="3" text-anchor="middle"><textPath href="#arcDn" startOffset="50%">anatono</textPath></text><g transform="translate(200 168) rotate(-35) scale(1.15)"><rect x="-38" y="-18" width="76" height="36" rx="18" fill="#fff" stroke="#0B3B36" stroke-width="5"/><path d="M0 -18 H-20 A18 18 0 0 0 -20 18 H0 Z" fill="#FF8A6B" stroke="#0B3B36" stroke-width="5" stroke-linejoin="round"/></g></svg><small>in the nav bar</small></div>
+</section>
+
+<section class="opt">
+  <div class="label">E · THE WORD RIDES THE LINE AND FLOWS INTO THE CAPSULE: THE CAPSULE IS THE LAST "O" (THE HERO'S IDEA IN ONE WORD)</div>
+  <svg class="big" viewBox="0 0 560 170"><path id="waveE" d="M 0 120 C 70 50, 150 40, 230 88 S 360 132, 440 92" fill="none" stroke="currentColor" stroke-opacity=".14" stroke-width="2"/>
+    <text class="w" font-size="74" letter-spacing="1" text-anchor="end"><textPath href="#waveE" id="flowE" startOffset="100%">anaton</textPath></text><g transform="translate(486 84) rotate(-20) scale(1.15)"><rect x="-38" y="-18" width="76" height="36" rx="18" fill="#fff" stroke="#0B3B36" stroke-width="5"/><path d="M0 -18 H-20 A18 18 0 0 0 -20 18 H0 Z" fill="#FF8A6B" stroke="#0B3B36" stroke-width="5" stroke-linejoin="round"/></g></svg>
+  <div class="marks">
+    <svg viewBox="0 0 100 100"><rect width="100" height="100" rx="24" fill="#F2FAF5" stroke="#cfe3d8"/><path d="M 4 66 C 22 42, 42 40, 56 54" fill="none" stroke="#0B3B36" stroke-width="5" stroke-linecap="round" stroke-dasharray="1 9"/><g transform="translate(66 50) rotate(-20) scale(0.62)"><rect x="-38" y="-18" width="76" height="36" rx="18" fill="#fff" stroke="#0B3B36" stroke-width="5"/><path d="M0 -18 H-20 A18 18 0 0 0 -20 18 H0 Z" fill="#FF8A6B" stroke="#0B3B36" stroke-width="5" stroke-linejoin="round"/></g></svg>
+    <svg class="s" viewBox="0 0 100 100"><rect width="100" height="100" rx="24" fill="#F2FAF5" stroke="#cfe3d8"/><g transform="translate(50 50) rotate(-20) scale(0.95)"><rect x="-38" y="-18" width="76" height="36" rx="18" fill="#fff" stroke="#0B3B36" stroke-width="5"/><path d="M0 -18 H-20 A18 18 0 0 0 -20 18 H0 Z" fill="#FF8A6B" stroke="#0B3B36" stroke-width="5" stroke-linejoin="round"/></g></svg>
+    <svg class="xs" viewBox="0 0 100 100"><rect width="100" height="100" rx="24" fill="#0B3B36"/><g transform="translate(50 50) rotate(-20) scale(0.95)"><rect x="-38" y="-18" width="76" height="36" rx="18" fill="#fff" stroke="#0B3B36" stroke-width="5"/><path d="M0 -18 H-20 A18 18 0 0 0 -20 18 H0 Z" fill="#FF8A6B" stroke="#0B3B36" stroke-width="5" stroke-linejoin="round"/></g></svg>
+  </div>
+  <div class="in-nav"><svg viewBox="0 0 560 170"><path id="waveEn" d="M 0 120 C 70 50, 150 40, 230 88 S 360 132, 440 92" fill="none"/>
+    <text class="w" font-size="90" letter-spacing="1" text-anchor="end"><textPath href="#waveEn" startOffset="100%">anaton</textPath></text><g transform="translate(486 84) rotate(-20) scale(1.25)"><rect x="-38" y="-18" width="76" height="36" rx="18" fill="#fff" stroke="#0B3B36" stroke-width="5"/><path d="M0 -18 H-20 A18 18 0 0 0 -20 18 H0 Z" fill="#FF8A6B" stroke="#0B3B36" stroke-width="5" stroke-linejoin="round"/></g></svg><small>in the nav bar</small></div>
+  <button class="replay" onclick="flowIn()">↻ replay: the letters slide along the line into the capsule</button>
+</section>
+
+<section class="opt dark">
+  <div class="label">F · RING: THE WORD GOES ROUND THE CAPSULE, A STAMP FOR THE APP ICON, STICKERS AND THE FOOTER</div>
+  <svg class="big" viewBox="0 0 300 300" style="max-width:300px"><path id="ringF" d="M 150 40 a 110 110 0 1 1 -0.1 0" fill="none"/>
+    <text class="w" font-size="30"><textPath href="#ringF" textLength="684" lengthAdjust="spacing">anatono · never miss a dose · anatono · never miss a dose · </textPath></text>
+    <g style="color:#0B3B36"><g transform="translate(150 150) rotate(-35) scale(1.4)"><rect x="-38" y="-18" width="76" height="36" rx="18" fill="#fff" stroke="#0B3B36" stroke-width="5"/><path d="M0 -18 H-20 A18 18 0 0 0 -20 18 H0 Z" fill="#FF8A6B" stroke="#0B3B36" stroke-width="5" stroke-linejoin="round"/></g></g></svg>
+  <div class="marks">
+    <svg viewBox="0 0 100 100"><rect width="100" height="100" rx="50" fill="#F2FAF5"/><path id="ringFs" d="M 50 14 a 36 36 0 1 1 -0.1 0" fill="none"/>
+      <text font-family="EB Garamond" font-size="12" fill="#0B3B36"><textPath href="#ringFs" textLength="222" lengthAdjust="spacing">anatono · anatono · anatono · </textPath></text><g transform="translate(50 50) rotate(-35) scale(0.55)"><rect x="-38" y="-18" width="76" height="36" rx="18" fill="#fff" stroke="#0B3B36" stroke-width="5"/><path d="M0 -18 H-20 A18 18 0 0 0 -20 18 H0 Z" fill="#FF8A6B" stroke="#0B3B36" stroke-width="5" stroke-linejoin="round"/></g></svg>
+    <svg class="s" viewBox="0 0 100 100"><rect width="100" height="100" rx="50" fill="#F2FAF5"/><g transform="translate(50 50) rotate(-35) scale(0.95)"><rect x="-38" y="-18" width="76" height="36" rx="18" fill="#fff" stroke="#0B3B36" stroke-width="5"/><path d="M0 -18 H-20 A18 18 0 0 0 -20 18 H0 Z" fill="#FF8A6B" stroke="#0B3B36" stroke-width="5" stroke-linejoin="round"/></g></svg>
+    <svg class="xs" viewBox="0 0 100 100"><rect width="100" height="100" rx="50" fill="#F2FAF5"/><g transform="translate(50 50) rotate(-35) scale(0.95)"><rect x="-38" y="-18" width="76" height="36" rx="18" fill="#fff" stroke="#0B3B36" stroke-width="5"/><path d="M0 -18 H-20 A18 18 0 0 0 -20 18 H0 Z" fill="#FF8A6B" stroke="#0B3B36" stroke-width="5" stroke-linejoin="round"/></g></svg>
+  </div>
+</section>
+
+<script>
+/* E: the letters slide along the line and settle in front of the capsule */
+function flowIn() {
+  const tp = document.getElementById("flowE"), t0 = performance.now();
+  (function step(now) {
+    const k = Math.min(1, (now - t0) / 1400), e = 1 - Math.pow(1 - k, 3);
+    tp.setAttribute("startOffset", (100 * e) + "%");
+    if (k < 1) requestAnimationFrame(step);
+  })(t0);
+}
+document.fonts.ready.then(flowIn);
+</script>
+
+<section class="opt">
+  <div class="label">A · SERIF, THE LAST "O" IS A CAPSULE (matches the Wispr-style EB Garamond headings)</div>
+  <div class="word">anaton<span class="cap"></span></div>
+  <div class="marks">
+    <svg viewBox="0 0 100 100"><rect width="100" height="100" rx="24" fill="#0B3B36"/><g transform="rotate(-35 50 50)"><rect x="22" y="34" width="56" height="32" rx="16" fill="#fff" stroke="#0B3B36" stroke-width="0"/><path d="M38 34 h12 v32 h-12 a16 16 0 0 1 0 -32 z" fill="#FF8A6B"/><rect x="22" y="34" width="56" height="32" rx="16" fill="none" stroke="#fff" stroke-width="0"/></g></svg>
+    <svg class="s" viewBox="0 0 100 100"><rect width="100" height="100" rx="24" fill="#0B3B36"/><g transform="rotate(-35 50 50)"><rect x="22" y="34" width="56" height="32" rx="16" fill="#fff"/><path d="M38 34 h12 v32 h-12 a16 16 0 0 1 0 -32 z" fill="#FF8A6B"/></g></svg>
+    <svg class="xs" viewBox="0 0 100 100"><rect width="100" height="100" rx="24" fill="#0B3B36"/><g transform="rotate(-35 50 50)"><rect x="22" y="34" width="56" height="32" rx="16" fill="#fff"/><path d="M38 34 h12 v32 h-12 a16 16 0 0 1 0 -32 z" fill="#FF8A6B"/></g></svg>
+  </div>
+  <div class="in-nav"><div class="word">anaton<span class="cap"></span></div><small>in the nav bar</small></div>
+</section>
+
+<section class="opt">
+  <div class="label">B · BOLD SANS, BOTH "O"S ARE PILLS: MORNING (CORAL) AND NIGHT (MINT)</div>
+  <div class="word sans">anat<span class="cap"></span>n<span class="cap mint"></span></div>
+  <div class="marks">
+    <svg viewBox="0 0 100 100"><rect width="100" height="100" rx="24" fill="#FFC7B5"/><g transform="rotate(-35 50 50)"><rect x="20" y="33" width="60" height="34" rx="17" fill="#fff" stroke="#0B3B36" stroke-width="6"/><path d="M37 33 h13 v34 h-13 a17 17 0 0 1 0 -34 z" fill="#FF8A6B" stroke="#0B3B36" stroke-width="6" stroke-linejoin="round"/></g></svg>
+    <svg class="s" viewBox="0 0 100 100"><rect width="100" height="100" rx="24" fill="#FFC7B5"/><g transform="rotate(-35 50 50)"><rect x="20" y="33" width="60" height="34" rx="17" fill="#fff" stroke="#0B3B36" stroke-width="7"/><path d="M37 33 h13 v34 h-13 a17 17 0 0 1 0 -34 z" fill="#FF8A6B" stroke="#0B3B36" stroke-width="7" stroke-linejoin="round"/></g></svg>
+    <svg class="xs" viewBox="0 0 100 100"><rect width="100" height="100" rx="24" fill="#FFC7B5"/><g transform="rotate(-35 50 50)"><rect x="20" y="33" width="60" height="34" rx="17" fill="#fff" stroke="#0B3B36" stroke-width="9"/><path d="M37 33 h13 v34 h-13 a17 17 0 0 1 0 -34 z" fill="#FF8A6B" stroke="#0B3B36" stroke-width="9" stroke-linejoin="round"/></g></svg>
+  </div>
+  <div class="in-nav"><div class="word sans">anat<span class="cap"></span>n<span class="cap mint"></span></div><small>in the nav bar</small></div>
+</section>
+
+<section class="opt dark">
+  <div class="label">C · SERIF, THE FIRST "O" IS A CLOCK AT 8 O'CLOCK, DOSE TIME</div>
+  <div class="word">anat<span class="clock"></span>no<span class="dot">.</span></div>
+  <div class="marks">
+    <svg viewBox="0 0 100 100"><rect width="100" height="100" rx="50" fill="#F2FAF5"/><circle cx="50" cy="50" r="30" fill="#fff" stroke="#0B3B36" stroke-width="7"/><path d="M50 50 V30 M50 50 L33 60" stroke="#FF8A6B" stroke-width="7" stroke-linecap="round"/></svg>
+    <svg class="s" viewBox="0 0 100 100"><rect width="100" height="100" rx="50" fill="#F2FAF5"/><circle cx="50" cy="50" r="30" fill="#fff" stroke="#0B3B36" stroke-width="8"/><path d="M50 50 V30 M50 50 L33 60" stroke="#FF8A6B" stroke-width="8" stroke-linecap="round"/></svg>
+    <svg class="xs" viewBox="0 0 100 100"><rect width="100" height="100" rx="50" fill="#F2FAF5"/><circle cx="50" cy="50" r="30" fill="#fff" stroke="#0B3B36" stroke-width="10"/><path d="M50 50 V30 M50 50 L33 60" stroke="#FF8A6B" stroke-width="10" stroke-linecap="round"/></svg>
+  </div>
+  <div class="in-nav"><div class="word">anat<span class="clock"></span>no<span class="dot">.</span></div><small>in the nav bar</small></div>
+</section>
+
+<section class="opt">
+  <div class="label">G · ARC TEXT: THE WORD ANATONO SET ON A CURVE, LIKE THE HERO LINE, WITH THE CAPSULE UNDER IT</div>
+  <svg viewBox="0 0 560 240" style="width:560px;max-width:100%">
+    <path id="arcw" d="M 60 190 Q 280 20 500 190" fill="none"/>
+    <text style="font:500 92px 'EB Garamond',serif;letter-spacing:-1px;fill:#0B3B36"><textPath href="#arcw" startOffset="50%" text-anchor="middle">anatono</textPath></text>
+    <g transform="translate(280 200) rotate(-20)"><rect x="-46" y="-20" width="92" height="40" rx="20" fill="#fff" stroke="#0B3B36" stroke-width="5"/><path d="M-26 -20 h26 v40 h-26 a20 20 0 0 1 0 -40 z" fill="#FF8A6B" stroke="#0B3B36" stroke-width="5" stroke-linejoin="round"/></g>
+  </svg>
+  <div class="marks">
+    <svg viewBox="0 0 200 200"><defs><path id="ring" d="M100 100 m-70 0 a70 70 0 1 1 140 0 a70 70 0 1 1 -140 0"/></defs>
+      <circle cx="100" cy="100" r="98" fill="#0B3B36"/>
+      <text style="font:700 19px Figtree;letter-spacing:4px;fill:#EAF6EF"><textPath href="#ring">ANATONO · NEVER MISS A DOSE ·</textPath></text>
+      <g transform="translate(100 100) rotate(-35)"><rect x="-34" y="-16" width="68" height="32" rx="16" fill="#fff"/><path d="M-18 -16 h18 v32 h-18 a16 16 0 0 1 0 -32 z" fill="#FF8A6B"/></g></svg>
+  </div>
+  <div class="in-nav"><svg viewBox="0 0 560 240" style="width:120px"><use href="#arcw"/><text style="font:500 92px 'EB Garamond',serif;fill:#0B3B36"><textPath href="#arcw" startOffset="50%" text-anchor="middle">anatono</textPath></text><g transform="translate(280 200) rotate(-20)"><rect x="-46" y="-20" width="92" height="40" rx="20" fill="#fff" stroke="#0B3B36" stroke-width="5"/><path d="M-26 -20 h26 v40 h-26 a20 20 0 0 1 0 -40 z" fill="#FF8A6B" stroke="#0B3B36" stroke-width="5"/></g></svg><small>in the nav bar · the round badge is the app icon</small></div>
+</section>
+
+</body></html>

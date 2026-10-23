@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Anatono · design variations</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: Figtree, Arial, sans-serif; color: #1a1a1a; background: #ddd; }
+  .tag { position: absolute; top: 14px; left: 14px; z-index: 5; font: 700 12px Figtree; letter-spacing: .08em;
+         background: #1a1a1a; color: #fff; padding: 6px 10px; border-radius: 8px; }
+
+  /* one hero, three themes */
+  .hero { --bg: #FFFFEB; --ink: #1A1A1A; --cta: #F0D7FF; --sub: #3c3c3c; --line: #1A1A1A; --pillbg: #fff;
+          position: relative; overflow: hidden; min-height: 860px; background: var(--bg); color: var(--ink); }
+  .hero.b { --bg: #F2FAF5; --ink: #0B3B36; --cta: #FFC7B5; --sub: #2e5a54; --line: #0B3B36; --pillbg: #fff; }
+  .hero.c { --bg: #1A1A1A; --ink: #FFFFEB; --cta: #FFA946; --sub: #cfcfc0; --line: #FFFFEB; --pillbg: #262626; }
+
+  nav { position: relative; z-index: 3; margin: 26px auto 0; width: min(900px, calc(100% - 32px)); display: flex;
+        align-items: center; gap: 18px; padding: 8px 8px 8px 16px; border-radius: 14px; background: var(--bg);
+        border: 1px solid color-mix(in srgb, var(--ink) 18%, transparent); }
+  .logo { display: flex; align-items: center; gap: 8px; font: 500 24px "EB Garamond", serif; letter-spacing: -.3px; }
+  .logo svg { width: 26px; height: 34px; }
+  .seg { display: flex; background: color-mix(in srgb, var(--ink) 9%, transparent); border-radius: 10px; padding: 3px; }
+  .seg span { font: 600 13px Figtree; padding: 7px 12px; border-radius: 8px; }
+  .seg span:first-child { background: var(--bg); box-shadow: 0 1px 2px rgba(0,0,0,.08); }
+  .links { margin-left: auto; display: flex; gap: 22px; font: 500 14px Figtree; }
+  .btn { display: inline-flex; align-items: center; gap: 9px; background: var(--cta); color: #1a1a1a; border: 2px solid #1a1a1a;
+         border-radius: 12px; padding: 14px 22px; font: 600 16px Figtree; cursor: pointer; text-decoration: none;
+         transition: transform .2s, box-shadow .2s; }
+  .btn:hover { transform: translateY(-2px); box-shadow: 0 4px 0 #1a1a1a; }
+  .btn.sm { padding: 9px 14px; font-size: 14px; border-radius: 10px; }
+  .btn svg { width: 18px; height: 18px; }
+
+  .copy { position: relative; z-index: 2; text-align: center; margin-top: 70px; padding: 0 16px; }
+  .eyebrow { font: 500 13px Figtree; letter-spacing: .12em; text-transform: uppercase; opacity: .7; }
+  h1 { margin: 18px 0 0; font: 400 clamp(56px, 8vw, 104px)/.95 "EB Garamond", serif; letter-spacing: -2px; }
+  h1 em { font-style: italic; display: block; }
+  .lead { margin: 26px auto 0; max-width: 470px; font: 500 20px/1.3 Figtree; color: var(--sub); }
+  .copy .btn { margin-top: 30px; }
+  .avail { margin-top: 18px; font: 400 13px Figtree; opacity: .65; }
+
+  /* the flow: scribble -> Anatono pill -> reminder */
+  .flow { position: absolute; left: 0; right: 0; bottom: 40px; height: 230px; z-index: 1; }
+  .flow svg { width: 100%; height: 100%; overflow: visible; }
+  .flow text { font: 500 17px Figtree; fill: var(--ink); }
+  .flow .messy { font-family: "EB Garamond", serif; font-style: italic; font-size: 21px; opacity: .55; }
+  .flow .clean { font-weight: 600; }
+  .ribbon { fill: none; stroke: var(--ink); stroke-width: 34; stroke-linecap: round; opacity: .96; }
+  .hero.c .ribbon { stroke: #FFFFEB; }
+  .flow .clean { fill: var(--bg); }
+  .pill { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 128px; height: 64px;
+          border-radius: 40px; background: var(--pillbg); display: grid; place-items: center; z-index: 2; }
+  .pill::before { content: ""; position: absolute; inset: -4px; border-radius: 44px; z-index: -1;
+                  background: conic-gradient(from var(--a), #FFBCF2, #F0D7FF, #FFA946, #34D399, #FFBCF2);
+                  animation: spin 2.2s linear infinite; }
+  .pill::after { content: ""; position: absolute; inset: 0; border-radius: 40px; background: var(--pillbg);
+                 border: 2px solid var(--ink); z-index: -1; }
+  @property --a { syntax: "<angle>"; inherits: false; initial-value: 0deg; }
+  @keyframes spin { to { --a: 360deg; } }
+  .pill svg.m { width: 34px; height: 44px; }
+
+  /* the ring of prescription shorthand */
+  .ring { position: absolute; left: 4%; top: 250px; width: 250px; height: 330px; z-index: 0; opacity: .5;
+          animation: turn 40s linear infinite; }
+  .ring text { font: 500 14px Figtree; fill: var(--ink); letter-spacing: .5px; }
+  @keyframes turn { to { transform: rotate(360deg); } }
+
+  /* mascot placements */
+  .mascot { position: absolute; z-index: 2; right: 6%; top: 430px; width: 150px; animation: bob 3.2s ease-in-out infinite; }
+  @keyframes bob { 50% { transform: translateY(-10px) rotate(-3deg); } }
+  .bubble { position: absolute; right: calc(6% + 112px); top: 382px; z-index: 2; background: var(--pillbg); border: 2px solid var(--ink);
+            border-radius: 16px 16px 4px 16px; padding: 10px 14px; font: 600 14px Figtree; box-shadow: 0 6px 0 var(--ink); }
+  .bubble small { display: block; font-weight: 500; opacity: .7; }
+  @media (max-width: 800px) { .ring, .mascot, .bubble, .links { display: none; } }
+</style></head>
+<body>
+
+<!-- ======= mascot: Anatono, a capsule with a face (3 colourways) ======= -->
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <symbol id="anatono" viewBox="0 0 140 180">
+      <path d="M30 104 q-18 4 -22 24" stroke="var(--ml)" stroke-width="5" fill="none" stroke-linecap="round"/>
+      <g class="wave"><path d="M108 96 q20 -8 22 -34" stroke="var(--ml)" stroke-width="5" fill="none" stroke-linecap="round"/>
+        <path d="M120 40 l14 4 -4 14 -10 6 -12 -10 z" fill="var(--mb)" stroke="var(--ml)" stroke-width="4" stroke-linejoin="round"/>
+        <path d="M118 66 q4 4 9 1" stroke="var(--ml)" stroke-width="4" fill="none" stroke-linecap="round"/></g>
+      <rect x="32" y="14" width="76" height="146" rx="38" fill="var(--mt)" stroke="var(--ml)" stroke-width="5"/>
+      <path d="M32 88 h76 v34 a38 38 0 0 1 -76 0 z" fill="var(--mbot)" stroke="var(--ml)" stroke-width="5" stroke-linejoin="round"/>
+      <path d="M46 34 q-6 12 -4 26" stroke="#fff" stroke-width="5" fill="none" stroke-linecap="round" opacity=".75"/>
+      <circle cx="58" cy="56" r="5.5" fill="var(--ml)"/><circle cx="84" cy="56" r="5.5" fill="var(--ml)"/>
+      <circle cx="60" cy="54" r="1.8" fill="#fff"/><circle cx="86" cy="54" r="1.8" fill="#fff"/>
+      <ellipse cx="50" cy="68" rx="6" ry="3.5" fill="#FFBCF2"/><ellipse cx="92" cy="68" rx="6" ry="3.5" fill="#FFBCF2"/>
+      <path d="M62 70 q9 9 18 0" stroke="var(--ml)" stroke-width="4.5" fill="none" stroke-linecap="round"/>
+      <path d="M56 160 v12 M84 160 v12" stroke="var(--ml)" stroke-width="5" stroke-linecap="round"/>
+      <path d="M50 174 h12 M78 174 h12" stroke="var(--ml)" stroke-width="5" stroke-linecap="round"/>
+    </symbol>
+  </defs>
+</svg>
+
+<template id="hero">
+  <nav>
+    <div class="logo"><svg viewBox="30 10 80 85"><use href="#anatono"/></svg>Anatono</div>
+    <div class="seg"><span>Reminders</span><span>Medicine check</span></div>
+    <div class="links"><span>Families</span><span>How it works</span><span>FAQ</span></div>
+    <a class="btn sm"><i data-lucide="smartphone"></i>Get Anatono</a>
+  </nav>
+  <svg class="ring" viewBox="0 0 250 330"><defs><path id="ell-X" d="M125 15 a110 150 0 1 1 -0.1 0"/></defs>
+    <text><textPath href="#ell-X">Tab. Amoxil 500mg 1+0+1 x 5/7 · Syp. Brufen 2 tsp TDS · Cap. Omeprazole 20mg OD before breakfast · Tab. Glucophage 500 BD after meals ·</textPath></text></svg>
+  <div class="copy">
+    <div class="eyebrow">Anatono medicine reminders</div>
+    <h1 class="h"></h1>
+    <p class="lead">Snap your prescription. Anatono turns it into gentle reminders on your phone, and checks every medicine before you take it.</p>
+    <a class="btn"><i data-lucide="camera"></i>Get Anatono free</a>
+    <div class="avail">For Android and iPhone · free and open source</div>
+  </div>
+  <div class="bubble">8:00 am · Amoxil 500 mg<small>1 tablet after breakfast</small></div>
+  <svg class="mascot" viewBox="0 0 140 180"><use href="#anatono"/></svg>
+  <div class="flow">
+    <svg viewBox="0 0 1440 230" preserveAspectRatio="xMidYMid slice">
+      <defs>
+        <path id="p-X" d="M-60 170 C 200 60, 420 210, 720 115 S 1180 30, 1500 120"/>
+        <clipPath id="l-X"><rect x="-100" y="0" width="820" height="230"/></clipPath>
+        <clipPath id="r-X"><rect x="720" y="0" width="900" height="230"/></clipPath>
+      </defs>
+      <g clip-path="url(#l-X)"><text class="messy"><textPath href="#p-X" class="tp-in">Tab Amoxil 500mg 1+0+1 x5/7 a/m · Syp Brufen 2tsp tds prn · Cap Omez 20 od ac · Tab Amoxil 500mg 1+0+1 x5/7 a/m · Syp Brufen 2tsp tds prn · Cap Omez 20 od ac ·</textPath></text></g>
+      <g clip-path="url(#r-X)"><use href="#p-X" class="ribbon"/><text class="clean" dy="6"><textPath href="#p-X" class="tp-out">8:00 am · Amoxil 500 mg, 1 tablet after breakfast  ·  2:00 pm · Brufen syrup, 2 spoons  ·  9:00 pm · Amoxil 500 mg, 1 tablet after dinner  ·  7:30 am · Omez 20 mg before breakfast  ·  8:00 am · Amoxil 500 mg, 1 tablet after breakfast  ·  2:00 pm · Brufen syrup, 2 spoons  ·</textPath></text></g>
+    </svg>
+    <div class="pill"><svg class="m" viewBox="30 10 80 90"><use href="#anatono"/></svg></div>
+  </div>
+</template>
+
+<section class="hero a" data-h="Don’t remember,<em>just take it.</em>" style="--mt:#F0D7FF;--mbot:#FFFFEB;--ml:#1A1A1A;--mb:#FFA946"><span class="tag">A · WISPR CREAM + LAVENDER</span></section>
+<section class="hero b" data-h="Never miss<em>a dose again.</em>" style="--mt:#9FE3C4;--mbot:#FFFFFF;--ml:#0B3B36;--mb:#FF8A6B"><span class="tag">B · CLINIC MINT + CORAL</span></section>
+<section class="hero c" data-h="Your medicines,<em>remembered.</em>" style="--mt:#FFA946;--mbot:#FFFFEB;--ml:#1A1A1A;--mb:#FFBCF2"><span class="tag">C · NIGHT INK + ORANGE</span></section>
+
+<script>
+// Stamp the hero into each variation (unique SVG ids per copy).
+document.querySelectorAll(".hero").forEach((sec, i) => {
+  const html = document.getElementById("hero").innerHTML.replaceAll("-X", "-" + i);
+  sec.insertAdjacentHTML("beforeend", html);
+  sec.querySelector("h1").innerHTML = sec.dataset.h;
+});
+lucide.createIcons();
+// The flow: scribbled prescription slides along the path into the pill; clean reminders slide out of it.
+let t = 0;
+(function loop() {
+  t = (t + 0.035) % 50;
+  document.querySelectorAll(".tp-in").forEach(p => p.setAttribute("startOffset", (t - 50) + "%"));
+  document.querySelectorAll(".tp-out").forEach(p => p.setAttribute("startOffset", (t - 50) + "%"));
+  requestAnimationFrame(loop);
+})();
+</script>
+</body></html>

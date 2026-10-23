@@ -1,0 +1,707 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Anatono · never miss a medicine</title>
+<meta name="description" content="Snap your medicine, say or type how you take it, and Anatono reminds you on time. Reads prescriptions, checks expiry and warning signs. Powered by Gemma 4.">
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#0B3B36">
+<link rel="icon" href="mascot.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
+<style>
+  :root { --bg: #F2FAF5; --sand: #E1EEE6; --ink: #0B3B36; --sub: #2E5A54; --cta: #FFC7B5; --coral: #FF8A6B;
+          --mint: #9FE3C4; --deep: #0E2A27; --band: #0B3B36; --pink: #FFBCF2; --lav: #F0D7FF; --sun: #FFA946; }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 400 16px/1.3 Figtree, Arial, sans-serif;
+         -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+  a { color: inherit; text-decoration: none; }
+  h1, h2, h3 { font-family: "EB Garamond", serif; font-weight: 400; letter-spacing: -1.5px; margin: 0; }
+  h2 { font-size: clamp(46px, 6.5vw, 92px); line-height: .98; }
+  h2 em, h1 em { font-style: italic; }
+  h3 { font-size: clamp(30px, 3.4vw, 46px); line-height: 1; letter-spacing: -.8px; }
+  p { margin: 0; }
+  .lead { font: 500 20px/1.3 Figtree; color: var(--sub); }
+  .eyebrow { font: 500 13px Figtree; letter-spacing: .12em; text-transform: uppercase; opacity: .75; }
+  .wrap { width: min(1200px, calc(100% - 32px)); margin: 0 auto; }
+  .center { text-align: center; }
+  svg.lucide { width: 18px; height: 18px; }
+
+  .btn { display: inline-flex; align-items: center; gap: 9px; background: var(--cta); color: #1a1a1a; border: 2px solid #1a1a1a;
+         border-radius: 12px; padding: 15px 24px; font: 600 16px Figtree; cursor: pointer; transition: transform .2s, box-shadow .2s; }
+  .btn:hover { transform: translateY(-2px); box-shadow: 0 4px 0 #1a1a1a; }
+  .btn.ghost { background: transparent; }
+  .btn.light { background: var(--bg); }
+  .btn.sm { padding: 9px 14px; font-size: 14px; border-radius: 10px; }
+
+  /* ---------- nav ---------- */
+  .top { position: relative; background: var(--band); color: #EAF6EF; text-align: center; padding: 11px 48px; font: 600 14px Figtree; }
+  .top .x { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: 0; color: inherit; cursor: pointer; padding: 6px; opacity: .8; display: grid; }
+  .top .x:hover { opacity: 1; }
+  .top a { margin-left: 14px; opacity: .85; }
+  nav { position: sticky; top: 12px; z-index: 50; width: min(940px, calc(100% - 32px)); margin: 14px auto 0; display: flex;
+        align-items: center; gap: 18px; padding: 8px 8px 8px 16px; border-radius: 14px; background: color-mix(in srgb, var(--bg) 88%, transparent);
+        backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1px solid color-mix(in srgb, var(--ink) 16%, transparent); }
+  .logo { display: flex; align-items: center; gap: 8px; font: 500 25px "EB Garamond", serif; letter-spacing: -.3px; }
+  .logo svg { width: 24px; height: 32px; }
+  .seg { display: flex; background: color-mix(in srgb, var(--ink) 8%, transparent); border-radius: 10px; padding: 3px; }
+  .seg a { font: 600 13px Figtree; padding: 7px 12px; border-radius: 8px; }
+  .seg a:first-child { background: var(--bg); box-shadow: 0 1px 2px rgba(0,0,0,.08); }
+  .links { margin-left: auto; display: flex; gap: 22px; font: 500 14px Figtree; }
+
+  /* ---------- hero ---------- */
+  .hero { position: relative; overflow: hidden; margin-top: -70px; padding: 70px 0 40px; }
+  .hero .copy { position: relative; z-index: 3; text-align: center; margin-top: 34px; padding: 0 16px; }
+  .hero h1 { margin-top: 0; font-size: clamp(58px, 8.4vw, 108px); line-height: .94; letter-spacing: -2.5px; }
+  .hero h1 em { display: block; }
+  .hero .lead { margin: 26px auto 0; max-width: 480px; }
+  .hero .copy .btn { display: flex; width: fit-content; margin: 30px auto 0; }
+  .avail { margin-top: 22px; font-size: 13px; opacity: .65; }
+  .flow { position: relative; height: 250px; margin-top: 16px; z-index: 1; }
+  .flow > svg { width: 100%; height: 100%; overflow: visible; display: block; }
+  .flow .messy { font: 500 21px Figtree; fill: var(--ink); opacity: .42; }
+  .flow .clean { font: 600 17px Figtree; fill: var(--bg); }
+  .ribbon { fill: none; stroke: var(--ink); stroke-width: 36; stroke-linecap: round; }
+  /* the capsule the medicine names go into */
+  .capsule { position: absolute; left: 50%; top: calc(50% - 35px); width: 150px; height: 70px; margin-left: -75px; z-index: 4; border-radius: 40px; }
+  .capsule::before { content: ""; position: absolute; inset: -5px; border-radius: 45px;
+                     background: conic-gradient(from var(--a), var(--pink), var(--lav), var(--sun), var(--mint), var(--pink));
+                     animation: spin 2.2s linear infinite; }
+  .capsule .body { position: absolute; inset: 0; border-radius: 40px; border: 2.5px solid #1a1a1a; overflow: hidden;
+                   background: linear-gradient(90deg, var(--coral) 0 50%, #fff 50% 100%); }
+  .capsule .body::after { content: ""; position: absolute; left: 50%; top: 0; bottom: 0; border-left: 2.5px solid #1a1a1a; }
+  .capsule .face { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; gap: 15px; }
+  .capsule .face i { width: 8px; height: 8px; border-radius: 50%; background: #1a1a1a; animation: blink 4s infinite; }
+  .capsule .face b { position: absolute; top: 40px; width: 16px; height: 8px; border: 3px solid #1a1a1a; border-top: 0; border-radius: 0 0 12px 12px; }
+  @property --a { syntax: "<angle>"; inherits: false; initial-value: 0deg; }
+  @keyframes spin { to { --a: 360deg; } }
+  @keyframes blink { 0%, 92%, 100% { transform: scaleY(1); } 95% { transform: scaleY(.1); } }
+  /* the changing pill */
+  .status { position: absolute; left: 50%; top: calc(50% - 100px); transform: translateX(-50%); z-index: 4; padding: 9px 16px; border-radius: 30px;
+            background: #fff; border: 2px solid #1a1a1a; font: 700 14px Figtree; white-space: nowrap; display: flex; align-items: center; gap: 8px; }
+  .status::before { content: ""; position: absolute; inset: -4px; z-index: -1; border-radius: 34px;
+                    background: conic-gradient(from var(--a), var(--mint), var(--lav), var(--coral), var(--mint)); animation: spin 2.2s linear infinite; }
+  .status svg.lucide { width: 15px; height: 15px; }
+  .status .ch { display: inline-block; transition: transform .35s cubic-bezier(.2,.8,.2,1), opacity .35s; }
+  .status .ch.out { transform: translateY(-9px); opacity: 0; }
+  .status .ch.in { transform: translateY(9px); opacity: 0; }
+  /* mascot */
+  .mascot { position: absolute; z-index: 3; right: 6%; top: 300px; width: 150px; }
+  .mascot .arm { transform-origin: 108px 96px; animation: ring 1.4s ease-in-out infinite; }
+  .mascot .eyes { transform-origin: 71px 56px; animation: blink 3.6s infinite; }
+  @keyframes ring { 0%, 100% { transform: rotate(0); } 25% { transform: rotate(-14deg); } 75% { transform: rotate(10deg); } }
+  .bubble { position: absolute; z-index: 3; right: calc(6% + 112px); top: 252px; background: #fff; border: 2px solid #1a1a1a;
+            border-radius: 16px 16px 4px 16px; padding: 10px 14px; font: 600 14px Figtree; box-shadow: 0 6px 0 #1a1a1a; }
+  .bubble small { display: block; font-weight: 500; opacity: .7; }
+
+  /* ---------- dark card: every phone ---------- */
+  .dark { background: var(--deep); color: #EAF6EF; border-radius: 40px; }
+  .dark .lead { color: #BFD8CF; }
+  .phone { justify-self: center; width: 290px; height: 590px; border-radius: 46px; background: #0a0a0a; border: 10px solid #222;
+           position: relative; padding: 54px 14px 14px; box-shadow: 0 40px 80px -30px rgba(0,0,0,.7); }
+  .phone::before { content: ""; position: absolute; top: 14px; left: 50%; width: 90px; height: 26px; margin-left: -45px; border-radius: 20px; background: #000; }
+  .phone .time { text-align: center; font: 300 64px Figtree; color: #fff; letter-spacing: -2px; }
+  .phone .date { text-align: center; font: 500 14px Figtree; color: #ccc; margin-bottom: 26px; }
+  .note { background: rgba(255,255,255,.88); color: #111; border-radius: 18px; padding: 12px 14px; display: flex; gap: 10px; margin-top: 10px; }
+  .note .ic { width: 34px; height: 34px; border-radius: 9px; background: var(--mint); flex: none; display: grid; place-items: center; }
+  .note .ic svg { width: 22px; height: 28px; }
+  .note b { font-size: 13px; display: flex; justify-content: space-between; }
+  .note b span { font-weight: 400; opacity: .55; }
+  .note p { font-size: 13px; line-height: 1.3; margin-top: 2px; }
+
+  /* ---------- section 2: black, the phone with the apps running through it, the ticker ---------- */
+  .apps { background: #111614; color: #EAF6EF; border-radius: 48px; margin: 10px 10px 0; padding: 110px 0 112px; overflow: hidden; position: relative; }
+  .apps .copy { text-align: center; padding: 0 20px; }
+  .apps h2 { margin-top: 16px; font-size: clamp(44px, 6vw, 86px); }
+  .apps .lead { color: #B9CCC4; max-width: 540px; margin: 22px auto 0; }
+  .stage { position: relative; height: 680px; margin-top: 56px; display: grid; place-items: center; }
+  .lanes { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center; gap: 22px;
+           mask-image: linear-gradient(90deg, transparent, #000 14%, #000 86%, transparent); -webkit-mask-image: linear-gradient(90deg, transparent, #000 14%, #000 86%, transparent); }
+  .lane .row { display: flex; gap: 22px; width: max-content; animation: ticker 50s linear infinite; }
+  .lane:nth-child(2) .row { animation-direction: reverse; animation-duration: 58s; }
+  .lane:nth-child(3) .row { animation-duration: 44s; }
+  .tile { width: 92px; height: 92px; border-radius: 24px; display: grid; place-items: center; color: #0B3B36; flex: none;
+          box-shadow: inset 0 -5px 0 rgba(0,0,0,.12); }
+  .tile svg.lucide { width: 40px; height: 40px; stroke-width: 1.8; }
+  .phone2 { position: relative; z-index: 2; width: 310px; height: 640px; border-radius: 54px; background: #050706; padding: 11px;
+            box-shadow: 0 0 0 2px #2c3531, 0 60px 110px -30px #000, 0 0 140px 20px rgba(159,227,196,.14); }
+  .phone2 .screen { height: 100%; border-radius: 44px; overflow: hidden; position: relative; padding: 62px 12px 12px;
+                    background: radial-gradient(120% 70% at 15% 0%, #2f7a68 0, transparent 60%), radial-gradient(90% 60% at 100% 100%, rgba(255,138,107,.45) 0, transparent 60%), #0E2A27; }
+  .island { position: absolute; top: 12px; left: 50%; width: 100px; height: 30px; margin-left: -50px; border-radius: 20px; background: #000; }
+  .lock .time { text-align: center; font: 300 78px/1 Figtree; letter-spacing: -3px; color: #fff; }
+  .lock .date { text-align: center; font: 500 15px Figtree; color: #D8EBE3; margin: 8px 0 24px; }
+  .pnote { background: rgba(255,255,255,.93); color: #111; border-radius: 20px; overflow: hidden; margin-bottom: 9px; }
+  .pnote .in { padding: 12px 13px; display: flex; gap: 10px; }
+  .pnote .ic { width: 36px; height: 36px; border-radius: 10px; background: var(--mint); display: grid; place-items: center; flex: none; }
+  .pnote .ic svg { width: 24px; height: 30px; }
+  .pnote .txt { flex: 1; }
+  .pnote b { display: flex; justify-content: space-between; font: 700 11px Figtree; letter-spacing: .06em; opacity: .55; }
+  .pnote p { font: 500 14px/1.3 Figtree; margin-top: 3px; }
+  .pnote .acts { display: flex; gap: 6px; margin-top: 9px; }
+  .pnote .acts span { font: 600 12px Figtree; padding: 6px 10px; border-radius: 9px; background: var(--ink); color: #fff; }
+  .pnote .acts span + span { background: rgba(0,0,0,.07); color: #111; }
+  .pnote + .pnote .acts { display: none; }
+  .pnote + .pnote { opacity: .82; }
+  .trust { display: flex; align-items: center; justify-content: center; gap: 12px; margin-top: 64px; }
+  .trust .mini { width: 44px; height: 57px; }
+  .trust .eyebrow { opacity: .7; }
+  .apps .marquee .track span { font: 600 25px Figtree; letter-spacing: -.4px; gap: 10px; }
+  .brand { display: inline-block; width: 24px; height: 24px; background: currentColor; -webkit-mask: var(--i) center / contain no-repeat; mask: var(--i) center / contain no-repeat; }
+  .btn .brand { width: 19px; height: 19px; margin-right: -2px; }
+  .apps .marquee .track svg.lucide { width: 24px; height: 24px; }
+
+  /* ---------- Anatono with moving parts (legs, arms, eyes, mouth) ---------- */
+  .off, .off * { animation-play-state: paused !important; }
+  .lane .row, .marquee .track { will-change: transform; }
+  svg[data-rig] { overflow: visible; }
+  svg[data-rig] .m-blink { transform-origin: 71px 56px; animation: blink 3.6s infinite; }
+  .calm .m-bell { animation: none !important; }
+  svg[data-rig] .m-bell { transform-origin: 129px 60px; animation: ring 1.4s ease-in-out infinite; }
+  /* walking: legs take turns, arms swing against them, the body bobs at each step and leans forward */
+  .walking .m-legL { transform-origin: 56px 156px; animation: stride .7s ease-in-out infinite; }
+  .walking .m-legR { transform-origin: 84px 156px; animation: stride .7s ease-in-out -.35s infinite; }
+  .walking .m-armL { transform-origin: 34px 104px; animation: stride .7s ease-in-out -.35s infinite; }
+  .walking .m-armR { transform-origin: 106px 96px; animation: sway .7s ease-in-out infinite; }
+  .walking .m-all { animation: bob .175s ease-in-out infinite alternate; }
+  .walking .m-body { transform-origin: 70px 160px; animation: step .35s ease-in-out infinite; }
+  @keyframes stride { 0%, 100% { transform: rotate(26deg); } 50% { transform: rotate(-26deg); } }
+  @keyframes sway { 0%, 100% { transform: rotate(-12deg); } 50% { transform: rotate(9deg); } }
+  @keyframes bob { from { transform: translateY(2px); } to { transform: translateY(-5px); } }
+  @keyframes step { 0%, 100% { transform: rotate(4deg) scale(1.03, .96); } 50% { transform: rotate(4deg) scale(.98, 1.03); } }
+  .marquee { overflow: hidden; margin-top: 24px; mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent); }
+  .marquee .track { display: flex; gap: 52px; width: max-content; animation: ticker 40s linear infinite; }
+  .marquee .track span { display: inline-flex; align-items: center; gap: 10px; font: 600 22px Figtree; white-space: nowrap; opacity: .9; }
+  @keyframes ticker { to { transform: translateX(-50%); } }
+
+  /* ---------- 1 photo, not 10 minutes ---------- */
+  /* ---------- section 3: one photo, not ten minutes ---------- */
+  .speed2 { position: relative; z-index: 1; background: var(--ink); color: #EAF6EF; border-radius: 48px; margin: -48px 10px 0; padding: 110px 30px 40px; }
+  .speed2 .copy { text-align: center; }
+  .speed2 h2 { font-size: clamp(44px, 6vw, 86px); }
+  .speed2 .lead { color: #BFD8CF; max-width: 560px; margin: 20px auto 0; }
+  .race2 { display: grid; grid-template-columns: 1fr 2.6fr; gap: 14px; max-width: 1180px; margin: 56px auto 0; }
+  .rc { position: relative; height: 520px; border-radius: 28px; overflow: hidden; text-align: center; padding-top: 34px; }
+  .rc small { position: relative; z-index: 2; font: 600 15px Figtree; opacity: .85; }
+  .rc .big { position: relative; z-index: 2; font: 400 54px/1 "EB Garamond", serif; letter-spacing: -1px; margin-top: 6px; }
+  .rc.slow { border: 1.5px solid rgba(255,255,255,.16); }
+  .typing { position: absolute; left: 0; right: 0; top: 50%; display: flex; justify-content: flex-end; align-items: center; padding-right: 22px;
+            white-space: nowrap; overflow: hidden; font: 500 19px Figtree; color: #BFD8CF;
+            mask-image: linear-gradient(90deg, transparent, #000 45%); -webkit-mask-image: linear-gradient(90deg, transparent, #000 45%); }
+  .caret { display: inline-block; width: 2px; height: 22px; background: currentColor; margin-left: 2px; animation: caret 1s steps(1) infinite; }
+  @keyframes caret { 50% { opacity: 0; } }
+  .rc.fast { background: radial-gradient(45% 55% at 26% 40%, rgba(255,138,107,.9) 0, transparent 70%), radial-gradient(40% 50% at 74% 28%, rgba(159,227,196,.85) 0, transparent 70%),
+             radial-gradient(55% 60% at 62% 88%, rgba(255,169,70,.65) 0, transparent 70%), #2a5a52; }
+  .rc.fast::before { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,.28), transparent 45%, rgba(0,0,0,.22)); }
+  .rc.fast .arc { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .arct { font: 600 21px Figtree; fill: #fff; }
+  .rc .capsule { width: 112px; height: 52px; margin-left: -56px; top: calc(50% - 26px); }
+  .rc .capsule .face b { top: 30px; }
+
+  /* ---------- made for you ---------- */
+  .foryou { margin-top: 100px; padding: 80px 64px; display: grid; grid-template-columns: 1.2fr .8fr; gap: 40px; position: relative; overflow: hidden; }
+  .foryou .tags { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 34px; max-width: 560px; }
+  .tagp { padding: 10px 16px; border-radius: 30px; border: 1.5px solid rgba(255,255,255,.25); font: 600 15px Figtree; cursor: pointer; transition: .2s; }
+  .tagp.on, .tagp:hover { background: var(--mint); color: var(--ink); border-color: var(--mint); }
+  .foryou .panel { align-self: end; }
+  .foryou .panel h3 { margin-top: 18px; }
+  .foryou .panel p { margin-top: 14px; color: #BFD8CF; font: 500 17px/1.4 Figtree; }
+  .foryou .sign { position: absolute; right: 70px; top: 50px; width: 190px; animation: bob 3.2s ease-in-out infinite; }
+  @keyframes bob { 50% { transform: translateY(-10px) rotate(-2deg); } }
+
+  /* ---------- medicine check ---------- */
+  .check { padding: 140px 0 40px; display: grid; grid-template-columns: 1.1fr .9fr; gap: 60px; align-items: center; }
+  .shot { border-radius: 28px; min-height: 460px; padding: 34px; display: flex; align-items: flex-end;
+          background: radial-gradient(120% 90% at 30% 20%, #FFE2D8, #CDEFE0 55%, #9FE3C4); position: relative; overflow: hidden; }
+  .shot .strip { position: absolute; left: 50px; top: 46px; width: 300px; height: 150px; border-radius: 16px; background: #fff;
+                 border: 2px solid #1a1a1a; transform: rotate(-6deg); padding: 16px; font: 600 13px Figtree; }
+  .shot .strip .dots { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-top: 16px; }
+  .shot .strip .dots i { height: 30px; border-radius: 15px; background: #F3F3F3; border: 1.5px solid #ccc; }
+  .shot .strip .scan { position: absolute; left: 0; right: 0; height: 3px; background: var(--coral); box-shadow: 0 0 14px var(--coral); animation: scan 2.4s ease-in-out infinite; }
+  @keyframes scan { 0%, 100% { top: 10%; } 50% { top: 88%; } }
+  .result { position: relative; width: 100%; background: var(--deep); color: #fff; border-radius: 20px; padding: 20px; }
+  .result .r { display: flex; gap: 10px; align-items: center; padding: 9px 0; border-bottom: 1px solid rgba(255,255,255,.1); font: 500 15px Figtree; }
+  .result .r:last-child { border: 0; }
+  .result .r svg.lucide { color: var(--mint); flex: none; }
+  .result .r.warn svg.lucide { color: var(--sun); }
+  .check .txt .lead { margin-top: 20px; }
+  .check .txt h2 { font-size: clamp(42px, 5vw, 72px); }
+  .check .txt h2 svg { width: 44px; height: 44px; color: var(--coral); vertical-align: -4px; }
+  .check .txt .btn { margin-top: 26px; }
+
+  /* ---------- feature grid ---------- */
+  .grid { padding: 80px 0; display: grid; grid-template-columns: 1fr 1fr; gap: 70px 60px; }
+  .feat .lead { margin-top: 12px; font-size: 17px; max-width: 420px; }
+  .feat .ui { margin-top: 26px; border-radius: 24px; background: var(--deep); color: #EAF6EF; min-height: 300px; padding: 24px; position: relative; overflow: hidden; }
+  .feat:nth-child(even) { margin-top: 120px; }
+  .hand { font: italic 26px "EB Garamond", serif; color: #fff; opacity: .9; line-height: 1.4; }
+  .hand u { text-decoration-color: var(--coral); text-underline-offset: 5px; }
+  .rowline { display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,.07); border-radius: 12px; padding: 12px 14px; margin-top: 10px; font: 600 15px Figtree; }
+  .rowline span { font-weight: 500; opacity: .7; font-size: 13px; }
+  .rowline.alert { background: rgba(255,138,107,.18); border: 1px solid rgba(255,138,107,.5); }
+  .times { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
+  .times b { padding: 9px 13px; border-radius: 10px; background: rgba(255,255,255,.1); font: 600 14px Figtree; display: inline-flex; gap: 7px; align-items: center; }
+  .langs { position: relative; height: 300px; }
+  .langs span { position: absolute; padding: 9px 14px; border-radius: 22px; background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.16); font: 600 15px Figtree; white-space: nowrap; }
+  .langs .core { left: 50%; top: 50%; transform: translate(-50%, -50%); background: var(--mint); color: var(--ink); font: 400 28px "EB Garamond", serif; padding: 14px 22px; }
+
+  /* ---------- devices: phone or family ---------- */
+  .duo { padding: 80px 0; display: grid; grid-template-columns: .8fr 1.2fr; gap: 50px; align-items: center; }
+  .duo .chips2 { display: flex; gap: 8px; margin-bottom: 22px; }
+  .duo .chips2 .chip { background: #fff; border-color: color-mix(in srgb, var(--ink) 18%, transparent); }
+  .duo .lead { margin-top: 20px; }
+  .duo .btn { margin-top: 26px; }
+  .screens { position: relative; height: 520px; }
+  .laptop { position: absolute; right: 0; top: 0; width: 88%; height: 440px; border-radius: 18px; background: var(--deep); border: 10px solid #1c1c1c; padding: 22px; color: #EAF6EF; }
+  .laptop h4 { margin: 0 0 14px; font: 400 26px "EB Garamond", serif; }
+  .laptop .wk { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; }
+  .laptop .wk div { border-radius: 10px; background: rgba(255,255,255,.07); padding: 10px 8px; font: 600 12px Figtree; text-align: center; }
+  .laptop .wk div i { display: block; height: 8px; border-radius: 4px; margin: 6px 0 0; background: var(--mint); }
+  .laptop .wk div i.miss { background: var(--coral); }
+  .phone.small { position: absolute; left: 0; bottom: 0; width: 230px; height: 450px; padding-top: 48px; transform: rotate(-4deg); }
+
+  /* ---------- love letters ---------- */
+  .love { padding: 110px 0 70px; margin-top: 40px; overflow: hidden; }
+  .love h2 { color: #EAF6EF; }
+  .quotes { display: flex; gap: 18px; margin-top: 50px; width: max-content; animation: ticker 60s linear infinite; }
+  .quote { width: 340px; background: #F2FAF5; color: var(--ink); border-radius: 20px; padding: 22px; position: relative; }
+  .quote p { font: 500 16px/1.45 Figtree; }
+  .quote .who { display: flex; gap: 10px; align-items: center; margin-top: 18px; font: 600 14px Figtree; }
+  .quote .who i { width: 36px; height: 36px; border-radius: 50%; background: var(--mint); display: grid; place-items: center; font-style: normal; }
+  .quote .sample { position: absolute; top: 14px; right: 14px; font: 700 10px Figtree; letter-spacing: .08em; padding: 4px 7px; border-radius: 6px; background: var(--sand); opacity: .8; }
+  .stats { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 30px; }
+  .stat { background: var(--band); border-radius: 22px; padding: 28px; color: #EAF6EF; }
+  .stat b { font: 400 52px/1 "EB Garamond", serif; display: block; }
+  .stat p { margin-top: 10px; font: 500 15px/1.4 Figtree; color: #BFD8CF; }
+  .stat a { font-size: 12px; opacity: .6; text-decoration: underline; }
+
+  /* ---------- FAQ ---------- */
+  .faq { padding: 120px 0 60px; display: grid; grid-template-columns: .8fr 1.2fr; gap: 50px; }
+  details { border-bottom: 1.5px solid color-mix(in srgb, var(--ink) 16%, transparent); padding: 22px 0; }
+  summary { cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center; font: 600 19px Figtree; }
+  summary::-webkit-details-marker { display: none; }
+  summary svg.lucide { transition: transform .3s; flex: none; }
+  details[open] summary svg.lucide { transform: rotate(45deg); }
+  :root { interpolate-size: allow-keywords; }
+  details::details-content { block-size: 0; overflow: hidden; transition: block-size .35s ease, content-visibility .35s allow-discrete; }
+  details[open]::details-content { block-size: auto; }
+  details p { margin-top: 14px; font: 500 16px/1.5 Figtree; color: var(--sub); max-width: 640px; }
+
+  /* ---------- final CTA + footer ---------- */
+  .final { margin-top: 40px; border-radius: 40px; min-height: 640px; position: relative; overflow: hidden; display: grid; place-items: center; text-align: center;
+           background: radial-gradient(90% 70% at 50% 110%, #FFB38F 0%, #FFD7B8 25%, transparent 60%), linear-gradient(180deg, #9ED9C2 0%, #CDEFE0 45%, #FFE9D9 100%); }
+  .final h2 { font-size: clamp(60px, 9vw, 130px); }
+  .final .lead { margin: 20px auto 0; max-width: 520px; }
+  .final .btns { display: flex; gap: 12px; justify-content: center; margin-top: 30px; }
+  .final .hill { position: absolute; left: -10%; right: -10%; bottom: -120px; height: 300px; border-radius: 50%; background: #7CC9A9; }
+  .final .hill.b { bottom: -170px; left: 20%; right: -30%; background: #5DB592; }
+  .final .walk { position: absolute; bottom: 70px; width: 110px; height: 141px; animation: walk 18s linear infinite; }
+  @keyframes walk { from { left: -120px; } to { left: 105%; } }
+  footer { padding: 70px 0 30px; }
+  footer .cols { display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 30px; }
+  footer h5 { margin: 0 0 12px; font: 600 13px Figtree; letter-spacing: .1em; text-transform: uppercase; opacity: .6; }
+  footer a { display: block; margin: 8px 0; font: 500 15px Figtree; }
+  .word { font: 400 clamp(110px, 21vw, 320px)/.8 "EB Garamond", serif; letter-spacing: -8px; text-align: center; margin-top: 60px; color: var(--ink); }
+  .legal { display: flex; justify-content: space-between; margin-top: 24px; font-size: 13px; opacity: .6; }
+
+  .reveal { opacity: 0; transform: translateY(40px); }
+  @media (max-width: 900px) {
+    .links, .seg, .foryou .sign { display: none; }
+    .stage { height: 560px; } .phone2 { transform: scale(.84); } .tile { width: 72px; height: 72px; border-radius: 19px; } .tile svg.lucide { width: 32px; height: 32px; }
+    .apps { margin: 10px 6px 0; border-radius: 32px; padding-top: 80px; }
+    .race2 { grid-template-columns: 1fr; } .rc { height: 380px; }
+    .foryou, .check, .grid, .duo, .faq, .stats { grid-template-columns: 1fr; padding-left: 22px; padding-right: 22px; }
+    .feat:nth-child(even) { margin-top: 0; }
+    .mascot { right: 2%; top: 560px; width: 90px; } .bubble { display: none; }
+    footer .cols { grid-template-columns: 1fr 1fr; }
+  }
+</style></head>
+<body>
+
+<!-- Anatono, the mascot: a capsule with a face, ringing a little reminder bell -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="anatono" viewBox="0 0 140 180">
+      <path d="M32 104 q-18 4 -22 24" stroke="#0B3B36" stroke-width="5" fill="none" stroke-linecap="round"/>
+      <g class="arm"><path d="M108 96 q20 -8 22 -34" stroke="#0B3B36" stroke-width="5" fill="none" stroke-linecap="round"/>
+        <path d="M121 38 q10 -2 14 8 l3 12 -18 6 -4 -12 q-2 -10 5 -14 z" fill="#FFA946" stroke="#0B3B36" stroke-width="4" stroke-linejoin="round"/>
+        <circle cx="131" cy="66" r="3.5" fill="#0B3B36"/></g>
+      <rect x="32" y="14" width="76" height="146" rx="38" fill="#9FE3C4" stroke="#0B3B36" stroke-width="5"/>
+      <path d="M32 88 h76 v34 a38 38 0 0 1 -76 0 z" fill="#fff" stroke="#0B3B36" stroke-width="5" stroke-linejoin="round"/>
+      <path d="M46 34 q-6 12 -4 26" stroke="#fff" stroke-width="5" fill="none" stroke-linecap="round" opacity=".8"/>
+      <g class="eyes"><circle cx="58" cy="56" r="5.5" fill="#0B3B36"/><circle cx="84" cy="56" r="5.5" fill="#0B3B36"/>
+        <circle cx="60" cy="54" r="1.8" fill="#fff"/><circle cx="86" cy="54" r="1.8" fill="#fff"/></g>
+      <ellipse cx="50" cy="68" rx="6" ry="3.5" fill="#FFBCF2"/><ellipse cx="92" cy="68" rx="6" ry="3.5" fill="#FFBCF2"/>
+      <path d="M62 70 q9 9 18 0" stroke="#0B3B36" stroke-width="4.5" fill="none" stroke-linecap="round"/>
+      <path d="M56 160 v12 M84 160 v12 M50 174 h12 M78 174 h12" stroke="#0B3B36" stroke-width="5" stroke-linecap="round"/>
+    </symbol>
+  </defs>
+</svg>
+
+<div class="top">Anatono now reads handwritten prescriptions, in Urdu and English. <a href="app.html">Try it free ›</a>
+  <button class="x" aria-label="Close" onclick="this.parentElement.remove()"><i data-lucide="x"></i></button></div>
+<nav>
+  <a class="logo" href="#"><svg viewBox="30 10 80 85"><use href="#anatono"/></svg>Anatono</a>
+  <div class="seg"><a href="#hero">Reminders</a><a href="#check">Medicine check</a></div>
+  <div class="links"><a href="#foryou">Families</a><a href="#how">How it works</a><a href="#faq">FAQ</a></div>
+  <a class="btn sm" href="app.html"><i data-lucide="smartphone"></i>Get Anatono</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="hero">
+  <div class="copy">
+    <h1>Never miss<em>a dose again.</em></h1>
+    <p class="lead">Snap your medicine, say or type how you take it. Anatono turns it into gentle reminders, and checks every medicine before you take it.</p>
+    <a class="btn" href="app.html"><b class="brand" style="--i:url(https://cdn.jsdelivr.net/npm/simple-icons@13.21.0/icons/apple.svg)"></b><b class="brand" style="--i:url(https://cdn.jsdelivr.net/npm/simple-icons@13.21.0/icons/android.svg)"></b>Get Anatono free</a>
+    <div class="avail">Free on iPhone, Android and the web · open source · powered by Gemma 4</div>
+  </div>
+  <div class="bubble" id="bubble">8:00 am · Amoxil 500 mg<small>1 tablet after breakfast</small></div>
+  <svg class="mascot calm" id="heroMascot" data-rig></svg>
+  <div class="flow" id="flow">
+    <svg viewBox="0 0 1440 250" preserveAspectRatio="xMidYMid slice">
+      <defs>
+        <path id="fp" d=""/>
+        <clipPath id="cl"><rect x="-300" y="-1000" width="1020" height="1400"/></clipPath>
+        <clipPath id="cr"><rect x="720" y="-1000" width="1000" height="1400"/></clipPath>
+      </defs>
+      <g clip-path="url(#cl)"><text class="messy" dy="7"><textPath href="#fp" id="tin">Amoxil 500 · 1+0+1 · khane ke baad · Brufen syp 2 tsp TDS · Omez 20 subah khali pait · Glucophage 500 BD · Amoxil 500 · 1+0+1 · khane ke baad · Brufen syp 2 tsp TDS · Omez 20 subah khali pait · Glucophage 500 BD ·</textPath></text></g>
+      <g clip-path="url(#cr)"><use href="#fp" class="ribbon"/><text class="clean" dy="6"><textPath href="#fp" id="tout">8:00 am · Amoxil 500 mg, 1 tablet after breakfast  ·  7:30 am · Omez 20 mg, before breakfast  ·  2:00 pm · Brufen syrup, 2 spoons  ·  9:00 pm · Amoxil 500 mg, 1 tablet after dinner  ·  8:00 am · Amoxil 500 mg, 1 tablet after breakfast  ·  7:30 am · Omez 20 mg, before breakfast  ·</textPath></text></g>
+    </svg>
+    <div class="status" id="status"><i data-lucide="sparkles"></i><span id="statusText"></span></div>
+    <div class="capsule" id="capsule"><div class="body"></div><div class="face"><i></i><i></i><b></b></div></div>
+  </div>
+</section>
+
+<!-- SECTION 2: the phone, with the apps running through it -->
+<section class="apps" id="how">
+  <div class="copy reveal">
+    <div class="eyebrow">Works on every phone</div>
+    <h2>Rings in the apps <em>you already use.</em></h2>
+    <p class="lead">Anatono puts every dose into your phone's own calendar and alarms, so it rings on time, even when the app is closed.</p>
+  </div>
+  <div class="stage">
+    <div class="lanes" id="lanes"></div>
+    <div class="phone2"><div class="screen"><div class="island"></div>
+      <div class="lock"><div class="time" id="ptime">8:00</div><div class="date">Friday, 24 October</div></div>
+      <div id="pnotes"></div></div></div>
+  </div>
+  <div class="trust"><svg class="mini" data-rig id="miniMascot"></svg><span class="eyebrow">Your reminders land in</span></div>
+  <div class="marquee"><div class="track" id="track"></div></div>
+</section>
+
+<!-- SECTION 3: one photo, not ten minutes (after Wispr's "4x faster than typing") -->
+<section class="speed2" id="speed">
+  <div class="copy reveal">
+    <h2>One photo, <em>not ten minutes</em></h2>
+    <p class="lead">Typing in every medicine, strength, time and day by hand takes about ten minutes. With Anatono it's one photo and one sentence.</p>
+  </div>
+  <div class="race2">
+    <div class="rc slow"><small>By hand</small><div class="big">~10 min</div>
+      <div class="typing"><span id="typed"></span><i class="caret"></i></div></div>
+    <div class="rc fast"><small>Anatono</small><div class="big">1 photo</div>
+      <svg class="arc" viewBox="0 0 840 520" preserveAspectRatio="xMidYMid slice"><path id="ap" d="M -60 420 C 150 310, 330 262, 420 260 C 520 258, 700 200, 920 110" fill="none"/>
+        <text class="arct" dy="7"><textPath href="#ap" id="atp">"subah aur raat, khane ke baad, paanch din"  ·  8:00 am and 9:00 pm, after food, for 5 days  ·  reminders set  ·  </textPath></text></svg>
+      <div class="capsule"><div class="body"></div><div class="face"><i></i><i></i><b></b></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- MADE FOR YOU -->
+<section class="wrap dark foryou reveal" id="foryou">
+  <div>
+    <h2>Anatono is <em>made for you</em></h2>
+    <div class="tags" id="tags"></div>
+  </div>
+  <div class="panel"><span class="chip" id="tagChip">For elders</span><h3 id="tagTitle">Anatono for elders</h3>
+    <p id="tagText">Big text, one button, and Urdu. Anatono reads the strip so Ammi and Abbu don't have to, and gently reminds them, every time.</p>
+    <a class="btn light" style="margin-top:22px" href="app.html"><i data-lucide="heart-handshake"></i>Set it up for them</a></div>
+  <svg class="sign" viewBox="0 0 140 180"><use href="#anatono"/></svg>
+</section>
+
+<!-- MEDICINE CHECK -->
+<section class="wrap check" id="check">
+  <div class="shot reveal">
+    <div class="strip">Amoxil 500 mg · Batch AX2391 · Exp 06/2027<div class="dots"><i></i><i></i><i></i><i></i><i></i></div><div class="scan"></div></div>
+    <div class="result">
+      <div class="r"><i data-lucide="badge-check"></i>Amoxil 500 mg (amoxicillin), matches your prescription</div>
+      <div class="r"><i data-lucide="calendar-check"></i>In date until June 2027</div>
+      <div class="r"><i data-lucide="shield-check"></i>Batch, maker and registration number are printed</div>
+      <div class="r warn"><i data-lucide="triangle-alert"></i>You also take Augmentin: same ingredient. Ask your doctor.</div>
+    </div>
+  </div>
+  <div class="txt reveal">
+    <h2><i data-lucide="scan-line"></i> Medicine <em>check</em></h2>
+    <p class="lead">Before you take it, Anatono reads the pack. Expired? Missing a batch number? The same medicine under two names? You'll know, with the reason shown.</p>
+    <p class="lead" style="font-size:15px;margin-top:12px">It can't prove a medicine is genuine. It flags the warning signs, so you can ask your pharmacist.</p>
+    <a class="btn" href="app.html"><i data-lucide="scan-line"></i>Check a medicine</a>
+  </div>
+</section>
+
+<!-- FEATURE GRID -->
+<section class="wrap grid">
+  <div class="feat reveal"><h3>Reads any <em>handwriting</em></h3>
+    <p class="lead">Doctor's scribble, "1+0+1", "BD x 5/7": Gemma 4 reads it, and Anatono's own rules double-check what each pattern means.</p>
+    <div class="ui"><div class="hand">Tab <u>Amoxil</u> 500mg<br><u>1+0+1</u> × 5/7 a/m<br>Syp Brufen 2tsp <u>tds</u></div>
+      <div class="rowline">Amoxil 500 mg <span>8:00 am · 9:00 pm · 5 days</span></div><div class="rowline">Brufen syrup <span>8:00 · 2:00 · 9:00</span></div></div></div>
+  <div class="feat reveal"><h3>Double-dose <em>guard</em></h3>
+    <p class="lead">Two brands, one ingredient: the easiest way to take a medicine twice. Anatono spots it the moment you add the second one.</p>
+    <div class="ui"><div class="rowline">Panadol 500 mg <span>paracetamol</span></div><div class="rowline">Calpol 500 mg <span>paracetamol</span></div>
+      <div class="rowline alert">Same ingredient twice <span>Ask your doctor first</span></div></div></div>
+  <div class="feat reveal"><h3>Each medicine, <em>its own rhythm</em></h3>
+    <p class="lead">Before food, after food, at bedtime, only when needed. Every medicine gets the reminders it actually needs.</p>
+    <div class="ui"><div class="times"><b><i data-lucide="sunrise"></i>7:30 Omez, before food</b><b><i data-lucide="sun"></i>8:00 Amoxil, after food</b><b><i data-lucide="sun-medium"></i>2:00 Brufen</b><b><i data-lucide="moon"></i>9:00 Amoxil</b><b><i data-lucide="hand-heart"></i>Panadol, only if needed</b></div></div></div>
+  <div class="feat reveal"><h3>Urdu, English and <em>140+ languages</em></h3>
+    <p class="lead">Speak the way you speak. Roman Urdu, Punjabi, English or a mix: Gemma 4 understands it.</p>
+    <div class="ui langs" id="langs"><span class="core">Anatono</span></div></div>
+</section>
+
+<!-- PHONE OR FAMILY -->
+<section class="wrap duo">
+  <div class="reveal"><div class="chips2"><span class="chip"><i data-lucide="smartphone"></i>Phone</span><span class="chip"><i data-lucide="users"></i>Family</span></div>
+    <h2>On your phone, <em>or your family's</em></h2>
+    <p class="lead">Set it up once on Abbu's phone. Add the reminders to your own calendar too, so you know he's on track, even from another city.</p>
+    <a class="btn" href="app.html"><i data-lucide="calendar-plus"></i>Get Anatono free</a></div>
+  <div class="screens reveal">
+    <div class="laptop"><h4>Abbu's week</h4><div class="wk" id="wk"></div>
+      <div class="rowline" style="margin-top:18px">Glucophage 500 <span>runs out in 3 days</span></div><div class="rowline">Next: Amoxil 500 mg <span>9:00 pm</span></div></div>
+    <div class="phone small"><div class="time" style="font-size:48px">9:00</div><div class="date">Tonight</div>
+      <div class="note"><div class="ic"><svg viewBox="30 10 80 90"><use href="#anatono"/></svg></div><div><b>Anatono <span>now</span></b><p><strong>Amoxil 500 mg</strong> after dinner.</p></div></div></div>
+  </div>
+</section>
+
+<!-- LOVE LETTERS (placeholder reviews for the MVP) -->
+<section class="dark love">
+  <div class="wrap center"><div class="eyebrow" style="color:#BFD8CF">Early access</div><h2>Love letters <em>to Anatono</em></h2></div>
+  <div class="quotes" id="quotes"></div>
+  <div class="wrap stats">
+    <div class="stat"><b>About half</b><p>of people with long-term illnesses don't take their medicines as prescribed.</p><a href="https://iris.who.int/handle/10665/42682" target="_blank" rel="noopener">WHO, Adherence to long-term therapies</a></div>
+    <div class="stat"><b>1 in 10</b><p>medical products in low- and middle-income countries is substandard or falsified.</p><a href="https://www.who.int/news/item/28-11-2017-1-in-10-medical-products-in-developing-countries-is-substandard-or-falsified" target="_blank" rel="noopener">WHO, 2017</a></div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="wrap faq" id="faq">
+  <div><div class="eyebrow">FAQs</div><h2 style="margin-top:14px">Good <em>questions.</em></h2></div>
+  <div id="faqs"></div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="wrap final">
+  <div class="hill"></div><div class="hill b"></div>
+  <svg class="walk walking" data-rig></svg>
+  <div style="position:relative;z-index:2;padding:0 20px">
+    <h2>Start <em>remembering</em></h2>
+    <p class="lead">One photo, one sentence, and Anatono takes it from there. Free for everyone.</p>
+    <div class="btns"><a class="btn" href="app.html"><i data-lucide="camera"></i>Get Anatono free</a><a class="btn light" href="https://github.com/taseen-t/anatono"><i data-lucide="github"></i>Open source</a></div>
+  </div>
+</section>
+
+<footer class="wrap">
+  <div class="cols">
+    <div><a class="logo" href="#"><svg viewBox="30 10 80 85"><use href="#anatono"/></svg>Anatono</a><p style="margin-top:12px;opacity:.7;max-width:280px">Never miss a dose again. Built at Hack Day, Faisalabad, with Gemma 4.</p></div>
+    <div><h5>Product</h5><a href="app.html">Reminders</a><a href="app.html#check">Medicine check</a><a href="#foryou">For families</a></div>
+    <div><h5>Open source</h5><a href="https://github.com/taseen-t/anatono">GitHub</a><a href="https://ai.google.dev/gemma">Gemma 4</a><a href="#faq">How it works</a></div>
+    <div><h5>Help</h5><a href="#faq">FAQ</a><a href="#faq">Privacy</a><a href="#faq">Safety</a></div>
+  </div>
+  <div class="word">Anatono</div>
+  <div class="legal"><span>MIT licence · Anatono is a reminder tool, not medical advice</span><span>© 2026 Anatono</span></div>
+</footer>
+
+<script>
+const $ = id => document.getElementById(id);
+
+/* HERO: one still line (Taseen's drawing, 20:15). It comes in at the bottom-left, loops once round the left side, runs under the capsule
+   (always through its middle, x 720 y 125) and leaves to the right as the clean routine. Only the words move. */
+$("fp").setAttribute("d",
+  "M -80 -90 C 40 -88, 140 -84, 200 -95 C 290 -115, 365 -170, 362 -240 C 359 -300, 310 -345, 250 -342 " +   // in from the left, up the loop
+  "C 185 -338, 150 -290, 152 -230 C 154 -150, 185 -90, 240 -40 C 360 50, 560 125, 720 125 " +              // round, crossing itself, down into the capsule
+  "C 880 125, 1000 110, 1120 80 S 1400 0, 1560 -40");                                                       // out to the right, rising
+const status = $("status");
+// the words repeat end to end, just enough to cover the line, and slide along it without a jump
+function fill(tp) {
+  tp.dataset.unit ??= tp.textContent; tp.textContent = tp.dataset.unit;
+  const u = tp.getComputedTextLength(), path = document.querySelector(tp.getAttribute("href"));
+  tp.textContent = tp.dataset.unit.repeat(Math.ceil(path.getTotalLength() / u) + 2); return u;
+}
+const lines = [[$("tin"), 0.7], [$("tout"), 0.7], [$("atp"), 1.8]];
+let lens = lines.map(([tp]) => fill(tp)), off = 0;
+document.fonts.ready.then(() => { lens = lines.map(([tp]) => fill(tp)); });          // measure again once the fonts are in
+/* anything moving pauses while its section is off screen */
+const io = new IntersectionObserver(es => es.forEach(e => e.target.classList.toggle("off", !e.isIntersecting)));
+document.querySelectorAll(".hero, .apps, .speed2").forEach(el => io.observe(el));
+(function frame() {
+  off += 1;
+  lines.forEach(([tp, speed], i) => { if (!tp.closest(".off")) tp.setAttribute("startOffset", (off * speed % lens[i]) - lens[i]); });
+  requestAnimationFrame(frame);
+})();
+
+/* the changing pill: words swap letter by letter */
+const steps = [["sparkles", "Don't remember"], ["camera", "Snap the medicine"], ["mic", "Speak or type the dose"],
+               ["mouse-pointer-click", "One click"], ["circle-check", "Routine added"]];
+let si = 0;
+function setStatus() {
+  const [icon, words] = steps[si];
+  const span = $("statusText"), old = [...span.children];
+  old.forEach((c, i) => setTimeout(() => c.classList.add("out"), i * 14));
+  setTimeout(() => {
+    const ic = document.createElement("i"); ic.setAttribute("data-lucide", icon); status.querySelector("svg, i")?.replaceWith(ic);
+    span.innerHTML = [...words].map(ch => `<span class="ch in">${ch === " " ? "&nbsp;" : ch}</span>`).join("");
+    lucide.createIcons();
+    [...span.children].forEach((c, i) => setTimeout(() => c.classList.remove("in"), 20 + i * 18));
+  }, old.length * 14 + 200);
+  si = (si + 1) % steps.length;
+}
+setStatus(); setInterval(setStatus, 2600);
+
+/* Anatono with moving parts, so it can hop and walk like it has a body */
+const RIG = `<g class="m-all" stroke="#0B3B36" stroke-width="5" fill="none" stroke-linecap="round">
+  <g class="m-leg m-legL"><path d="M56 156 v16 M50 174 h12"/></g><g class="m-leg m-legR"><path d="M84 156 v16 M78 174 h12"/></g>
+  <g class="m-armL"><path d="M34 104 q-18 4 -22 24"/></g>
+  <g class="m-armR"><path d="M106 96 q20 -8 22 -34"/><g class="m-bell"><path d="M121 38 q10 -2 14 8 l3 12 -18 6 -4 -12 q-2 -10 5 -14 z" fill="#FFA946" stroke-width="4" stroke-linejoin="round"/><circle cx="131" cy="66" r="3.5" fill="#0B3B36" stroke="none"/></g></g>
+  <g class="m-body"><rect x="32" y="14" width="76" height="146" rx="38" fill="#9FE3C4"/>
+    <path d="M32 88 h76 v34 a38 38 0 0 1 -76 0 z" fill="#fff" stroke-linejoin="round"/><path d="M46 34 q-6 12 -4 26" stroke="#fff" opacity=".8"/>
+    <g class="m-eyes"><g class="m-blink" stroke="none"><circle cx="58" cy="56" r="5.5" fill="#0B3B36"/><circle cx="84" cy="56" r="5.5" fill="#0B3B36"/>
+      <circle cx="60" cy="54" r="1.8" fill="#fff"/><circle cx="86" cy="54" r="1.8" fill="#fff"/></g></g>
+    <ellipse cx="50" cy="68" rx="6" ry="3.5" fill="#FFBCF2" stroke="none"/><ellipse cx="92" cy="68" rx="6" ry="3.5" fill="#FFBCF2" stroke="none"/>
+    <path class="m-smile" d="M62 70 q9 9 18 0" stroke-width="4.5"/><ellipse class="m-oh" cx="71" cy="75" rx="5" ry="6.5" fill="#0B3B36" stroke="none" opacity="0"/></g></g>`;
+document.querySelectorAll("svg[data-rig]").forEach(svg => {
+  svg.setAttribute("viewBox", "0 0 140 180"); svg.innerHTML = RIG;
+  if (svg.classList.contains("walking")) return;            // the walker is all CSS
+  const q = c => svg.querySelector(c);
+  gsap.set(q(".m-body"), { svgOrigin: "70 160" }); gsap.set(svg.querySelectorAll(".m-leg"), { svgOrigin: "70 156" });
+  gsap.set(q(".m-armL"), { svgOrigin: "34 104" }); gsap.set(q(".m-armR"), { svgOrigin: "106 96" }); gsap.set(q(".m-eyes"), { svgOrigin: "71 56" });
+});
+
+/* a hop with weight: crouch, stretch on take-off, legs tuck, arms fly up, mouth opens, squash on landing, wobble back */
+function hop(svg) {
+  const q = c => svg.querySelector(c), legs = svg.querySelectorAll(".m-leg");
+  const all = q(".m-all"), body = q(".m-body"), aL = q(".m-armL"), aR = q(".m-armR"), eyes = q(".m-eyes"), smile = q(".m-smile"), oh = q(".m-oh");
+  gsap.timeline({ defaults: { overwrite: "auto" } })
+    .to(body, { scaleX: 1.1, scaleY: .86, duration: .13, ease: "power2.out" })
+    .to(legs, { scaleY: .65, duration: .13, ease: "power2.out" }, "<")
+    .to(all, { y: 6, duration: .13, ease: "power2.out" }, "<")
+    .to(aL, { rotation: -15, duration: .13 }, "<").to(aR, { rotation: 15, duration: .13 }, "<")
+    .to(all, { y: -40, duration: .27, ease: "power2.out" })
+    .to(body, { scaleX: .9, scaleY: 1.12, duration: .27, ease: "power2.out" }, "<")
+    .to(legs, { scaleY: .5, duration: .2 }, "<")
+    .to(aL, { rotation: 70, duration: .27, ease: "back.out(2)" }, "<").to(aR, { rotation: -25, duration: .27, ease: "back.out(2)" }, "<")
+    .to(eyes, { scale: 1.2, duration: .2 }, "<").to(smile, { opacity: 0, duration: .08 }, "<").to(oh, { opacity: 1, duration: .08 }, "<")
+    .to(all, { y: 0, duration: .25, ease: "power2.in" }, "+=.05")
+    .to(body, { scaleX: .96, scaleY: 1.05, duration: .25, ease: "power2.in" }, "<")
+    .to(legs, { scaleY: 1.08, duration: .2 }, "<")
+    .to(body, { scaleX: 1.15, scaleY: .8, duration: .07, ease: "power1.out" })
+    .to(legs, { scaleY: .7, duration: .07 }, "<").to(all, { y: 5, duration: .07 }, "<")
+    .to(eyes, { scaleX: 1.1, scaleY: .15, duration: .07 }, "<")
+    .to([body, legs, eyes], { scaleX: 1, scaleY: 1, duration: .75, ease: "elastic.out(1, .35)" })
+    .to(all, { y: 0, duration: .55, ease: "elastic.out(1, .4)" }, "<")
+    .to([aL, aR], { rotation: 0, duration: .7, ease: "elastic.out(1, .4)" }, "<")
+    .to(smile, { opacity: 1, duration: .15 }, "<").to(oh, { opacity: 0, duration: .15 }, "<");
+}
+
+/* the hero mascot hops and its bubble swaps each time a reminder comes out */
+const reminders = [["8:00 am · Amoxil 500 mg", "1 tablet after breakfast"], ["7:30 am · Omez 20 mg", "before breakfast"],
+                   ["2:00 pm · Brufen syrup", "2 spoons"], ["9:00 pm · Amoxil 500 mg", "1 tablet after dinner"]];
+let ri = 0;
+setInterval(() => {
+  ri = (ri + 1) % reminders.length;
+  // the bubble pops back into Anatono, then springs out of it with the next reminder
+  gsap.timeline().to("#bubble", { scale: 0, opacity: 0, duration: .2, ease: "power2.in", transformOrigin: "100% 100%" })
+    .add(() => { $("bubble").innerHTML = `${reminders[ri][0]}<small>${reminders[ri][1]}</small>`; })
+    .to("#bubble", { scale: 1, opacity: 1, duration: .55, ease: "back.out(2.6)" });
+}, 2600);
+
+/* section 2: three lanes of app tiles running through the phone */
+const lanes = [
+  [["sunrise", "#FFC7B5"], ["alarm-clock", "#F0D7FF"], ["pill", "#9FE3C4"], ["calendar-days", "#FFFFFF"], ["coffee", "#FFA946"], ["bell-ring", "#FFBCF2"], ["watch", "#9FE3C4"], ["message-circle", "#F0D7FF"]],
+  [["utensils", "#9FE3C4"], ["heart-pulse", "#FFBCF2"], ["smartphone", "#FFFFFF"], ["tablets", "#FFA946"], ["clock-3", "#FFC7B5"], ["users", "#F0D7FF"], ["droplets", "#9FE3C4"], ["calendar-check", "#FFBCF2"]],
+  [["moon", "#F0D7FF"], ["bed", "#9FE3C4"], ["syringe", "#FFC7B5"], ["mail", "#FFFFFF"], ["timer", "#FFBCF2"], ["house", "#FFA946"], ["phone", "#9FE3C4"], ["stethoscope", "#F0D7FF"]]];
+$("lanes").innerHTML = lanes.map(l => { const t = [...l, ...l].map(([i, c]) => `<span class="tile" style="background:${c}"><i data-lucide="${i}"></i></span>`).join("");
+  return `<div class="lane"><div class="row">${t}${t}</div></div>`; }).join("");
+
+/* section 2: a new reminder drops onto the lock screen, and the little mascot hops */
+const pn = [["8:00", "Amoxil 500 mg", "1 tablet after breakfast"], ["7:30", "Omez 20 mg", "before breakfast, empty stomach"],
+            ["2:00", "Brufen syrup", "2 spoons after lunch"], ["8:30", "Glucophage 500 mg", "1 tablet with dinner"],
+            ["9:00", "Amoxil 500 mg", "1 tablet after dinner"], ["10:00", "Vitamin D", "every Sunday, with milk"]];
+let pi = 0;
+function addNote() {
+  const [t, m, d] = pn[pi++ % pn.length], box = $("pnotes");
+  $("ptime").textContent = t;
+  box.querySelectorAll("b span").forEach(x => x.textContent = "earlier");
+  box.insertAdjacentHTML("afterbegin", `<div class="pnote"><div class="in"><div class="ic"><svg viewBox="30 10 80 90"><use href="#anatono"/></svg></div>
+    <div class="txt"><b>ANATONO <span>now</span></b><p><strong>${m}</strong> · ${d}</p><div class="acts"><span>Taken</span><span>Snooze 10 min</span></div></div></div></div>`);
+  gsap.from(box.firstElementChild, { height: 0, opacity: 0, y: -24, duration: .55, ease: "power3.out", clearProps: "height" });
+  [...box.children].slice(3).forEach(x => x.remove());
+  hop($("miniMascot"));
+}
+addNote(); setInterval(addNote, 3200);
+
+/* section 2 ticker: the calendars the reminders go into (.ics works with all of them).
+   "si:" = the real brand logo from Simple Icons (CC0), drawn in the text colour with a CSS mask */
+const SI = "https://cdn.jsdelivr.net/npm/simple-icons@13.21.0/icons/";
+const band = [["si:googlecalendar", "Google Calendar"], ["si:apple", "Apple Calendar"], ["mail", "Outlook"], ["calendar-range", "Samsung Calendar"],
+              ["si:protoncalendar", "Proton Calendar"], ["si:android", "Android"], ["si:apple", "iPhone"], ["si:googlechrome", "Chrome"], ["si:safari", "Safari"]];
+$("track").innerHTML = [...band, ...band, ...band, ...band].map(([i, s]) => i.startsWith("si:")
+  ? `<span><b class="brand" style="--i:url(${SI}${i.slice(3)}.svg)"></b>${s}</span>` : `<span><i data-lucide="${i}"></i>${s}</span>`).join("");
+
+/* section 3: the slow card types it out by hand, letter by letter */
+const byHand = "Amoxil 500 mg, 1 tablet, 8:00 am, after breakfast, 5 days. Amoxil 500 mg, 1 tablet, 9:00 pm, after dinner, 5 days. Brufen syrup, 2 spoons, 2:00 pm. ";
+let hi = 0;
+setInterval(() => { if ($("speed").classList.contains("off")) return;
+  const t = $("typed"); t.textContent = (t.textContent + byHand[hi++ % byHand.length]).slice(-60); }, 150);
+
+/* made for you */
+const groups = {
+  "Elders": ["Anatono for elders", "Big text, one button, and Urdu. Anatono reads the strip so Ammi and Abbu don't have to, and gently reminds them, every time."],
+  "Carers": ["Anatono for carers", "Set it up for someone you look after, and get their reminders in your calendar too."],
+  "Busy parents": ["Anatono for parents", "Syrups, drops and antibiotics for the kids: the right spoonful at the right time, for the right number of days."],
+  "Long-term care": ["Anatono for long-term care", "Diabetes, BP, thyroid: months of daily tablets, with a heads-up before a strip runs out."],
+  "Students": ["Anatono for students", "Exam weeks and late nights: the reminder still rings, even when the app is closed."],
+  "After surgery": ["Anatono after surgery", "Five new medicines at once, each with its own rhythm. One photo of the prescription sets them all."],
+  "Travellers": ["Anatono for travellers", "Your routine comes with you, in your phone's calendar, in any time zone."],
+  "Pharmacists": ["Anatono for pharmacists", "Show customers how to take it: one photo and they leave with reminders set."]
+};
+$("tags").innerHTML = Object.keys(groups).map((g, i) => `<span class="tagp${i ? "" : " on"}">${g}</span>`).join("");
+$("tags").onclick = e => { const g = e.target.closest(".tagp"); if (!g) return;
+  document.querySelectorAll(".tagp").forEach(x => x.classList.toggle("on", x === g));
+  const [title, text] = groups[g.textContent]; $("tagChip").textContent = "For " + g.textContent.toLowerCase();
+  gsap.fromTo([$("tagTitle"), $("tagText")], { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: .4, stagger: .06 });
+  $("tagTitle").textContent = title; $("tagText").textContent = text; };
+
+/* languages on a curve */
+const langs = ["اردو", "Roman Urdu", "English", "ਪੰਜਾਬੀ", "سنڌي", "پښتو", "العربية", "हिन्दी", "বাংলা", "Türkçe", "Español", "Français"];
+langs.forEach((l, i) => { const a = i / langs.length * Math.PI * 2;
+  $("langs").insertAdjacentHTML("beforeend", `<span style="left:calc(50% + ${Math.cos(a) * 210}px - 40px);top:calc(50% + ${Math.sin(a) * 110}px - 18px)">${l}</span>`); });
+
+/* family week */
+$("wk").innerHTML = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map((d, i) =>
+  `<div>${d}<i></i><i class="${i === 2 ? "miss" : ""}"></i><i></i></div>`).join("");
+
+/* love letters: SAMPLE placeholders for the MVP, to be replaced with real reviews at launch */
+const quotes = [["Ammi ki dawai ab kabhi miss nahi hoti. Raat 9 baje Anatono khud yaad dila deta hai.", "Ayesha", "Carer, Lahore"],
+  ["I photographed Abbu's prescription and every reminder was there in a minute.", "Bilal", "Son, Faisalabad"],
+  ["The double-dose warning caught Panadol and Calpol on the same day.", "Sara", "Mother of two"],
+  ["Mujhe parhna nahi aata. Main bas bol deti hoon, aur Anatono samajh jata hai.", "Nasreen", "Retired teacher"],
+  ["Five tablets after my surgery and I didn't miss one.", "Hamza", "Patient, Islamabad"],
+  ["It flagged an expired syrup in our cupboard before my son took it.", "Zainab", "Mother, Karachi"]];
+$("quotes").innerHTML = [...quotes, ...quotes].map(([q, n, r]) =>
+  `<div class="quote"><span class="sample">SAMPLE</span><p>"${q}"</p><div class="who"><i>${n[0]}</i><div>${n}<br><span style="opacity:.6;font-weight:500">${r}</span></div></div></div>`).join("");
+
+/* FAQ */
+const faqs = [["Is Anatono free?", "Yes. Anatono is free and open source (MIT licence)."],
+  ["Does it work in Urdu?", "Yes. Speak or type in Urdu, Roman Urdu, Punjabi or English, or a mix. Gemma 4 understands it, and Anatono shows you what it understood before saving."],
+  ["Can it tell if a medicine is fake?", "No app can prove that from a photo. Anatono flags warning signs: expired, missing batch or registration number, spelling mistakes on the pack. If anything looks wrong, ask your pharmacist."],
+  ["Will reminders ring when the app is closed?", "Yes. Add the reminders to your phone's calendar with one tap, and the alarms ring like any other calendar alarm."],
+  ["Does it replace my doctor?", "No. Anatono only helps you remember what your doctor prescribed. It never changes a dose."],
+  ["What happens to my photos?", "The photo is sent to Gemma 4 through the Gemini API to be read, and Anatono keeps your routine on your own phone."]];
+$("faqs").innerHTML = faqs.map(([q, a], i) => `<details name="faq"${i ? "" : " open"}><summary>${q}<i data-lucide="plus"></i></summary><p>${a}</p></details>`).join("");
+
+lucide.createIcons();
+
+/* scroll reveals */
+gsap.registerPlugin(ScrollTrigger);
+document.querySelectorAll(".reveal").forEach(el => gsap.to(el, { opacity: 1, y: 0, duration: .9, ease: "power3.out",
+  scrollTrigger: { trigger: el, start: "top 85%" } }));
+gsap.from(".hero h1", { y: 40, opacity: 0, duration: 1, ease: "power3.out" });
+gsap.from(".hero .lead, .avail", { y: 20, opacity: 0, duration: .8, stagger: .1, delay: .2 });   // not the button: its hover transition fights the tween and it ends up on top of the line below
+</script>
+</body></html>
