@@ -22,8 +22,9 @@ a = p.parse_args()
 
 read = A.read_photo(Path(a.photo).read_bytes())
 out = {"kind": read.get("kind"), "medicines": [], "routine": []}
-for m, c in zip(read.get("medicines") or [], read["checks"]):
-    out["medicines"].append({"name": m.get("name"), "strength": m.get("strength"), "what_for": m.get("what_for"),
+why = A.explain(read.get("medicines") or []) if read.get("medicines") else []
+for m, c, w in zip(read.get("medicines") or [], read["checks"], why):
+    out["medicines"].append({"name": m.get("name"), "strength": m.get("strength"), "what_for": w.get("what_for"),
                              "check": c["level"], "flags": c["flags"]})
     said = a.dose if a.dose and len(read["medicines"]) == 1 else m.get("dose_written")
     if c["level"] == "stop" or not said:

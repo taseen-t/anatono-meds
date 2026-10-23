@@ -10,6 +10,7 @@ import io
 import json
 import re
 import time
+from concurrent.futures import ThreadPoolExecutor
 from datetime import date, datetime
 from pathlib import Path
 
@@ -34,13 +35,16 @@ Reply with JSON only:
  "medicines": [{"name": "brand name as printed", "salt": "active ingredient(s)", "strength": "e.g. 500 mg",
    "form": "tablet|capsule|syrup|drops|injection|cream|inhaler|other", "manufacturer": "", "batch": "",
    "mfg": "YYYY-MM or ''", "expiry": "YYYY-MM or ''", "reg_no": "registration number as printed, or ''",
-   "dose_written": "the dose as written on a prescription (e.g. 1+0+1, BD x 5 days), or ''",
-   "what_for": "one simple English sentence: what this medicine is usually used for",
-   "what_for_urdu": "the same sentence in simple Urdu"}],
- "text": "everything printed or written, copied exactly (up to 1200 characters)",
+   "dose_written": "the dose as written on a prescription (e.g. 1+0+1, BD x 5 days), or ''"}],
  "warning_signs": ["anything that looks wrong for a genuine medicine: spelling mistakes, blurry or uneven print,
    missing batch, expiry or manufacturer, damaged packaging. [] if none"]}
-Never invent anything that isn't visible. If you can't read something, leave it ''."""
+Never invent anything that isn't visible. If you can't read something, leave it ''.
+Keep it short: no text outside the JSON."""
+
+# asked after the photo is read, so the first (slow) call only has to read what's on the page
+EXPLAIN_PROMPT = """You are Anatono. For each medicine below, say in one simple sentence what it is usually used for,
+in English and in simple Urdu. Medicines: {meds}
+Reply with JSON only: {{"medicines": [{{"what_for": "...", "what_for_urdu": "..."}}]}}, in the same order."""
 
 DOSE_PROMPT = """You are Anatono. The person is telling you how they take {med}. They may use Urdu, Roman Urdu,
 Punjabi or English, for example "subah aur raat ek goli khane ke baad", "1+0+1", "twice a day for 5 days".
@@ -81,10 +85,40 @@ def image_from(data_url_or_bytes):
     return img
 
 
-def read_photo(image, routine=(), today=None):
-    """Gemma reads the medicine or prescription; code checks it against today's date and the person's routine."""
-    d = ask([READ_PROMPT, image if isinstance(image, Image.Image) else image_from(image)])
-    return {**d, "checks": [check_medicine(m, d, routine, today) for m in d.get("medicines") or []]}
+def pieces(img):
+    """A tall page (a full prescription) is cut into two overlapping halves, because Gemma 4 on the API is slow and
+    two short answers come back sooner than one long one. The overlap keeps a line cut in half readable in one piece."""
+    w, h = img.size
+    if h < 1.2 * w:
+        return [img]
+    return [img.crop((0, 0, w, int(h * .58))), img.crop((0, int(h * .42), w, h))]
+
+
+def read_photo(image, routine=(), today=None, piece=None):
+    """Gemma reads the medicine or prescription; code checks it against today's date and the person's routine.
+    piece=None reads every piece at once; piece=0, 1 reads just that one (the app shows part 1 and offers the rest)."""
+    img = image if isinstance(image, Image.Image) else image_from(image)
+    cut = pieces(img)
+    todo = cut if piece is None else [cut[min(int(piece), len(cut) - 1)]]
+    with ThreadPoolExecutor() as pool:
+        parts = list(pool.map(lambda p: ask([READ_PROMPT, p]), todo))
+    meds, seen = [], set()
+    for part in parts:                            # a medicine in the overlap is read twice: keep it once
+        for m in part.get("medicines") or []:
+            key = norm(m.get("name")) + norm(m.get("strength"))
+            if key and key not in seen:
+                seen.add(key)
+                meds.append(m)
+    d = {"kind": next((p["kind"] for p in parts if p.get("kind") == "prescription"), parts[0].get("kind")),
+         "medicines": meds, "warning_signs": sorted({w for p in parts for w in p.get("warning_signs") or []})}
+    return {**d, "pieces": len(cut), "checks": [check_medicine(m, d, routine, today) for m in meds]}
+
+
+def explain(medicines):
+    """What each medicine is usually for, in English and Urdu (a second, quick call after the photo is read)."""
+    names = "; ".join(" ".join(x for x in (m.get("name"), m.get("salt")) if x) for m in medicines)
+    got = ask([EXPLAIN_PROMPT.format(meds=names)]).get("medicines") or []
+    return [got[i] if i < len(got) else {} for i in range(len(medicines))]
 
 
 def hear(audio, mime="audio/webm"):
@@ -244,4 +278,5 @@ if __name__ == "__main__":
     cal = ics([{"name": "Amoxil", "strength": "500 mg", "amount": "1 tablet", "food": "after",
                 "times": ["08:00", "21:00"], "days": 5}], today)
     assert cal.count("BEGIN:VEVENT") == 2 and "COUNT=5" in cal
+    assert len(pieces(Image.new("RGB", (800, 1600)))) == 2 and len(pieces(Image.new("RGB", (1600, 900)))) == 1
     print("self-check ok")

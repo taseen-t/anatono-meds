@@ -48,6 +48,15 @@
 
   /* reading + results */
   .thumb { width: 100%; max-height: 220px; object-fit: cover; border-radius: 14px; border: 2px solid var(--ink); margin-top: 14px; }
+  /* wide screens: the app on the left, the whole prescription on the right */
+  .page { display: none; }
+  @media (min-width: 900px) {
+    .app.has-photo { max-width: 1180px; display: grid; grid-template-columns: 480px 1fr; column-gap: 40px; align-items: start; }
+    .app.has-photo > * { grid-column: 1; }
+    .app.has-photo .page { display: block; grid-column: 2; grid-row: 1 / span 20; position: sticky; top: 16px; }
+    .page img { width: 100%; max-height: calc(100vh - 32px); object-fit: contain; border-radius: 16px; border: 2px solid var(--ink); background: #fff; }
+    .app.has-photo .thumb { display: none; }
+  }
   .reading { display: flex; gap: 12px; align-items: center; margin-top: 14px; font-weight: 600; }
   .pulse { width: 46px; height: 30px; flex: none; }
   .pulse path { stroke-dasharray: 100; animation: trace 1.4s linear infinite; }
@@ -57,6 +66,9 @@
   .badge.ok { background: #DDF3E7; color: var(--ok); } .badge.careful { background: #FCEFD8; color: var(--warn); } .badge.stop { background: #FBE1DC; color: var(--stop); }
   .badge svg.lucide { width: 16px; height: 16px; }
   ul.flags { margin: 10px 0 0; padding-left: 20px; font-size: 14px; color: var(--sub); } ul.flags li { margin: 4px 0; }
+  .for:empty { display: none; }
+  .more { margin-top: 16px; padding: 16px; border: 2px dashed var(--ink); border-radius: 14px; }
+  .more p { font-size: 14px; color: var(--sub); margin: 0 0 10px; }
   .for { margin-top: 10px; font-size: 15px; } .for .ur { display: block; direction: rtl; font-size: 16px; margin-top: 4px; color: var(--sub); }
   label.lbl { display: block; font: 700 14px Figtree; margin: 16px 0 6px; }
   .say { display: flex; gap: 8px; }
@@ -127,6 +139,8 @@
     </div>
   </div>
 
+  <aside class="page"><img id="page" alt="Your prescription"></aside>
+
   <footer>Anatono helps you remember what your doctor prescribed. It isn't medical advice and never changes a dose.<br>
     Photos go to Gemma 4 (Google Gemini API) to be read. Your routine stays on this phone.</footer>
 </div>
@@ -163,16 +177,38 @@ async function shrink(file) {
   return c.toDataURL("image/jpeg", .85);
 }
 let found = [];   // what Gemma read from the last photo
+let photo = "";   // the photo being read, kept so the rest of a long prescription can be read on request
 async function readPhoto(dataUrl) {
-  $("out").innerHTML = `<img class="thumb" src="${dataUrl}" alt="Your photo"><div class="reading">${pulse}<span>Gemma 4 is reading it. This can take a minute.</span></div>`;
+  photo = dataUrl; found = [];
+  $("page").src = dataUrl; document.querySelector(".app").classList.add("has-photo");
+  $("out").innerHTML = `<img class="thumb" src="${dataUrl}" alt="Your photo"><div id="cards"></div><div id="tail"></div>`;
+  readPiece(0);
+}
+async function readPiece(n) {
+  $("tail").innerHTML = `<div class="reading">${pulse}<span>Gemma 4 is reading ${n ? "the rest of the page" : "it"}. This can take a minute.</span></div>`;
   try {
-    const r = await api("api/read", { image: dataUrl, routine });
-    found = r.medicines || [];
-    if (!found.length) { $("out").innerHTML = `<img class="thumb" src="${dataUrl}" alt=""><p class="err">No medicine found in this photo. Try a closer, brighter photo of the name on the strip or box.</p>`; return; }
-    $("out").innerHTML = `<p class="muted" style="margin-top:14px">${r.kind === "prescription" ? "From your prescription" : "From your photo"}: ${found.length} medicine${found.length > 1 ? "s" : ""}. Check each one, then say how you take it.</p>` +
-      found.map((m, i) => medCard(m, r.checks?.[i] || { level: "ok", flags: [], good: [] }, i)).join("");
+    // medicines already read count as the routine, so the code can spot the same salt twice across parts
+    const r = await api("api/read", { image: photo, routine: routine.concat(found), piece: n });
+    const seen = new Set(found.map(m => `${m.name}${m.strength || ""}`.toLowerCase()));
+    const fresh = (r.medicines || []).map((m, i) => [m, r.checks?.[i]]).filter(([m]) => !seen.has(`${m.name}${m.strength || ""}`.toLowerCase()));
+    const start = found.length;
+    found.push(...fresh.map(([m]) => m));
+    $("cards").insertAdjacentHTML("beforeend", fresh.map(([m, c], i) => medCard(m, c || { level: "ok", flags: [], good: [] }, start + i)).join(""));
+    const left = (r.pieces || 1) - n - 1;
+    $("tail").innerHTML = left > 0 ? `<div class="more"><p>We read long prescriptions in parts only because Gemma 4's connection is slow right now.
+        Part ${n + 1} of ${r.pieces} is done${fresh.length ? "" : " (no medicines in it)"}.</p>
+        <button class="btn dark full" id="moreBtn"><i data-lucide="scan-text"></i>Read the remaining medicines</button></div>`
+      : !found.length ? `<p class="err">No medicine found in this photo. Try a closer, brighter photo of the name on the strip or box.</p>` : "";
+    if (left > 0) $("moreBtn").onclick = () => readPiece(n + 1);
     icons();
-  } catch (e) { $("out").innerHTML = `<p class="err">${esc(e.message)}</p>`; }
+    // what each medicine is for comes from a second, quick call, so the cards show up sooner
+    if (fresh.length) api("api/explain", { medicines: fresh.map(([m]) => m) }).then(x => (x.medicines || []).forEach((w, i) => {
+      const el = $(`for${start + i}`); if (el && w.what_for) el.innerHTML = `${esc(w.what_for)}${w.what_for_urdu ? `<span class="ur">${esc(w.what_for_urdu)}</span>` : ""}`;
+    })).catch(() => {});
+  } catch (e) {
+    $("tail").innerHTML = `<p class="err">${esc(e.message)}</p><button class="btn light full" id="moreBtn"><i data-lucide="refresh-cw"></i>Try again</button>`;
+    $("moreBtn").onclick = () => readPiece(n); icons();
+  }
 }
 $("cam").onchange = $("gal").onchange = async e => { const f = e.target.files[0]; e.target.value = ""; if (f) readPhoto(await shrink(f)); };
 $("sample").onclick = async () => { const b = await (await fetch("samples/prescription.jpg")).blob(); readPhoto(await shrink(b)); };
@@ -183,7 +219,7 @@ $("typeName").onclick = () => {
       <button class="btn" type="submit"><i data-lucide="arrow-right"></i>Next</button></div></form>`;
   icons(); $("typedName").focus();
   $("nameForm").onsubmit = e => { e.preventDefault(); const name = $("typedName").value.trim(); if (!name) return;
-    found = [{ name, strength: "", salt: "" }];
+    found = [{ name, strength: "", salt: "" }]; document.querySelector(".app").classList.remove("has-photo");
     $("out").innerHTML = medCard(found[0], { level: "ok", flags: [], good: [], typed: true }, 0); icons(); $("say0").focus(); };
 };
 
@@ -193,7 +229,7 @@ function medCard(m, c, i) {
   return `<div class="card med" id="med${i}">
     <h3>${esc(m.name)} ${esc(m.strength)}</h3>
     <div class="sub">${esc([m.form, m.salt].filter(Boolean).join(" · "))}</div>
-    ${m.what_for ? `<div class="for">${esc(m.what_for)}${m.what_for_urdu ? `<span class="ur">${esc(m.what_for_urdu)}</span>` : ""}</div>` : ""}
+    <div class="for" id="for${i}"></div>
     ${c.typed ? "" : `<span class="badge ${c.level}"><i data-lucide="${badge[0]}"></i>${badge[1]}</span>`}
     ${c.flags?.length || c.good?.length ? `<ul class="flags">${c.flags.map(f => `<li>${esc(f)}</li>`).join("")}${(c.good || []).map(g => `<li>${esc(g)}</li>`).join("")}</ul>` : ""}
     ${c.level === "stop" ? `<p class="err">Please don't take this one. Show it to your pharmacist.</p>` : `

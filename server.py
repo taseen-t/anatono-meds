@@ -27,8 +27,16 @@ async def read(request):
         b = await body(request)
         if not str(b.get("image", "")).startswith("data:image/"):
             return JSONResponse({"error": "Send a photo (data:image/...)."}, 400)
-        return JSONResponse(A.read_photo(b["image"], b.get("routine") or []))
+        return JSONResponse(A.read_photo(b["image"], b.get("routine") or [], piece=b.get("piece")))
     except Exception as e:  # noqa: BLE001 - tell the app what went wrong
+        return JSONResponse({"error": str(e)}, 500)
+
+
+async def explain(request):
+    """The medicines Gemma read -> what each is usually for, in English and Urdu."""
+    try:
+        return JSONResponse({"medicines": A.explain((await body(request)).get("medicines") or [])})
+    except Exception as e:  # noqa: BLE001
         return JSONResponse({"error": str(e)}, 500)
 
 
@@ -56,7 +64,8 @@ async def calendar(request):
                     headers={"Content-Disposition": 'attachment; filename="anatono-reminders.ics"'})
 
 
-api_routes = [Route("/api/read", read, methods=["POST"]), Route("/api/dose", dose, methods=["POST"]),
+api_routes = [Route("/api/read", read, methods=["POST"]), Route("/api/explain", explain, methods=["POST"]),
+              Route("/api/dose", dose, methods=["POST"]),
               Route("/api/calendar", calendar, methods=["POST"])]
 app = Starlette(routes=api_routes + [Mount("/", StaticFiles(directory=Path(__file__).parent / "site", html=True, check_dir=False))])
 
