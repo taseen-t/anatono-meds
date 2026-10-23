@@ -408,18 +408,28 @@
   .phone.small { position: absolute; left: 0; bottom: 0; width: 230px; height: 450px; padding-top: 48px; transform: rotate(-4deg); }
 
   /* ---------- love letters ---------- */
-  .love { padding: 110px 0 70px; margin-top: 40px; overflow: hidden; }
-  .love h2 { color: #EAF6EF; }
-  .quotes { display: flex; gap: 18px; margin-top: 50px; width: max-content; animation: ticker 60s linear infinite; }
-  .quote { width: 340px; background: #F2FAF5; color: var(--ink); border-radius: 20px; padding: 22px; position: relative; }
-  .quote p { font: 500 16px/1.45 Figtree; }
-  .quote .who { display: flex; gap: 10px; align-items: center; margin-top: 18px; font: 600 14px Figtree; }
-  .quote .who i { width: 36px; height: 36px; border-radius: 50%; background: var(--mint); display: grid; place-items: center; font-style: normal; }
-  .quote .sample { position: absolute; top: 14px; right: 14px; font: 700 10px Figtree; letter-spacing: .08em; padding: 4px 7px; border-radius: 6px; background: var(--sand); opacity: .8; }
-  .stats { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 30px; }
-  .stat { background: var(--band); border-radius: 22px; padding: 28px; color: #EAF6EF; }
-  .stat b { font: 400 52px/1 "EB Garamond", serif; display: block; }
-  .stat p { margin-top: 10px; font: 500 15px/1.4 Figtree; color: #BFD8CF; }
+  /* ---------- section 8: reviews ---------- */
+  .reviews { margin: 40px 10px 0; padding: 110px 0 80px; border-radius: 48px; background: #111614; color: #EAF6EF; overflow: hidden; }
+  .reviews h2 { margin-top: 14px; font-size: clamp(44px, 5.6vw, 80px); } .reviews h2 em { display: block; }
+  .rv-note { margin-top: 14px; font: 500 13px Figtree; opacity: .5; }
+  .collage { position: relative; width: min(1200px, calc(100% - 40px)); height: 820px; margin: 70px auto 0; }
+  .rv { position: absolute; margin: 0; padding: 26px 26px 22px; border-radius: 28px; color: #1a1a1a; }
+  .rv blockquote { margin: 0; font: 400 28px/1.15 "EB Garamond", serif; letter-spacing: -.3px; }
+  .rv figcaption { display: flex; align-items: center; gap: 10px; margin-top: 22px; font: 600 14px Figtree; }
+  .rv figcaption i { width: 40px; height: 40px; flex: none; border-radius: 50%; border: 2px solid #1a1a1a; display: grid; place-items: center;
+                     font: 400 20px "EB Garamond", serif; font-style: normal; background: #FFFDF6; }
+  .rv small { display: block; font-weight: 500; opacity: .6; font-size: 12px; }
+  .rv .sample { position: absolute; bottom: 32px; right: 22px; font: 700 10px Figtree; letter-spacing: .1em; text-transform: uppercase;
+                padding: 4px 8px; border-radius: 6px; border: 1.5px solid currentColor; opacity: .55; }
+  .r1 { left: 0; top: 0; width: 470px; background: var(--lav); transform: rotate(-3deg); }
+  .r2 { left: 510px; top: 90px; width: 330px; background: #FFFDF6; transform: rotate(2deg); }
+  .r3 { right: 0; top: 0; width: 320px; background: var(--sun); transform: rotate(4deg); }
+  .r4 { left: 40px; top: 470px; width: 360px; background: var(--mint); transform: rotate(3deg); }
+  .r5 { left: 450px; top: 520px; width: 400px; background: var(--pink); transform: rotate(-2deg); }
+  .r6 { right: 10px; top: 450px; width: 320px; background: var(--sand); transform: rotate(-4deg); }
+  .stat2 b { display: block; font: 400 84px/.9 "EB Garamond", serif; letter-spacing: -2px; }
+  .stat2 p { margin-top: 12px; font: 500 17px/1.4 Figtree; }
+  .stat2 a { display: inline-block; margin-top: 14px; font: 600 12px Figtree; text-decoration: underline; opacity: .65; }
   .stat a { font-size: 12px; opacity: .6; text-decoration: underline; }
 
   /* ---------- FAQ ---------- */
@@ -463,6 +473,8 @@
     .ef { min-height: 40vh; } .trust2 { grid-template-columns: 1fr; padding: 32px 24px; }
     .race2 { grid-template-columns: 1fr; } .rc { height: 280px; }
     .check2 { grid-template-columns: 1fr; gap: 30px; padding: 90px 0 40px; } .deck { height: 420px; } .vc { width: 300px; margin-left: -150px; }
+    .collage { height: auto; display: grid; gap: 18px; } .rv { position: relative; inset: auto; width: auto; } .rv .sample { bottom: auto; top: 14px; }
+    .reviews { margin: 30px 6px 0; border-radius: 32px; padding: 80px 0; }
     .grid, .duo, .faq, .stats { grid-template-columns: 1fr; padding-left: 22px; padding-right: 22px; }
     .feat:nth-child(even) { margin-top: 0; }
     .mascot { right: 2%; top: 560px; width: 90px; } .bubble { display: none; }
@@ -667,27 +679,18 @@
   </div>
 </section>
 
-<!-- PHONE OR FAMILY -->
-<section class="wrap duo">
-  <div class="reveal"><div class="chips2"><span class="chip"><i data-lucide="smartphone"></i>Phone</span><span class="chip"><i data-lucide="users"></i>Family</span></div>
-    <h2>On your phone, <em>or your family's</em></h2>
-    <p class="lead">Set it up once on Abbu's phone. Add the reminders to your own calendar too, so you know he's on track, even from another city.</p>
-    <a class="btn" href="app.html"><i data-lucide="calendar-plus"></i>Get Anatono free</a></div>
-  <div class="screens reveal">
-    <div class="laptop"><h4>Abbu's week</h4><div class="wk" id="wk"></div>
-      <div class="rowline" style="margin-top:18px">Glucophage 500 <span>runs out in 3 days</span></div><div class="rowline">Next: Amoxil 500 mg <span>9:00 pm</span></div></div>
-    <div class="phone small"><div class="time" style="font-size:48px">9:00</div><div class="date">Tonight</div>
-      <div class="note"><div class="ic"><svg viewBox="30 10 80 90"><use href="#anatono"/></svg></div><div><b>Anatono <span>now</span></b><p><strong>Amoxil 500 mg</strong> after dinner.</p></div></div></div>
-  </div>
-</section>
-
-<!-- LOVE LETTERS (placeholder reviews for the MVP) -->
-<section class="dark love">
-  <div class="wrap center"><div class="eyebrow" style="color:#BFD8CF">Early access</div><h2>Love letters <em>to Anatono</em></h2></div>
-  <div class="quotes" id="quotes"></div>
-  <div class="wrap stats">
-    <div class="stat"><b>About half</b><p>of people with long-term illnesses don't take their medicines as prescribed.</p><a href="https://iris.who.int/handle/10665/42682" target="_blank" rel="noopener">WHO, Adherence to long-term therapies</a></div>
-    <div class="stat"><b>1 in 10</b><p>medical products in low- and middle-income countries is substandard or falsified.</p><a href="https://www.who.int/news/item/28-11-2017-1-in-10-medical-products-in-developing-countries-is-substandard-or-falsified" target="_blank" rel="noopener">WHO, 2017</a></div>
+<!-- SECTION 8: reviews (after Wispr's "From the first people to use it"). The quotes are SAMPLES until real reviews come in -->
+<section class="reviews" id="reviews">
+  <div class="center reveal"><div class="eyebrow">Families, carers, patients</div>
+    <h2>From the first <em>families to use it.</em></h2>
+    <p class="rv-note">Sample reviews for this preview. Real ones will replace them at launch.</p></div>
+  <div class="collage">
+    <figure class="rv r1"><span class="sample">Sample</span><blockquote>"Ammi used to forget her evening tablet. Now the bell rings at nine and she shows me the tick."</blockquote><figcaption><i>S</i><span>Sana<small>Daughter and carer, Faisalabad</small></span></figcaption></figure>
+    <figure class="rv r2"><span class="sample">Sample</span><blockquote>"I said the prescription out loud in Punjabi and it set everything. I didn't type a single word."</blockquote><figcaption><i>R</i><span>Rashid<small>Retired teacher, 67</small></span></figcaption></figure>
+    <figure class="rv r3"><span class="sample">Sample</span><blockquote>"It caught that Panadol and the cough syrup both had paracetamol. I had no idea."</blockquote><figcaption><i>H</i><span>Hira<small>Mother of two, Lahore</small></span></figcaption></figure>
+    <figure class="rv stat2 r4"><b>1 in 2</b><p>people with a long-term illness don't take their medicines as prescribed.</p><a href="https://iris.who.int/handle/10665/42682" target="_blank" rel="noopener">WHO, Adherence to long-term therapies</a></figure>
+    <figure class="rv r5"><span class="sample">Sample</span><blockquote>"Five medicines after my knee surgery, one photo. The reminders were in my calendar before I left the pharmacy."</blockquote><figcaption><i>U</i><span>Usman<small>After surgery, Islamabad</small></span></figcaption></figure>
+    <figure class="rv stat2 r6"><b>1 in 10</b><p>medical products in low- and middle-income countries is substandard or falsified.</p><a href="https://www.who.int/news/item/28-11-2017-1-in-10-medical-products-in-developing-countries-is-substandard-or-falsified" target="_blank" rel="noopener">WHO, 2017</a></figure>
   </div>
 </section>
 
@@ -904,20 +907,6 @@ setInterval(() => { if ($("check").classList.contains("off")) return;
   vk = (vk + 1) % vcs.length; vcs.forEach((c, i) => c.className = `vc ${c.dataset.level} p${(i - vk + vcs.length) % vcs.length}`); }, 3000);
 io.observe($("check"));
 
-/* languages on a curve */
-$("wk").innerHTML = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map((d, i) =>
-  `<div>${d}<i></i><i class="${i === 2 ? "miss" : ""}"></i><i></i></div>`).join("");
-
-/* love letters: SAMPLE placeholders for the MVP, to be replaced with real reviews at launch */
-const quotes = [["Ammi ki dawai ab kabhi miss nahi hoti. Raat 9 baje Anatono khud yaad dila deta hai.", "Ayesha", "Carer, Lahore"],
-  ["I photographed Abbu's prescription and every reminder was there in a minute.", "Bilal", "Son, Faisalabad"],
-  ["The double-dose warning caught Panadol and Calpol on the same day.", "Sara", "Mother of two"],
-  ["Mujhe parhna nahi aata. Main bas bol deti hoon, aur Anatono samajh jata hai.", "Nasreen", "Retired teacher"],
-  ["Five tablets after my surgery and I didn't miss one.", "Hamza", "Patient, Islamabad"],
-  ["It flagged an expired syrup in our cupboard before my son took it.", "Zainab", "Mother, Karachi"]];
-$("quotes").innerHTML = [...quotes, ...quotes].map(([q, n, r]) =>
-  `<div class="quote"><span class="sample">SAMPLE</span><p>"${q}"</p><div class="who"><i>${n[0]}</i><div>${n}<br><span style="opacity:.6;font-weight:500">${r}</span></div></div></div>`).join("");
-
 /* FAQ */
 const faqs = [["Is Anatono free?", "Yes. Anatono is free and open source (MIT licence)."],
   ["Does it work in Urdu?", "Yes. Speak or type in Urdu, Roman Urdu, Punjabi or English, or a mix. Gemma 4 understands it, and Anatono shows you what it understood before saving."],
@@ -956,6 +945,11 @@ efs.forEach((ef, i) => ScrollTrigger.create({ trigger: ef, start: "top 55%", end
   onToggle: st => { if (!st.isActive) return; efs.forEach((x, k) => x.classList.toggle("on", k === i)); dms.forEach((x, k) => x.classList.toggle("on", k === i)); } }));
 const langNames = ["Roman Urdu", "English", "اردو", "ਪੰਜਾਬੀ"];
 let ln = 0; setInterval(() => { $("langName").textContent = langNames[++ln % langNames.length]; }, 2200);
+
+/* section 8: the review cards drift at different speeds as you scroll past */
+if (matchMedia("(min-width: 901px)").matches)
+  document.querySelectorAll(".rv").forEach((c, i) => gsap.fromTo(c, { y: 60 + (i % 3) * 50 }, { y: -40 - (i % 3) * 40, ease: "none",
+    scrollTrigger: { trigger: ".collage", start: "top bottom", end: "bottom top", scrub: true } }));
 
 gsap.from(".hero h1", { y: 40, opacity: 0, duration: 1, ease: "power3.out" });
 gsap.from(".hero .lead, .avail", { y: 20, opacity: 0, duration: .8, stagger: .1, delay: .2 });   // not the button: its hover transition fights the tween and it ends up on top of the line below
