@@ -455,14 +455,20 @@
   @keyframes dot3 { 0%, 80%, 100% { opacity: .25; transform: none; } 40% { opacity: 1; transform: translateY(-3px); } }
 
   /* ---------- final CTA + footer ---------- */
-  .final { margin-top: 40px; border-radius: 40px; min-height: 640px; position: relative; overflow: hidden; display: grid; place-items: center; text-align: center;
-           background: radial-gradient(90% 70% at 50% 110%, #FFB38F 0%, #FFD7B8 25%, transparent 60%), linear-gradient(180deg, #9ED9C2 0%, #CDEFE0 45%, #FFE9D9 100%); }
-  .final h2 { font-size: clamp(60px, 9vw, 130px); }
-  .final .lead { margin: 20px auto 0; max-width: 520px; }
-  .final .btns { display: flex; gap: 12px; justify-content: center; margin-top: 30px; }
-  .final .hill { position: absolute; left: -10%; right: -10%; bottom: -120px; height: 300px; border-radius: 50%; background: #7CC9A9; }
-  .final .hill.b { bottom: -170px; left: 20%; right: -30%; background: #5DB592; }
-  .final .walk { position: absolute; bottom: 70px; width: 110px; height: 141px; animation: walk 18s linear infinite; }
+  /* ---------- section 10: final call to action ---------- */
+  .final2 { position: relative; overflow: hidden; margin: 40px 10px 0; min-height: 700px; border-radius: 48px; display: grid; place-items: center; text-align: center; color: #fff; }
+  .final2 .sky { position: absolute; inset: 0; background: radial-gradient(55% 50% at 24% 30%, rgba(255,169,70,.8), transparent 70%),
+                 radial-gradient(50% 45% at 78% 22%, rgba(255,138,107,.65), transparent 70%), radial-gradient(70% 55% at 50% 95%, rgba(159,227,196,.55), transparent 70%),
+                 linear-gradient(180deg, #2c6a5d, #1b453e); }
+  .final2 .hills { position: absolute; left: 0; bottom: 0; width: 100%; height: 260px; }
+  .final-copy { position: relative; z-index: 2; padding: 0 20px 130px; }
+  .final2 h2 { font-size: clamp(54px, 7.6vw, 112px); line-height: .95; color: #fff; }
+  .final2 .lead { margin: 22px auto 0; max-width: 520px; color: rgba(255,255,255,.88); }
+  .final2 .btns { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin-top: 30px; }
+  .btn.ghost2 { background: rgba(255,255,255,.12); color: #fff; border-color: #fff; }
+  .btn.ghost2:hover { box-shadow: 0 4px 0 #fff; }
+  .final2 .avail { margin-top: 18px; color: #fff; opacity: .75; }
+  .final2 .walk { position: absolute; z-index: 1; bottom: 63px; width: 110px; height: 141px; animation: walk 18s linear infinite; }
   @keyframes walk { from { left: -120px; } to { left: 105%; } }
   footer { padding: 70px 0 30px; }
   footer .cols { display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 30px; }
@@ -715,14 +721,19 @@
   </div>
 </section>
 
-<!-- FINAL CTA -->
-<section class="wrap final">
-  <div class="hill"></div><div class="hill b"></div>
+<!-- SECTION 10: final call to action (after Wispr's "You have a way with words. Now, two.") -->
+<section class="final2">
+  <div class="sky"></div>
+  <svg class="hills" viewBox="0 0 1440 260" preserveAspectRatio="none" aria-hidden="true">
+    <path d="M0 150 C 240 70, 430 80, 650 135 S 1090 190, 1440 95 V 260 H 0 Z" fill="#5DB592"/>
+    <path d="M0 196 C 360 186, 1080 186, 1440 196 V 260 H 0 Z" fill="#3E9E7A"/></svg>
   <svg class="walk walking" data-rig></svg>
-  <div style="position:relative;z-index:2;padding:0 20px">
-    <h2>Start <em>remembering</em></h2>
-    <p class="lead">One photo, one sentence, and Anatono takes it from there. Free for everyone.</p>
-    <div class="btns"><a class="btn" href="app.html"><i data-lucide="camera"></i>Get Anatono free</a><a class="btn light" href="https://github.com/taseen-t/anatono"><i data-lucide="github"></i>Open source</a></div>
+  <div class="final-copy reveal">
+    <h2>One photo tonight.<br><em>Every dose after.</em></h2>
+    <p class="lead">Snap your medicine, say how you take it, and Anatono takes it from there. Free for everyone.</p>
+    <div class="btns"><a class="btn" href="app.html"><b class="brand" style="--i:url(https://cdn.jsdelivr.net/npm/simple-icons@13.21.0/icons/apple.svg)"></b><b class="brand" style="--i:url(https://cdn.jsdelivr.net/npm/simple-icons@13.21.0/icons/android.svg)"></b>Get Anatono free</a>
+      <a class="btn ghost2" href="https://github.com/taseen-t/anatono"><i data-lucide="github"></i>Open source</a></div>
+    <div class="avail">Free on iPhone, Android and the web · powered by Gemma 4</div>
   </div>
 </section>
 
@@ -760,7 +771,7 @@ let lens = lines.map(([tp]) => fill(tp)), off = 0;
 document.fonts.ready.then(() => { lens = lines.map(([tp]) => fill(tp)); });          // measure again once the fonts are in
 /* anything moving pauses while its section is off screen */
 const io = new IntersectionObserver(es => es.forEach(e => e.target.classList.toggle("off", !e.isIntersecting)));
-document.querySelectorAll(".hero, .apps, .speed2, .how").forEach(el => io.observe(el));
+document.querySelectorAll(".hero, .apps, .speed2, .how, .final2").forEach(el => io.observe(el));
 (function frame() {
   off += 1;
   lines.forEach(([tp, speed], i) => { if (!tp.closest(".off")) tp.setAttribute("startOffset", (off * speed % lens[i]) - lens[i]); });
