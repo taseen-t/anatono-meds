@@ -471,11 +471,28 @@
   .final2 .walk { position: absolute; z-index: 1; bottom: 63px; width: 110px; height: 141px; animation: walk 18s linear infinite; }
   @keyframes walk { from { left: -120px; } to { left: 105%; } }
   footer { padding: 70px 0 30px; }
-  footer .cols { display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 30px; }
+  /* ---------- section 11: footer ---------- */
+  .prods { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 16px 0 54px; }
+  .prod { display: flex; gap: 18px; align-items: stretch; padding: 12px; border-radius: 18px; background: var(--sand); transition: transform .2s; }
+  .prod:hover { transform: translateY(-2px); }
+  .pt { width: 150px; flex: none; border-radius: 12px; display: grid; place-items: center; }
+  .pt1 { background: var(--lav); } .pt1 svg { width: 58px; height: 75px; }
+  .pt2 { background: var(--ink); }
+  .mini-stamp { transform: rotate(-12deg); border: 3px solid var(--mint); color: var(--mint); border-radius: 9px; padding: 4px 12px; font: 800 20px Figtree; letter-spacing: .1em; }
+  .prod > span:last-child { display: flex; flex-direction: column; padding: 12px 6px 10px 0; }
+  .prod b { font: 600 18px Figtree; display: flex; align-items: center; gap: 8px; }
+  .prod .new { font: 700 11px Figtree; background: var(--sun); border-radius: 6px; padding: 3px 7px; }
+  .prod small { margin-top: 8px; font: 500 14px/1.45 Figtree; color: var(--sub); }
+  .prod em { margin-top: auto; padding-top: 12px; display: inline-flex; align-items: center; gap: 4px; font: 600 14px Figtree; font-style: normal; }
+  .prod em svg.lucide { width: 15px; height: 15px; }
+  footer .cols { display: grid; grid-template-columns: repeat(4, 1fr); gap: 30px; }
+  .made { display: block; margin-top: 8px; font: 500 13px/1.5 Figtree; opacity: .6; }
+  .legal { align-items: center; }
+  .gh .brand { width: 20px; height: 20px; }
   footer h5 { margin: 0 0 12px; font: 600 13px Figtree; letter-spacing: .1em; text-transform: uppercase; opacity: .6; }
-  footer a { display: block; margin: 8px 0; font: 500 15px Figtree; }
+  footer .cols a { display: block; margin: 8px 0; font: 500 14px Figtree; }
   .word { font: 400 clamp(110px, 21vw, 320px)/.8 "EB Garamond", serif; letter-spacing: -8px; text-align: center; margin-top: 60px; color: var(--ink); }
-  .legal { display: flex; justify-content: space-between; margin-top: 24px; font-size: 13px; opacity: .6; }
+  .legal { display: flex; justify-content: space-between; margin-top: 24px; font-size: 13px; opacity: .7; }
 
   .reveal { opacity: 0; transform: translateY(40px); }
   @media (max-width: 900px) {
@@ -496,7 +513,7 @@
     .grid, .duo, .stats { grid-template-columns: 1fr; padding-left: 22px; padding-right: 22px; }
     .feat:nth-child(even) { margin-top: 0; }
     .mascot { right: 2%; top: 560px; width: 90px; } .bubble { display: none; }
-    footer .cols { grid-template-columns: 1fr 1fr; }
+    footer .cols { grid-template-columns: 1fr 1fr; } .prods { grid-template-columns: 1fr; } .pt { width: 96px; }
   }
 </style></head>
 <body>
@@ -737,17 +754,25 @@
   </div>
 </section>
 
-<footer class="wrap">
+<footer class="wrap foot2">
+  <div class="eyebrow">What's inside</div>
+  <div class="prods">
+    <a class="prod" href="app.html"><span class="pt pt1"><svg viewBox="0 0 140 180" aria-hidden="true"><use href="#anatono"/></svg></span>
+      <span><b>Anatono reminders</b><small>Snap the medicine, say how you take it, and get reminded. In Urdu, English or both.</small><em>Open the app <i data-lucide="chevron-right"></i></em></span></a>
+    <a class="prod" href="app.html#check"><span class="pt pt2"><span class="mini-stamp">OK</span></span>
+      <span><b>Medicine check <span class="new">New</span></b><small>Warning signs on any pack: expiry, a missing batch number, the same medicine twice.</small><em>Check a medicine <i data-lucide="chevron-right"></i></em></span></a>
+  </div>
   <div class="cols">
-    <div><a class="logo" href="#"><svg class="wm" viewBox="4 18 532 154" role="img" aria-label="Anatono"><use href="#wordmark"/></svg></a><p style="margin-top:12px;opacity:.7;max-width:280px">Never miss a dose again. Built at Hack Day, Faisalabad, with Gemma 4.</p></div>
-    <div><h5>Product</h5><a href="app.html">Reminders</a><a href="app.html#check">Medicine check</a><a href="#foryou">For families</a></div>
-    <div><h5>Open source</h5><a href="https://github.com/taseen-t/anatono">GitHub</a><a href="https://ai.google.dev/gemma">Gemma 4</a><a href="#faq">How it works</a></div>
-    <div><h5>Help</h5><a href="#faq">FAQ</a><a href="#faq">Privacy</a><a href="#faq">Safety</a></div>
+    <div><h5>Get started</h5><a href="app.html">Open the app</a><a href="#steps">How it works</a><a href="#check">Medicine check</a><a href="#faq">FAQ</a></div>
+    <div><h5>Made for</h5><a href="#foryou">Elders</a><a href="#foryou">Carers</a><a href="#foryou">Busy parents</a><a href="#foryou">Long-term care</a></div>
+    <div><h5>Open source</h5><a href="https://github.com/taseen-t/anatono">GitHub</a><a href="https://ai.google.dev/gemma">Gemma 4</a><a href="https://github.com/taseen-t/anatono#readme">How to check it yourself</a><a href="https://github.com/taseen-t/anatono/blob/main/LICENSE">MIT licence</a></div>
+    <div><h5>About</h5><a href="#faq">Privacy</a><a href="#faq">Safety</a><span class="made">Built at Hack Day, Faisalabad,<br>23 October 2026, with Gemma 4</span></div>
   </div>
   <svg class="word" viewBox="4 18 532 154" role="img" aria-label="Anatono"><g font-family="Figtree" font-weight="700" font-size="132" letter-spacing="-4" fill="#0B3B36"><text x="10" y="150">ana</text><text x="314" y="150">ono</text></g>
     <g fill="none" stroke-linecap="round" stroke-linejoin="round"><path class="beat" d="M222 84 H244 L256 24.6 L272 164 L284 84 H308" stroke="#FF8A6B" stroke-width="10"/>
       <path class="glint" d="M222 84 H244 L256 24.6 L272 164 L284 84 H308" stroke="#fff" stroke-width="5" pathLength="100" stroke-dasharray="10 100" stroke-dashoffset="10"/></g></svg>
-  <div class="legal"><span>MIT licence · Anatono is a reminder tool, not medical advice</span><span>© 2026 Anatono</span></div>
+  <div class="legal"><span>© 2026 Anatono · MIT licence · A reminder tool, not medical advice</span>
+    <a class="gh" href="https://github.com/taseen-t/anatono" aria-label="Anatono on GitHub"><b class="brand" style="--i:url(https://cdn.jsdelivr.net/npm/simple-icons@13.21.0/icons/github.svg)"></b></a></div>
 </footer>
 
 <script>
