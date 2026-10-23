@@ -3,7 +3,7 @@
 <title>Anatono · never miss a medicine</title>
 <meta name="description" content="Snap your medicine, say or type how you take it, and Anatono reminds you on time. Reads prescriptions, checks expiry and warning signs. Powered by Gemma 4.">
 <link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#0B3B36">
-<link rel="icon" href="mascot.svg">
+<link rel="icon" href="favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="icon-512.png">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/lucide@0.460.0/dist/umd/lucide.min.js"></script>
@@ -45,6 +45,8 @@
         backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1px solid color-mix(in srgb, var(--ink) 16%, transparent); }
   .logo { display: flex; align-items: center; gap: 8px; font: 500 25px "EB Garamond", serif; letter-spacing: -.3px; }
   .logo svg { width: 24px; height: 32px; }
+  .logo svg.wm { width: auto; height: 27px; }
+  footer svg.word { display: block; width: min(100%, 1100px); height: auto; margin: 60px auto 0; }
   .seg { display: flex; background: color-mix(in srgb, var(--ink) 8%, transparent); border-radius: 10px; padding: 3px; }
   .seg a { font: 600 13px Figtree; padding: 7px 12px; border-radius: 8px; }
   .seg a:first-child { background: var(--bg); box-shadow: 0 1px 2px rgba(0,0,0,.08); }
@@ -206,47 +208,107 @@
   .how-nav { list-style: none; margin: 0; padding: 0; position: relative; z-index: 1; font: 400 21px "EB Garamond", serif; }
   .how-nav li { padding: 6px 0 6px 14px; border-left: 3px solid color-mix(in srgb, var(--ink) 12%, transparent); opacity: .45; transition: opacity .3s, border-color .3s; cursor: pointer; }
   .how-nav li.on { opacity: 1; border-color: var(--coral); }
-  .how-card { position: relative; z-index: 1; height: 500px; border-radius: 26px; overflow: hidden; color: #fff;
-              background: radial-gradient(60% 40% at 25% 18%, #3c7a6d, transparent 70%), radial-gradient(55% 45% at 85% 85%, #8a4f3e, transparent 70%), #10241f;
-              box-shadow: 0 30px 60px -30px rgba(11,59,54,.55); }
-  .st { position: absolute; inset: 0; padding: 26px 22px; opacity: 0; transform: translateY(16px); transition: opacity .45s, transform .45s; }
+  .how-card { position: relative; z-index: 1; height: 500px; border-radius: 22px; overflow: hidden; color: var(--ink);
+              background: #FFFDF6; border: 2px solid #1a1a1a; box-shadow: 8px 8px 0 #1a1a1a; transform: rotate(-1.2deg); }
+  .st { position: absolute; inset: 0; padding: 24px; opacity: 0; transform: translateY(14px); transition: opacity .45s, transform .45s; }
   .st.on { opacity: 1; transform: none; }
   .how-text { position: relative; z-index: 1; max-width: 330px; justify-self: end; }
   .how-text h3 { font-size: 34px; }
   .how-text p { margin-top: 14px; font: 500 16px/1.45 Figtree; color: var(--sub); }
-  .strip { position: relative; margin: 30px auto 0; width: 270px; height: 170px; border-radius: 18px; transform: rotate(-6deg); overflow: hidden; color: #2b3a37;
-           background: linear-gradient(135deg, #f4f6f5, #c9d1ce 45%, #eef1f0 60%, #b9c2bf); padding: 14px 16px; box-shadow: 0 20px 40px -18px #000; }
-  .strip b { font: 800 22px Figtree; color: #c0392b; } .strip span { display: block; font: 600 12px Figtree; }
-  .strip .bl { display: grid; grid-template-columns: repeat(3, 44px); gap: 12px 22px; margin-top: 12px; }
-  .strip .bl i { height: 26px; border-radius: 13px; background: radial-gradient(circle at 35% 30%, #fff, #c5cdca 70%); box-shadow: inset 0 -2px 3px rgba(0,0,0,.2); }
-  .strip em { position: absolute; right: 12px; bottom: 9px; font: 600 10px Figtree; font-style: normal; letter-spacing: .04em; }
-  .scan { position: absolute; left: 0; right: 0; height: 3px; background: var(--mint); box-shadow: 0 0 16px 4px rgba(159,227,196,.8); animation: scan 2.2s ease-in-out infinite alternate; }
-  @keyframes scan { from { top: 4%; } to { top: 94%; } }
-  .how .chips { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: 34px; }
-  .how .chips span { display: inline-flex; align-items: center; gap: 6px; padding: 8px 12px; border-radius: 12px; font: 600 13px Figtree; background: rgba(255,255,255,.14);
-                     border: 1px solid rgba(255,255,255,.2); }
-  .how .chips span.ok { background: rgba(159,227,196,.25); border-color: var(--mint); }
-  .how .chips svg.lucide { width: 15px; height: 15px; }
-  .st.on .chips span { animation: pop .45s backwards; }
-  .st.on .chips span:nth-child(2) { animation-delay: .25s; } .st.on .chips span:nth-child(3) { animation-delay: .5s; } .st.on .chips span:nth-child(4) { animation-delay: .75s; }
-  @keyframes pop { from { opacity: 0; transform: translateY(8px) scale(.94); } }
-  .said { font: 600 21px/1.45 Figtree; margin-top: 18px; }
-  .said mark { color: inherit; border-radius: 6px; padding: 0 4px; }
-  .c1 { background: rgba(255,138,107,.55) !important; } .c2 { background: rgba(240,215,255,.4) !important; }
-  .c3 { background: rgba(159,227,196,.45) !important; } .c4 { background: rgba(255,169,70,.5) !important; }
-  .msg { position: absolute; left: 18px; right: 18px; bottom: 70px; display: flex; justify-content: space-between; align-items: center; background: #fff; color: #667;
-         border-radius: 14px; padding: 13px 14px; font: 500 14px Figtree; }
-  .msg svg.lucide { color: var(--ink); }
-  .rt { display: flex; gap: 14px; align-items: center; background: rgba(255,255,255,.93); color: #111; border-radius: 16px; padding: 13px 14px; margin-top: 12px; font: 700 15px Figtree; }
-  .rt:first-child { margin-top: 20px; }
-  .rt b { font: 700 13px Figtree; background: var(--ink); color: #fff; border-radius: 9px; padding: 6px 8px; white-space: nowrap; }
-  .rt small { display: block; font: 500 13px Figtree; opacity: .6; margin-top: 2px; }
-  .flag, .cal { display: flex; align-items: center; gap: 8px; margin-top: 16px; font: 600 14px Figtree; }
-  .flag { color: var(--mint); }
-  .cal { width: fit-content; background: var(--cta); color: #1a1a1a; border: 2px solid #1a1a1a; border-radius: 12px; padding: 10px 14px; }
-  .pillbar { position: absolute; left: 50%; bottom: 20px; transform: translateX(-50%); display: flex; align-items: center; gap: 7px; white-space: nowrap;
-             padding: 7px 14px; border-radius: 20px; background: rgba(0,0,0,.45); border: 1.5px solid var(--sun); font: 600 12px Figtree; }
-  .pillbar svg.lucide { width: 14px; height: 14px; }
+  .vf { position: absolute; left: 30px; right: 30px; top: 62px; height: 200px; }
+  .vf i { position: absolute; width: 26px; height: 26px; border: 3px solid #1a1a1a; }
+  .vf i:nth-child(1) { left: 0; top: 0; border-width: 3px 0 0 3px; border-radius: 8px 0 0 0; } .vf i:nth-child(2) { right: 0; top: 0; border-width: 3px 3px 0 0; border-radius: 0 8px 0 0; }
+  .vf i:nth-child(3) { left: 0; bottom: 0; border-width: 0 0 3px 3px; border-radius: 0 0 0 8px; } .vf i:nth-child(4) { right: 0; bottom: 0; border-width: 0 3px 3px 0; border-radius: 0 0 8px 0; }
+  .strip2 { position: absolute; left: 58px; top: 86px; width: 244px; height: 150px; border-radius: 16px; transform: rotate(-4deg); padding: 12px 14px;
+            background: #E6ECEA; border: 2px solid #1a1a1a; color: #1a1a1a; }
+  .strip2 b { font: 800 20px Figtree; color: #D9532E; } .strip2 span { display: block; font: 600 11px Figtree; }
+  .strip2 .bl { display: grid; grid-template-columns: repeat(3, 42px); gap: 10px 22px; margin-top: 10px; }
+  .strip2 .bl i { height: 24px; border-radius: 12px; background: #fff; border: 2px solid #1a1a1a; }
+  .strip2 em { position: absolute; right: 12px; bottom: 8px; font: 700 9px Figtree; font-style: normal; letter-spacing: .04em; }
+  .note { position: absolute; display: inline-flex; align-items: center; gap: 5px; padding: 6px 11px; background: #FFE7A8; border: 2px solid #1a1a1a; border-radius: 6px;
+          font: italic 500 18px "EB Garamond", serif; color: #1a1a1a; box-shadow: 3px 3px 0 #1a1a1a; }
+  .note svg.lucide { width: 15px; height: 15px; color: #1F8A5B; stroke-width: 3; }
+  .n1 { right: 16px; top: 22px; transform: rotate(4deg); } .n2 { left: 26px; top: 300px; transform: rotate(-3deg); background: #CFF3E2; }
+  .n3 { right: 30px; top: 342px; transform: rotate(2.5deg); background: #FFD8CC; }
+  .st.on .note { animation: pop .45s backwards; } .st.on .n2 { animation-delay: .3s; } .st.on .n3 { animation-delay: .6s; }
+  .arrows { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+  .peek { position: absolute; right: 14px; bottom: -34px; width: 86px; transform: rotate(-8deg); }
+  .tag { position: absolute; left: 22px; bottom: 22px; display: inline-flex; align-items: center; gap: 7px; padding: 8px 13px; border-radius: 20px;
+         background: #fff; border: 2px solid #1a1a1a; font: 700 13px Figtree; color: #1a1a1a; }
+  .tag svg.lucide { width: 15px; height: 15px; }
+  .speech { position: relative; margin-top: 16px; background: #fff; border: 2px solid #1a1a1a; border-radius: 20px 20px 20px 4px; box-shadow: 4px 4px 0 #1a1a1a;
+            padding: 16px 18px; font: 600 19px/1.5 Figtree; color: #1a1a1a; }
+  .speech mark { color: inherit; padding: 0 2px; border-radius: 3px; }
+  .speech mark.c1 { background: linear-gradient(100deg, transparent 2%, #FFB49C 4% 94%, transparent 96%) 0 85% / 100% 55% no-repeat; }
+  .speech mark.c2 { background: linear-gradient(100deg, transparent 2%, #E4C9FF 4% 94%, transparent 96%) 0 85% / 100% 55% no-repeat; }
+  .speech mark.c3 { background: linear-gradient(100deg, transparent 2%, #A9EBCB 4% 94%, transparent 96%) 0 85% / 100% 55% no-repeat; }
+  .speech mark.c4 { background: linear-gradient(100deg, transparent 2%, #FFD08A 4% 94%, transparent 96%) 0 85% / 100% 55% no-repeat; }
+  .stickers { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 26px; }
+  .stickers span { padding: 8px 13px; border: 2px solid #1a1a1a; border-radius: 12px; font: 700 15px Figtree; color: #1a1a1a; box-shadow: 3px 3px 0 #1a1a1a; }
+  .stickers .c1 { background: #FFB49C; transform: rotate(-3deg); } .stickers .c2 { background: #E4C9FF; transform: rotate(2deg); }
+  .stickers .c3 { background: #A9EBCB; transform: rotate(-1.5deg); } .stickers .c4 { background: #FFD08A; transform: rotate(3deg); }
+  .st.on .stickers span { animation: pop .45s backwards; } .st.on .stickers span:nth-child(2) { animation-delay: .25s; }
+  .st.on .stickers span:nth-child(3) { animation-delay: .5s; } .st.on .stickers span:nth-child(4) { animation-delay: .75s; }
+  @keyframes pop { from { opacity: 0; transform: translateY(8px) scale(.9); } }
+  .paper { margin-top: 8px; border: 2px solid #1a1a1a; border-radius: 14px; padding: 12px 16px 6px; color: #1a1a1a;
+           background: repeating-linear-gradient(#fff 0 43px, #DCE8E2 43px 45px); }
+  .paper h5 { margin: 0 0 6px; font: italic 500 22px "EB Garamond", serif; }
+  .li { display: flex; align-items: center; gap: 10px; height: 54px; font: 700 15px Figtree; }
+  .li b { font: 700 12px Figtree; background: var(--ink); color: #fff; border-radius: 8px; padding: 5px 7px; white-space: nowrap; }
+  .li small { display: block; font: 500 12px Figtree; opacity: .6; }
+  .box { width: 22px; height: 22px; flex: none; border: 2px solid #1a1a1a; border-radius: 6px; display: grid; place-items: center; }
+  .box.on { background: var(--mint); } .box svg.lucide { width: 15px; height: 15px; stroke-width: 3; }
+  .stamp { position: absolute; right: 22px; top: 196px; transform: rotate(-12deg); border: 3px solid #D9532E; color: #D9532E; border-radius: 10px; padding: 6px 12px;
+           font: 800 15px Figtree; letter-spacing: .08em; text-transform: uppercase; opacity: .9; }
+  .st.on .stamp { animation: stamp .4s .5s backwards cubic-bezier(.2, 1.6, .4, 1); }
+  @keyframes stamp { from { opacity: 0; transform: rotate(-12deg) scale(1.8); } }
+  .cal { position: absolute; left: 24px; top: 262px; display: flex; align-items: center; gap: 8px; background: var(--cta); color: #1a1a1a; border: 2px solid #1a1a1a;
+         border-radius: 12px; padding: 10px 14px; font: 700 14px Figtree; box-shadow: 3px 3px 0 #1a1a1a; }
+
+  /* ---------- section 5: built around how you live ---------- */
+  .easy { padding: 130px 0 40px; }
+  .easy h2 { font-size: clamp(40px, 5.2vw, 72px); margin-top: 14px; }
+  .swash { position: relative; white-space: nowrap; }
+  .swash svg { position: absolute; left: -2%; width: 104%; bottom: -.1em; height: .26em; overflow: visible; }
+  .swash path { fill: none; stroke: #C9A6F0; stroke-width: 4; stroke-linecap: round; }
+  .easy-grid { display: grid; grid-template-columns: 400px 1fr; gap: 100px; margin-top: 90px; align-items: start; }
+  .easy-demo { position: sticky; top: 30vh; height: 240px; border-radius: 20px; background: var(--sand); overflow: hidden; }
+  .dm { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; opacity: 0; transition: opacity .45s; }
+  .dm.on { opacity: 1; }
+  .langpill { position: relative; z-index: 1; margin-top: -40px; display: flex; align-items: center; gap: 8px; background: #fff; border-radius: 30px; padding: 12px 14px 12px 18px; font: 500 14px Figtree; }
+  .flag { width: 26px; height: 26px; border-radius: 50%; background: linear-gradient(90deg, #fff 0 25%, #01411C 25%); box-shadow: 0 0 0 1px rgba(0,0,0,.1); }
+  .arcd { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .arcd text { font: 600 15px Figtree; fill: var(--ink); }
+  .hand2 { font: italic 400 30px "EB Garamond", serif; transform: rotate(-3deg); color: #1a3a8a; }
+  .hand2 u { text-decoration-color: #c0392b; }
+  .read2 { background: #fff; border-radius: 12px; padding: 10px 14px; font: 600 14px Figtree; }
+  .dm.on .read2 { animation: pop .5s .5s backwards; }
+  .week { display: grid; grid-template-columns: 74px repeat(7, 26px); gap: 7px 4px; align-items: center; font: 600 12px Figtree; }
+  .week b { text-align: center; opacity: .5; font-weight: 600; }
+  .week i { height: 18px; border-radius: 6px; background: rgba(11,59,54,.07); }
+  .week i.d2 { background: linear-gradient(90deg, var(--coral) 0 46%, transparent 46% 54%, var(--coral) 54%); }
+  .week i.d1 { background: var(--sun); }
+  .week i.dq { background: transparent; border: 1.5px dashed rgba(11,59,54,.3); }
+  .pair { display: flex; align-items: center; gap: 10px; }
+  .pair span { background: #fff; border-radius: 12px; padding: 10px 12px; font: 600 14px Figtree; }
+  .pair small { display: block; font-weight: 500; opacity: .6; }
+  .warn { display: flex; align-items: center; gap: 7px; background: var(--coral); color: #1a1a1a; border-radius: 12px; padding: 9px 13px; font: 600 13px Figtree; }
+  .dm.on .warn { animation: pop .5s .4s backwards; }
+  .fam { display: flex; flex-direction: column; gap: 8px; width: 260px; }
+  .fam span { display: grid; grid-template-columns: 30px 1fr; column-gap: 10px; background: #fff; border-radius: 12px; padding: 8px 12px; font: 600 14px Figtree; }
+  .fam span i { grid-row: span 2; width: 30px; height: 30px; border-radius: 50%; background: var(--mint); display: grid; place-items: center; font-style: normal; align-self: center; }
+  .fam span:nth-child(2) i { background: var(--lav); } .fam span:nth-child(3) i { background: var(--cta); }
+  .fam small { font-weight: 500; opacity: .6; font-size: 12px; }
+  .ef { min-height: 44vh; display: flex; flex-direction: column; justify-content: center; max-width: 470px; opacity: .3; transition: opacity .4s; }
+  .ef.on { opacity: 1; }
+  .ef h3 { font-size: 40px; }
+  .ef p { margin-top: 14px; font: 500 16px/1.45 Figtree; color: var(--sub); }
+  .trust2 { display: grid; grid-template-columns: 1fr 1.2fr auto; gap: 40px; align-items: center; background: var(--sand); border-radius: 26px; padding: 44px 50px; margin-top: 90px; }
+  .trust2 h3 { font-size: 40px; } .trust2 h3 em { display: block; }
+  .trust2 p { font: 500 15px/1.5 Figtree; color: var(--sub); max-width: 380px; }
+  .seals { display: flex; gap: 12px; }
+  .seals span { width: 104px; height: 104px; border-radius: 50%; border: 1.5px solid var(--ink); display: flex; flex-direction: column; align-items: center; justify-content: center;
+                gap: 5px; text-align: center; font: 600 12px/1.2 Figtree; box-shadow: inset 0 0 0 5px var(--sand), inset 0 0 0 6.5px color-mix(in srgb, var(--ink) 35%, transparent); }
 
   /* ---------- made for you ---------- */
   .foryou { margin-top: 100px; padding: 80px 64px; display: grid; grid-template-columns: 1.2fr .8fr; gap: 40px; position: relative; overflow: hidden; }
@@ -360,7 +422,9 @@
     .stage { height: 560px; } .phone2 { transform: scale(.84); } .tile { width: 72px; height: 72px; border-radius: 19px; } .tile svg.lucide { width: 32px; height: 32px; }
     .apps { margin: 10px 6px 0; border-radius: 32px; padding-top: 80px; }
     .how { height: 240vh; } .how-pin { grid-template-columns: 1fr; gap: 18px; padding: 70px 20px 20px; align-content: center; } .how-nav { display: none; }
-    .how-card { height: 400px; } .how-text { justify-self: start; }
+    .how-card { height: 460px; width: 100%; max-width: 360px; justify-self: center; } .how-text { justify-self: start; }
+    .easy-grid { grid-template-columns: 1fr; gap: 10px; margin-top: 50px; } .easy-demo { top: 80px; z-index: 2; width: 100%; max-width: 400px; justify-self: center; }
+    .ef { min-height: 40vh; } .trust2 { grid-template-columns: 1fr; padding: 32px 24px; }
     .race2 { grid-template-columns: 1fr; } .rc { height: 280px; }
     .foryou, .check, .grid, .duo, .faq, .stats { grid-template-columns: 1fr; padding-left: 22px; padding-right: 22px; }
     .feat:nth-child(even) { margin-top: 0; }
@@ -387,13 +451,18 @@
       <path d="M62 70 q9 9 18 0" stroke="#0B3B36" stroke-width="4.5" fill="none" stroke-linecap="round"/>
       <path d="M56 160 v12 M84 160 v12 M50 174 h12 M78 174 h12" stroke="#0B3B36" stroke-width="5" stroke-linecap="round"/>
     </symbol>
+    <!-- the logo: "ana", a heartbeat that is the t, "ono" (Figtree 700) -->
+    <symbol id="wordmark" viewBox="4 18 532 154">
+      <g font-family="Figtree" font-weight="700" font-size="132" letter-spacing="-4" fill="#0B3B36"><text x="10" y="150">ana</text><text x="314" y="150">ono</text></g>
+      <path d="M222 84 H244 L256 24.6 L272 164 L284 84 H308" fill="none" stroke="#FF8A6B" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
   </defs>
 </svg>
 
 <div class="top">Anatono now reads handwritten prescriptions, in Urdu and English. <a href="app.html">Try it free ›</a>
   <button class="x" aria-label="Close" onclick="this.parentElement.remove()"><i data-lucide="x"></i></button></div>
 <nav>
-  <a class="logo" href="#"><svg viewBox="30 10 80 85"><use href="#anatono"/></svg>Anatono</a>
+  <a class="logo" href="#"><svg class="wm" viewBox="4 18 532 154" role="img" aria-label="Anatono"><use href="#wordmark"/></svg></a>
   <div class="seg"><a href="#hero">Reminders</a><a href="#check">Medicine check</a></div>
   <div class="links"><a href="#foryou">Families</a><a href="#how">How it works</a><a href="#faq">FAQ</a></div>
   <a class="btn sm" href="app.html"><i data-lucide="smartphone"></i>Get Anatono</a>
@@ -465,26 +534,60 @@
     <ol class="how-nav"><li class="on">Snap the medicine</li><li>Say how you take it</li><li>Reminders, set</li></ol>
     <div class="how-card">
       <div class="st on">
-        <div class="strip"><b>Amoxil</b><span>500 mg · Amoxicillin</span><div class="bl"><i></i><i></i><i></i><i></i><i></i><i></i></div><em>EXP 03/2027 · B2231</em><div class="scan"></div></div>
-        <div class="chips"><span><i data-lucide="pill"></i>Amoxil 500 mg</span><span><i data-lucide="flask-conical"></i>Amoxicillin</span><span class="ok"><i data-lucide="circle-check"></i>Expires 03/2027</span></div>
-        <div class="pillbar"><i data-lucide="scan-line"></i>Reading with Gemma 4</div>
+        <div class="vf"><i></i><i></i><i></i><i></i></div>
+        <div class="strip2"><b>Amoxil</b><span>500 mg · Amoxicillin</span><div class="bl"><i></i><i></i><i></i><i></i><i></i><i></i></div><em>EXP 03/2027 · B2231</em></div>
+        <span class="note n1">Amoxil, 500 mg</span><span class="note n2">expires 03/2027 <i data-lucide="check"></i></span><span class="note n3">batch B2231</span>
+        <svg class="arrows" viewBox="0 0 360 500" aria-hidden="true"><path fill="none" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M262 58 C 250 80, 200 82, 150 92 M150 92 l9 -7 M150 92 l10 4"/><path fill="none" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M120 300 C 112 284, 140 268, 186 252 M186 252 l-11 0 M186 252 l-6 9"/></svg>
+        <svg class="peek" viewBox="0 0 140 180" aria-hidden="true"><use href="#anatono"/></svg>
+        <div class="tag"><i data-lucide="scan-line"></i>Gemma 4 is reading it</div>
       </div>
       <div class="st">
-        <p class="said">"Doctor ne kaha <mark class="c1">subah</mark> aur <mark class="c2">raat</mark>, um, <mark class="c3">khane ke baad</mark>, <mark class="c4">paanch din</mark> tak"</p>
-        <div class="chips"><span class="c1">8:00 am</span><span class="c2">9:00 pm</span><span class="c3">after food</span><span class="c4">5 days</span></div>
-        <div class="msg"><span>Type or speak…</span><i data-lucide="mic"></i></div>
-        <div class="pillbar"><i data-lucide="sparkles"></i>Understanding…</div>
+        <div class="speech">"Doctor ne kaha <mark class="c1">subah</mark> aur <mark class="c2">raat</mark>, um, <mark class="c3">khane ke baad</mark>, <mark class="c4">paanch din</mark> tak"</div>
+        <div class="stickers"><span class="c1">8:00 am</span><span class="c2">9:00 pm</span><span class="c3">after food</span><span class="c4">5 days</span></div>
+        <svg class="peek" viewBox="0 0 140 180" aria-hidden="true"><use href="#anatono"/></svg>
+        <div class="tag"><i data-lucide="mic"></i>Speak or type</div>
       </div>
       <div class="st">
-        <div class="rt"><b>8:00 am</b><div>Amoxil 500 mg<small>1 tablet · after breakfast</small></div></div>
-        <div class="rt"><b>9:00 pm</b><div>Amoxil 500 mg<small>1 tablet · after dinner</small></div></div>
-        <div class="flag"><i data-lucide="shield-check"></i>Not expired · no double dose</div>
+        <div class="paper"><h5>Today</h5>
+          <div class="li"><i class="box on"><i data-lucide="check"></i></i><b>8:00 am</b><span>Amoxil 500 mg<small>after breakfast</small></span></div>
+          <div class="li"><i class="box"></i><b>9:00 pm</b><span>Amoxil 500 mg<small>after dinner</small></span></div></div>
+        <div class="stamp">Set for 5 days</div>
         <div class="cal"><i data-lucide="calendar-plus"></i>Add to calendar</div>
-        <div class="pillbar"><i data-lucide="bell-ring"></i>Reminders set for 5 days</div>
+        <svg class="peek" viewBox="0 0 140 180" aria-hidden="true"><use href="#anatono"/></svg>
+        <div class="tag"><i data-lucide="shield-check"></i>Not expired · no double dose</div>
       </div>
     </div>
     <div class="how-text"><h3 id="howT">Snap the medicine</h3><p id="howP"></p></div>
   </div>
+</section>
+
+<!-- SECTION 5: built around how you live (after Wispr's "Built around how you work") -->
+<section class="easy wrap" id="easy">
+  <div class="center reveal"><div class="eyebrow">Anatono makes it easy</div>
+    <h2>Built around <em class="swash">how you live<svg viewBox="0 0 300 20" preserveAspectRatio="none" aria-hidden="true"><path d="M3 15 C 90 3, 200 2, 297 11"/></svg></em>,<br>not how an app thinks you should.</h2></div>
+  <div class="easy-grid">
+    <div class="easy-demo">
+      <div class="dm on"><div class="langpill">Language: <b id="langName">Roman Urdu</b><i class="flag"></i></div><svg class="arcd" viewBox="0 0 400 240" aria-hidden="true"><path id="lp" d="M -20 230 C 80 150, 140 140, 200 140 C 260 140, 320 150, 420 230" fill="none"/><text><textPath href="#lp" startOffset="0%">subah aur raat, khane ke baad · morning and night, after food · subah aur raat, khane ke baad · morning and night, after food ·<animate attributeName="startOffset" from="0%" to="-50%" dur="14s" repeatCount="indefinite"/></textPath></text></svg></div>
+      <div class="dm"><div class="hand2">Tab. Amoxil 500 <u>1+0+1</u> × 5/7</div><i data-lucide="arrow-down"></i><div class="read2">Amoxil 500 mg · morning and night · 5 days</div></div>
+      <div class="dm"><div class="week"><span></span><b>M</b><b>T</b><b>W</b><b>T</b><b>F</b><b>S</b><b>S</b>
+        <span>Amoxil</span><i class="d2"></i><i class="d2"></i><i class="d2"></i><i class="d2"></i><i class="d2"></i><i></i><i></i>
+        <span>Vitamin D</span><i></i><i></i><i></i><i></i><i></i><i></i><i class="d1"></i>
+        <span>Brufen</span><i class="dq"></i><i class="dq"></i><i class="dq"></i><i class="dq"></i><i class="dq"></i><i class="dq"></i><i class="dq"></i></div></div>
+      <div class="dm"><div class="pair"><span>Panadol 500 mg<small>paracetamol</small></span><i data-lucide="plus"></i><span>Calpol 500 mg<small>paracetamol</small></span></div>
+        <div class="warn"><i data-lucide="triangle-alert"></i>Same medicine twice: paracetamol</div></div>
+      <div class="dm"><div class="fam"><span><i>A</i>Ammi<small>8:00 am · Glucophage</small></span><span><i>A</i>Abbu<small>9:00 pm · Concor</small></span><span><i>A</i>Ali<small>2:00 pm · Brufen syrup</small></span></div></div>
+    </div>
+    <div class="easy-list">
+      <div class="ef on"><h3>Urdu, English, or both</h3><p>Speak the way you speak at home. Anatono understands Urdu, Roman Urdu, Punjabi and English, even in one sentence.</p></div>
+      <div class="ef"><h3>Reads any handwriting</h3><p>Doctor's handwriting, strip packs, syrup bottles. Gemma 4 reads them, and shows you what it read before anything is saved.</p></div>
+      <div class="ef"><h3>Each medicine, its own rhythm</h3><p>Twice a day for five days, once a week, only when needed. Every medicine keeps its own schedule.</p></div>
+      <div class="ef"><h3>Double-dose guard</h3><p>Two brands with the same medicine inside? Anatono spots it and warns you before you take both.</p></div>
+      <div class="ef"><h3>For the whole family</h3><p>Set reminders for Ammi and Abbu from your phone, and add them to your own calendar too.</p></div>
+    </div>
+  </div>
+  <div class="trust2 reveal"><h3>Your health <em>stays yours.</em></h3>
+    <p>Your routine stays on your phone. Photos go to Gemma 4 on Google's Gemini API only to be read, and Anatono keeps no copy. No account, no ads.</p>
+    <div class="seals"><span><i data-lucide="smartphone"></i>On your<br>phone</span><span><i data-lucide="user-x"></i>No<br>account</span><span><i data-lucide="github"></i>Open<br>source</span></div></div>
 </section>
 
 <!-- MADE FOR YOU -->
@@ -516,24 +619,6 @@
     <p class="lead" style="font-size:15px;margin-top:12px">It can't prove a medicine is genuine. It flags the warning signs, so you can ask your pharmacist.</p>
     <a class="btn" href="app.html"><i data-lucide="scan-line"></i>Check a medicine</a>
   </div>
-</section>
-
-<!-- FEATURE GRID -->
-<section class="wrap grid">
-  <div class="feat reveal"><h3>Reads any <em>handwriting</em></h3>
-    <p class="lead">Doctor's scribble, "1+0+1", "BD x 5/7": Gemma 4 reads it, and Anatono's own rules double-check what each pattern means.</p>
-    <div class="ui"><div class="hand">Tab <u>Amoxil</u> 500mg<br><u>1+0+1</u> × 5/7 a/m<br>Syp Brufen 2tsp <u>tds</u></div>
-      <div class="rowline">Amoxil 500 mg <span>8:00 am · 9:00 pm · 5 days</span></div><div class="rowline">Brufen syrup <span>8:00 · 2:00 · 9:00</span></div></div></div>
-  <div class="feat reveal"><h3>Double-dose <em>guard</em></h3>
-    <p class="lead">Two brands, one ingredient: the easiest way to take a medicine twice. Anatono spots it the moment you add the second one.</p>
-    <div class="ui"><div class="rowline">Panadol 500 mg <span>paracetamol</span></div><div class="rowline">Calpol 500 mg <span>paracetamol</span></div>
-      <div class="rowline alert">Same ingredient twice <span>Ask your doctor first</span></div></div></div>
-  <div class="feat reveal"><h3>Each medicine, <em>its own rhythm</em></h3>
-    <p class="lead">Before food, after food, at bedtime, only when needed. Every medicine gets the reminders it actually needs.</p>
-    <div class="ui"><div class="times"><b><i data-lucide="sunrise"></i>7:30 Omez, before food</b><b><i data-lucide="sun"></i>8:00 Amoxil, after food</b><b><i data-lucide="sun-medium"></i>2:00 Brufen</b><b><i data-lucide="moon"></i>9:00 Amoxil</b><b><i data-lucide="hand-heart"></i>Panadol, only if needed</b></div></div></div>
-  <div class="feat reveal"><h3>Urdu, English and <em>140+ languages</em></h3>
-    <p class="lead">Speak the way you speak. Roman Urdu, Punjabi, English or a mix: Gemma 4 understands it.</p>
-    <div class="ui langs" id="langs"><span class="core">Anatono</span></div></div>
 </section>
 
 <!-- PHONE OR FAMILY -->
@@ -579,12 +664,12 @@
 
 <footer class="wrap">
   <div class="cols">
-    <div><a class="logo" href="#"><svg viewBox="30 10 80 85"><use href="#anatono"/></svg>Anatono</a><p style="margin-top:12px;opacity:.7;max-width:280px">Never miss a dose again. Built at Hack Day, Faisalabad, with Gemma 4.</p></div>
+    <div><a class="logo" href="#"><svg class="wm" viewBox="4 18 532 154" role="img" aria-label="Anatono"><use href="#wordmark"/></svg></a><p style="margin-top:12px;opacity:.7;max-width:280px">Never miss a dose again. Built at Hack Day, Faisalabad, with Gemma 4.</p></div>
     <div><h5>Product</h5><a href="app.html">Reminders</a><a href="app.html#check">Medicine check</a><a href="#foryou">For families</a></div>
     <div><h5>Open source</h5><a href="https://github.com/taseen-t/anatono">GitHub</a><a href="https://ai.google.dev/gemma">Gemma 4</a><a href="#faq">How it works</a></div>
     <div><h5>Help</h5><a href="#faq">FAQ</a><a href="#faq">Privacy</a><a href="#faq">Safety</a></div>
   </div>
-  <div class="word">Anatono</div>
+  <svg class="word" viewBox="4 18 532 154" role="img" aria-label="Anatono"><use href="#wordmark"/></svg>
   <div class="legal"><span>MIT licence · Anatono is a reminder tool, not medical advice</span><span>© 2026 Anatono</span></div>
 </footer>
 
@@ -758,11 +843,6 @@ $("tags").onclick = e => { const g = e.target.closest(".tagp"); if (!g) return;
   $("tagTitle").textContent = title; $("tagText").textContent = text; };
 
 /* languages on a curve */
-const langs = ["اردو", "Roman Urdu", "English", "ਪੰਜਾਬੀ", "سنڌي", "پښتو", "العربية", "हिन्दी", "বাংলা", "Türkçe", "Español", "Français"];
-langs.forEach((l, i) => { const a = i / langs.length * Math.PI * 2;
-  $("langs").insertAdjacentHTML("beforeend", `<span style="left:calc(50% + ${Math.cos(a) * 210}px - 40px);top:calc(50% + ${Math.sin(a) * 110}px - 18px)">${l}</span>`); });
-
-/* family week */
 $("wk").innerHTML = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map((d, i) =>
   `<div>${d}<i></i><i class="${i === 2 ? "miss" : ""}"></i><i></i></div>`).join("");
 
@@ -807,6 +887,13 @@ showStep(0);
 ScrollTrigger.create({ trigger: "#steps", start: "top top", end: "bottom bottom", onUpdate: st => showStep(Math.min(2, Math.floor(st.progress * 3))) });
 document.querySelectorAll(".how-nav li").forEach((li, k) => li.onclick = () => {
   const el = $("steps"); window.scrollTo({ top: el.offsetTop + (k + .5) / 3 * (el.offsetHeight - innerHeight) }); });
+
+/* section 5: the feature in the middle of the screen lights up, and the demo card shows it */
+const efs = document.querySelectorAll(".ef"), dms = document.querySelectorAll(".dm");
+efs.forEach((ef, i) => ScrollTrigger.create({ trigger: ef, start: "top 55%", end: "bottom 55%",
+  onToggle: st => { if (!st.isActive) return; efs.forEach((x, k) => x.classList.toggle("on", k === i)); dms.forEach((x, k) => x.classList.toggle("on", k === i)); } }));
+const langNames = ["Roman Urdu", "English", "اردو", "ਪੰਜਾਬੀ"];
+let ln = 0; setInterval(() => { $("langName").textContent = langNames[++ln % langNames.length]; }, 2200);
 
 gsap.from(".hero h1", { y: 40, opacity: 0, duration: 1, ease: "power3.out" });
 gsap.from(".hero .lead, .avail", { y: 20, opacity: 0, duration: .8, stagger: .1, delay: .2 });   // not the button: its hover transition fights the tween and it ends up on top of the line below

@@ -63,7 +63,7 @@
 
 <style>
   /* K: the two "o"s are dose marks: one taken (filled), one to take (open) */
-  .word .dose { display: inline-block; width: .44em; height: .44em; border-radius: 50%; margin: 0 .04em; border: .055em solid #0B3B36; box-sizing: border-box; }
+  .word .dose { display: inline-block; width: .4em; height: .4em; border-radius: 50%; margin: 0 .04em; border: .055em solid #0B3B36; box-sizing: border-box; }
   .word .dose.taken { background: #FF8A6B; border-color: #FF8A6B; }
   .opt.dark .word .dose { border-color: #EAF6EF; }
   /* O: the eyes look around */
@@ -71,6 +71,93 @@
   @keyframes look { 0%, 30%, 100% { transform: translateX(0); } 40%, 60% { transform: translateX(-5px); } 70%, 90% { transform: translateX(5px); } }
   svg.big2 { width: 100%; max-width: 660px; height: auto; overflow: visible; }
 </style>
+
+
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  /* W: a doctor's scrawl turns into clean type */
+  .word.scrawl { align-items: baseline; }
+  .word.scrawl .hand { font: 600 1.05em/1 Caveat, cursive; transform: rotate(-4deg) translateY(.04em); color: #2E5A54; letter-spacing: 0; display: inline-block; }
+  .word.scrawl .seam { display: inline-block; width: .05em; height: .62em; background: #FF8A6B; border-radius: .03em; margin: 0 .09em; align-self: center; }
+  .word.scrawl .clean { font: 800 .9em/1 Figtree; letter-spacing: -.04em; }
+  /* Y: a pharmacy label */
+  .rxlabel { width: fit-content; background: #fff; border: 2px solid #0B3B36; border-radius: 18px; overflow: hidden; box-shadow: 0 8px 0 #0B3B36; }
+  .rxlabel .bar { background: #FF8A6B; color: #fff; font: 600 15px "IBM Plex Mono", monospace; padding: 8px 20px; display: flex; justify-content: space-between; gap: 30px; }
+  .rxlabel .name { font: 600 92px/1 "IBM Plex Mono", monospace; letter-spacing: -4px; padding: 18px 22px 6px; color: #0B3B36; }
+  .rxlabel .sig { font: 500 17px "IBM Plex Mono", monospace; padding: 0 24px 18px; color: #2E5A54; }
+</style>
+
+<section class="opt">
+  <div class="label">P · SNAPPED PILL: A GAP RUNS THROUGH THE WORD LIKE A CAPSULE'S SEAM: CORAL ABOVE, DARK BELOW</div>
+  <svg class="big2" viewBox="0 0 640 190">
+    <defs><clipPath id="pTop"><rect x="0" y="0" width="640" height="112"/></clipPath><clipPath id="pBot"><rect x="0" y="112" width="640" height="100"/></clipPath></defs>
+    <g font-family="Figtree" font-weight="800" font-size="150" letter-spacing="-6"><text x="8" y="160" clip-path="url(#pTop)" fill="#FF8A6B">anatono</text><text x="8" y="160" clip-path="url(#pBot)" fill="#0B3B36">anatono</text></g>
+    <line x1="0" y1="112" x2="640" y2="112" stroke="#F2FAF5" stroke-width="7"/></svg>
+  <div class="marks">
+    <svg viewBox="0 0 100 100"><rect width="100" height="100" rx="24" fill="#F2FAF5" stroke="#cfe3d8"/><defs><clipPath id="pT2"><rect width="100" height="52"/></clipPath><clipPath id="pB2"><rect y="52" width="100" height="48"/></clipPath></defs>
+      <g font-family="Figtree" font-weight="800" font-size="80" text-anchor="middle"><text x="50" y="76" clip-path="url(#pT2)" fill="#FF8A6B">a</text><text x="50" y="76" clip-path="url(#pB2)" fill="#0B3B36">a</text></g><line x1="0" y1="52" x2="100" y2="52" stroke="#F2FAF5" stroke-width="5"/></svg>
+  </div>
+</section>
+
+<section class="opt">
+  <div class="label">T · THE WORD IS ONE DAY: SUNRISE ON THE FIRST "A", NIGHT ON THE LAST "O", DOSE TIMES TICKED ALONG THE BOTTOM</div>
+  <svg class="big2" viewBox="0 0 660 240" id="svgT">
+    <defs><linearGradient id="dayT" x1="0" x2="1"><stop offset="0" stop-color="#FFA946"/><stop offset=".45" stop-color="#FF8A6B"/><stop offset="1" stop-color="#0B3B36"/></linearGradient></defs>
+    <text id="wordT" x="10" y="150" font-family="EB Garamond" font-weight="500" font-size="132" fill="url(#dayT)" letter-spacing="-2">anatono</text><g id="dayMarks"></g></svg>
+</section>
+
+<section class="opt">
+  <div class="label">V · PRINTED ON A MEDICINE STRIP: SILVER FOIL, THE ROUND LETTERS ARE BLISTERS, THE LAST ONE HOLDS TODAY'S PILL</div>
+  <svg class="big2" viewBox="0 0 660 230" id="svgV">
+    <defs><linearGradient id="foil" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#F4F7F8"/><stop offset=".35" stop-color="#C9D3D7"/><stop offset=".6" stop-color="#EEF2F3"/><stop offset="1" stop-color="#B9C4C9"/></linearGradient>
+      <radialGradient id="bub" cx=".35" cy=".3" r=".75"><stop offset="0" stop-color="#fff"/><stop offset=".6" stop-color="#DCE4E7"/><stop offset="1" stop-color="#AEBAC0"/></radialGradient></defs>
+    <rect x="4" y="14" width="652" height="200" rx="22" fill="url(#foil)" stroke="#8D9AA0" stroke-width="2" stroke-dasharray="2 7"/>
+    <g id="bubbles"></g>
+    <text id="wordV" x="34" y="160" font-family="Figtree" font-weight="800" font-size="128" fill="#0B3B36" letter-spacing="-4">anatono</text></svg>
+</section>
+
+<section class="opt">
+  <div class="label">W · FROM SCRAWL TO CLEAR: "ANA" IN A DOCTOR'S HANDWRITING, A CORAL SEAM, THEN "TONO" CLEAN (WHAT THE APP DOES)</div>
+  <div class="word scrawl"><span class="hand">ana</span><span class="seam"></span><span class="clean">tono</span></div>
+  <div class="in-nav"><div class="word scrawl"><span class="hand">ana</span><span class="seam"></span><span class="clean">tono</span></div><small>in the nav bar</small></div>
+</section>
+
+<section class="opt">
+  <div class="label">Y · THE WORD IS A PHARMACY LABEL: RX ON TOP, THE NAME IN TYPEWRITER, THE DOSE IN PRESCRIPTION SHORTHAND</div>
+  <div class="rxlabel"><div class="bar"><span>Rx</span><span>No. 0001</span></div><div class="name">anatono</div><div class="sig">1+0+1 · after food · × 7/7</div></div>
+</section>
+
+<section class="opt">
+  <div class="label">Z · HEARTBEAT: THE "T" IS A PULSE LINE THAT SPIKES BETWEEN "ANA" AND "ONO"</div>
+  <svg class="big2" viewBox="0 0 660 200" id="svgZ"><g font-family="Figtree" font-weight="700" font-size="132" fill="#0B3B36" letter-spacing="-4">
+    <text id="zA" x="10" y="150">ana</text><text id="zO" y="150">ono</text></g>
+    <path id="pulse" fill="none" stroke="#FF8A6B" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/></svg>
+</section>
+
+<script>
+document.fonts.ready.then(() => {
+  const fs = 132, mid = (w, i) => (w.getStartPositionOfChar(i).x + w.getEndPositionOfChar(i).x) / 2;
+  // T: sun over the first "a", moon over the last "o", the day's doses under the word
+  const wT = document.getElementById("wordT"), bT = 150, a0 = mid(wT, 0), t3 = mid(wT, 3), o6 = mid(wT, 6), ly = bT + 30;
+  const tick = (x, label) => `<circle cx="${x}" cy="${ly}" r="7" fill="#FF8A6B"/><text x="${x}" y="${ly + 30}" text-anchor="middle" font-family="Figtree" font-weight="600" font-size="17" fill="#2E5A54">${label}</text>`;
+  document.getElementById("dayMarks").innerHTML =
+    `<g transform="translate(${a0} 40)" stroke="#FFA946" stroke-width="5" stroke-linecap="round"><circle r="13" fill="#FFA946" stroke="none"/>` +
+    [0, 45, 90, 135, 180, 225, 270, 315].map(r => `<line x1="0" y1="-20" x2="0" y2="-26" transform="rotate(${r})"/>`).join("") + `</g>` +
+    `<g transform="translate(${o6} 40)"><circle r="17" fill="#0B3B36"/><circle cx="8" cy="-6" r="14" fill="#F2FAF5"/></g>` +
+    `<line x1="${a0 - 30}" y1="${ly}" x2="${o6 + 30}" y2="${ly}" stroke="#0B3B36" stroke-opacity=".25" stroke-width="3" stroke-linecap="round"/>` +
+    tick(a0, "8:00") + tick(t3, "2:00") + tick(o6, "9:00");
+  // V: a blister bubble under each round letter; the last one holds a coral pill
+  const wV = document.getElementById("wordV"), bV = 160, cy = bV - fs * .27;
+  document.getElementById("bubbles").innerHTML = [0, 2, 4, 6].map((i, k) => { const x = mid(wV, i);
+    return `<circle cx="${x}" cy="${cy}" r="54" fill="url(#bub)" stroke="#9AA7AD" stroke-width="2"/>` +
+      (k === 3 ? `<g transform="translate(${x + 30} ${cy - 46}) rotate(-35)"><rect x="-26" y="-12" width="52" height="24" rx="12" fill="#fff" stroke="#0B3B36" stroke-width="4"/><path d="M0 -12 H-14 A12 12 0 0 0 -14 12 H0 Z" fill="#FF8A6B" stroke="#0B3B36" stroke-width="4"/></g>` : ""); }).join("");
+  // Z: the pulse line between "ana" and "ono" is the t
+  const zA = document.getElementById("zA"), zO = document.getElementById("zO"), b = 150, x = 10 + zA.getComputedTextLength() + 8, yc = b - fs * .5;
+  zO.setAttribute("x", x + 92);
+  document.getElementById("pulse").setAttribute("d", `M ${x} ${yc} H ${x + 22} L ${x + 34} ${b - fs * .95} L ${x + 50} ${b + 14} L ${x + 62} ${yc} H ${x + 86}`);
+  document.getElementById("svgZ").setAttribute("viewBox", `0 0 ${x + 102 + zO.getComputedTextLength()} 200`);
+});
+</script>
 
 <section class="opt">
   <div class="label">K · THE TWO "O"S ARE DOSES: MORNING TAKEN (CORAL), NIGHT STILL TO TAKE (OPEN)</div>
@@ -96,7 +183,7 @@
     <rect x="60" y="8" width="160" height="324" rx="80" fill="#fff"/><path d="M60 170 V88 A80 80 0 0 1 220 88 V170 Z" fill="#FF8A6B"/>
     <rect x="60" y="8" width="160" height="324" rx="80" fill="none" stroke="#0B3B36" stroke-width="7"/>
     <line x1="60" y1="170" x2="220" y2="170" stroke="#0B3B36" stroke-width="10" stroke-linecap="round"/>
-    <path d="M140 132 V214 q0 18 18 18" fill="none" stroke="#0B3B36" stroke-width="10" stroke-linecap="round"/>
+    <path d="M140 140 V196 q0 16 16 16 h6" fill="none" stroke="#0B3B36" stroke-width="13" stroke-linecap="round"/>
     <text x="140" y="118" text-anchor="middle" font-family="Figtree" font-weight="800" font-size="50" fill="#fff" letter-spacing="-1">ana</text>
     <text x="140" y="282" text-anchor="middle" font-family="Figtree" font-weight="800" font-size="50" fill="#0B3B36" letter-spacing="-1">ono</text></svg>
   <div class="marks">
