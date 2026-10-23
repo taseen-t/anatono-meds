@@ -19,6 +19,7 @@ from PIL import Image
 
 load_dotenv(Path(__file__).with_name(".env"))
 MODEL = "gemma-4-26b-a4b-it"
+MODEL_BACKUP = "gemma-4-31b-it"            # used only if the 26B model fails twice
 # Gemma 4 on the API refuses audio ("Audio input modality is not enabled"), so Gemini Flash-Lite only writes down
 # what was said (as Taseen's Uplink bot does); Gemma 4 does all the understanding.
 HEARING = "gemini-3.5-flash-lite"
@@ -57,16 +58,18 @@ Reply with JSON only:
 # ---------- Gemma ----------
 
 def ask(contents):
-    """One Gemma 4 call that must return JSON. The API sometimes answers 500 or loose JSON: retry once."""
+    """One Gemma 4 call that must return JSON. The API sometimes answers 500 or loose JSON: try the 26B model twice,
+    then the 31B one (both Gemma 4)."""
     client = genai.Client()                       # keep a reference: a dropped client closes its connection
-    for attempt in range(2):
+    tries = [MODEL, MODEL, MODEL_BACKUP]
+    for attempt, model in enumerate(tries):
         try:
-            text = client.models.generate_content(model=MODEL, contents=contents).text or ""
+            text = client.models.generate_content(model=model, contents=contents).text or ""
             return json.loads(re.search(r"\{.*\}", text, re.S).group(0))
         except Exception:  # noqa: BLE001
-            if attempt:
+            if attempt == len(tries) - 1:
                 raise
-            time.sleep(2)
+            time.sleep(2 * (attempt + 1))
 
 
 def image_from(data_url_or_bytes):

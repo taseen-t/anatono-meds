@@ -1,0 +1,300 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Anatono · your medicines</title>
+<meta name="theme-color" content="#0B3B36">
+<link rel="icon" href="favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="icon-512.png">
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<style>
+  :root { --bg: #F2FAF5; --sand: #E1EEE6; --ink: #0B3B36; --sub: #2E5A54; --cta: #FFC7B5; --coral: #FF8A6B; --mint: #9FE3C4;
+          --ok: #1F8A5B; --warn: #B7791F; --stop: #C2412D; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 500 16px/1.4 Figtree, Arial, sans-serif; -webkit-font-smoothing: antialiased; }
+  .app { max-width: 480px; margin: 0 auto; padding: 14px 16px 120px; }
+  header { display: flex; align-items: center; justify-content: space-between; padding: 6px 0 14px; }
+  header svg.wm { height: 24px; width: auto; }
+  header small { font-weight: 600; opacity: .6; }
+  h1, h2 { font-family: "EB Garamond", serif; font-weight: 400; letter-spacing: -1px; margin: 0; }
+  h1 { font-size: 46px; line-height: 1; } h1 em, h2 em { font-style: italic; }
+  h2 { font-size: 30px; }
+  p { margin: 0; }
+  svg.lucide { width: 20px; height: 20px; flex: none; }
+  .card { background: #fff; border: 2px solid var(--ink); border-radius: 22px; padding: 18px; margin-top: 16px; box-shadow: 0 5px 0 var(--ink); }
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 9px; background: var(--cta); color: #1a1a1a; border: 2px solid #1a1a1a;
+         border-radius: 14px; padding: 14px 18px; font: 700 16px Figtree; cursor: pointer; text-decoration: none; }
+  .btn:active { transform: translateY(2px); }
+  .btn.light { background: var(--bg); } .btn.dark { background: var(--ink); color: #fff; border-color: var(--ink); } .btn.full { width: 100%; }
+  .btn[disabled] { opacity: .5; pointer-events: none; }
+  .link { background: none; border: 0; color: var(--sub); font: 600 15px Figtree; text-decoration: underline; cursor: pointer; padding: 6px 0; }
+  .pick { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 14px; }
+  .pick .btn { flex-direction: column; padding: 18px 10px; gap: 8px; font-size: 15px; }
+  .pick .btn svg.lucide { width: 28px; height: 28px; }
+  .row { display: flex; gap: 10px; align-items: center; }
+  .muted { color: var(--sub); font-size: 14px; }
+
+  /* next dose */
+  .next { background: var(--ink); color: #EAF6EF; box-shadow: 0 5px 0 #000; }
+  .next .t { font: 300 54px/1 Figtree; letter-spacing: -2px; margin-top: 6px; }
+  .next .muted { color: #BFD8CF; }
+  /* today list */
+  .dose { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-top: 1.5px solid var(--sand); }
+  .dose:first-child { border-top: 0; }
+  .dose .tm { font: 700 15px Figtree; width: 70px; white-space: nowrap; }
+  .dose .what { flex: 1; } .dose .what b { display: block; } .dose .what span { font-size: 14px; color: var(--sub); }
+  .tick { width: 44px; height: 44px; border-radius: 50%; border: 2px solid var(--ink); background: #fff; display: grid; place-items: center; cursor: pointer; }
+  .tick.on { background: var(--mint); }
+  .dose.done .what { opacity: .5; text-decoration: line-through; }
+
+  /* reading + results */
+  .thumb { width: 100%; max-height: 220px; object-fit: cover; border-radius: 14px; border: 2px solid var(--ink); margin-top: 14px; }
+  .reading { display: flex; gap: 12px; align-items: center; margin-top: 14px; font-weight: 600; }
+  .pulse { width: 46px; height: 30px; flex: none; }
+  .pulse path { stroke-dasharray: 100; animation: trace 1.4s linear infinite; }
+  @keyframes trace { from { stroke-dashoffset: 100; } to { stroke-dashoffset: -100; } }
+  .med h3 { margin: 0; font: 700 21px Figtree; } .med .sub { color: var(--sub); font-size: 14px; margin-top: 2px; }
+  .badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 11px; border-radius: 10px; font: 700 13px Figtree; margin-top: 12px; }
+  .badge.ok { background: #DDF3E7; color: var(--ok); } .badge.careful { background: #FCEFD8; color: var(--warn); } .badge.stop { background: #FBE1DC; color: var(--stop); }
+  .badge svg.lucide { width: 16px; height: 16px; }
+  ul.flags { margin: 10px 0 0; padding-left: 20px; font-size: 14px; color: var(--sub); } ul.flags li { margin: 4px 0; }
+  .for { margin-top: 10px; font-size: 15px; } .for .ur { display: block; direction: rtl; font-size: 16px; margin-top: 4px; color: var(--sub); }
+  label.lbl { display: block; font: 700 14px Figtree; margin: 16px 0 6px; }
+  .say { display: flex; gap: 8px; }
+  textarea { flex: 1; min-height: 64px; resize: vertical; border: 2px solid var(--ink); border-radius: 14px; padding: 12px; font: 500 16px Figtree; color: var(--ink); background: var(--bg); }
+  .mic { width: 58px; flex: none; border-radius: 14px; border: 2px solid var(--ink); background: var(--mint); display: grid; place-items: center; cursor: pointer; }
+  .mic.rec { background: var(--coral); animation: rec 1s ease-in-out infinite; }
+  @keyframes rec { 50% { box-shadow: 0 0 0 6px rgba(255,138,107,.3); } }
+  .understood { margin-top: 14px; padding: 14px; border-radius: 16px; background: var(--bg); border: 1.5px dashed var(--ink); }
+  .understood .heard { font-style: italic; color: var(--sub); font-size: 14px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+  .chip { display: inline-flex; align-items: center; gap: 6px; padding: 7px 10px; border-radius: 10px; background: #fff; border: 1.5px solid var(--ink); font: 600 14px Figtree; }
+  .chip input { border: 0; font: 700 15px Figtree; color: var(--ink); background: none; width: 92px; }
+  .acts { display: flex; gap: 8px; margin-top: 14px; } .acts .btn { flex: 1; }
+
+  /* my medicines */
+  .mine { display: flex; gap: 12px; align-items: center; padding: 12px 0; border-top: 1.5px solid var(--sand); }
+  .mine:first-of-type { border-top: 0; }
+  .mine .what { flex: 1; } .mine .what b { display: block; } .mine .what span { font-size: 14px; color: var(--sub); }
+  .icon-btn { width: 40px; height: 40px; border-radius: 12px; border: 1.5px solid var(--sand); background: #fff; display: grid; place-items: center; cursor: pointer; color: var(--sub); }
+  .empty { text-align: center; padding: 10px 0 4px; color: var(--sub); }
+  .stack { display: grid; gap: 10px; margin-top: 14px; }
+  .toast { position: fixed; left: 50%; bottom: 24px; transform: translate(-50%, 140%); background: var(--ink); color: #fff; padding: 13px 18px; border-radius: 14px;
+           font: 600 15px Figtree; transition: transform .3s; z-index: 9; max-width: calc(100% - 32px); display: flex; gap: 10px; align-items: center; }
+  .toast.on { transform: translate(-50%, 0); }
+  .err { color: var(--stop); font-weight: 600; margin-top: 12px; }
+  footer { text-align: center; font-size: 12px; color: var(--sub); margin-top: 26px; line-height: 1.5; }
+</style></head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <symbol id="wordmark" viewBox="4 18 532 154">
+    <g font-family="Figtree" font-weight="700" font-size="132" letter-spacing="-4" fill="#0B3B36"><text x="10" y="150">ana</text><text x="314" y="150">ono</text></g>
+    <path d="M222 84 H244 L256 24.6 L272 164 L284 84 H308" fill="none" stroke="#FF8A6B" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+  </symbol></defs></svg>
+
+<div class="app">
+  <header><a href="index.html" aria-label="Anatono home"><svg class="wm" viewBox="4 18 532 154"><use href="#wordmark"/></svg></a><small id="today"></small></header>
+
+  <h1>Your <em>medicines</em></h1>
+
+  <!-- next dose + today's list -->
+  <div class="card next" id="nextCard" hidden><div class="muted" id="nextLabel">Next dose</div><div class="t" id="nextTime"></div><p id="nextWhat"></p></div>
+  <div class="card" id="todayCard" hidden><h2>Today</h2><div id="doses"></div></div>
+
+  <!-- add a medicine -->
+  <div class="card" id="addCard">
+    <h2>Add a <em>medicine</em></h2>
+    <p class="muted">A photo of the strip, the box or the whole prescription. Gemma 4 reads it.</p>
+    <div class="pick">
+      <label class="btn"><input type="file" accept="image/*" capture="environment" hidden id="cam"><i data-lucide="camera"></i>Take a photo</label>
+      <label class="btn light"><input type="file" accept="image/*" hidden id="gal"><i data-lucide="images"></i>From gallery</label>
+    </div>
+    <div class="row" style="justify-content:space-between;margin-top:8px">
+      <button class="link" id="typeName">No photo? Type the name</button>
+      <button class="link" id="sample">Try a sample</button>
+    </div>
+    <div id="out"></div>
+  </div>
+
+  <!-- my medicines -->
+  <div class="card" id="mineCard">
+    <h2>My <em>routine</em></h2>
+    <div id="mine"></div>
+    <div class="stack" id="mineActs">
+      <button class="btn dark full" id="calBtn"><i data-lucide="calendar-plus"></i>Add reminders to my calendar</button>
+      <button class="btn light full" id="notifBtn"><i data-lucide="bell-ring"></i>Remind me in this app too</button>
+    </div>
+  </div>
+
+  <footer>Anatono helps you remember what your doctor prescribed. It isn't medical advice and never changes a dose.<br>
+    Photos go to Gemma 4 (Google Gemini API) to be read. Your routine stays on this phone.</footer>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const todayKey = () => new Date().toLocaleDateString("en-CA");   // local date, YYYY-MM-DD
+const load = (k, d) => { try { return JSON.parse(localStorage.getItem(k)) ?? d; } catch { return d; } };
+const save = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} };
+let routine = load("anatono.routine", []);
+const icons = () => lucide.createIcons();
+function toast(msg, icon = "check") {
+  $("toast").innerHTML = `<i data-lucide="${icon}"></i>${esc(msg)}`; icons();
+  $("toast").classList.add("on"); clearTimeout(toast.t); toast.t = setTimeout(() => $("toast").classList.remove("on"), 3200);
+}
+async function api(path, body) {
+  const r = await fetch(path, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+  const j = await r.json().catch(() => ({ error: "The server didn't answer properly." }));
+  if (!r.ok || j.error) throw new Error(j.error || "Something went wrong.");
+  return j;
+}
+const FOOD = { before: "before food", after: "after food", with: "with food" };
+const describe = m => [m.amount, FOOD[m.food], m.days ? `for ${m.days} days` : ""].filter(Boolean).join(", ");
+const ampm = t => { const [h, m] = t.split(":").map(Number); return `${(h % 12) || 12}:${String(m).padStart(2, "0")} ${h < 12 ? "am" : "pm"}`; };
+const pulse = `<svg class="pulse" viewBox="0 0 46 30"><path d="M2 16 H12 L17 3 L25 27 L30 16 H44" pathLength="100" fill="none" stroke="#FF8A6B" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+
+/* ---------- 1. a photo in (camera or gallery), shrunk on the phone before it's sent ---------- */
+async function shrink(file) {
+  const img = await createImageBitmap(file), k = Math.min(1, 1600 / Math.max(img.width, img.height));
+  const c = Object.assign(document.createElement("canvas"), { width: Math.round(img.width * k), height: Math.round(img.height * k) });
+  c.getContext("2d").drawImage(img, 0, 0, c.width, c.height);
+  return c.toDataURL("image/jpeg", .85);
+}
+let found = [];   // what Gemma read from the last photo
+async function readPhoto(dataUrl) {
+  $("out").innerHTML = `<img class="thumb" src="${dataUrl}" alt="Your photo"><div class="reading">${pulse}<span>Gemma 4 is reading it. This can take a minute.</span></div>`;
+  try {
+    const r = await api("api/read", { image: dataUrl, routine });
+    found = r.medicines || [];
+    if (!found.length) { $("out").innerHTML = `<img class="thumb" src="${dataUrl}" alt=""><p class="err">No medicine found in this photo. Try a closer, brighter photo of the name on the strip or box.</p>`; return; }
+    $("out").innerHTML = `<p class="muted" style="margin-top:14px">${r.kind === "prescription" ? "From your prescription" : "From your photo"}: ${found.length} medicine${found.length > 1 ? "s" : ""}. Check each one, then say how you take it.</p>` +
+      found.map((m, i) => medCard(m, r.checks?.[i] || { level: "ok", flags: [], good: [] }, i)).join("");
+    icons();
+  } catch (e) { $("out").innerHTML = `<p class="err">${esc(e.message)}</p>`; }
+}
+$("cam").onchange = $("gal").onchange = async e => { const f = e.target.files[0]; e.target.value = ""; if (f) readPhoto(await shrink(f)); };
+$("sample").onclick = async () => { const b = await (await fetch("samples/prescription.jpg")).blob(); readPhoto(await shrink(b)); };
+$("typeName").onclick = () => {
+  const name = prompt("Medicine name and strength, e.g. Panadol 500 mg"); if (!name) return;
+  found = [{ name, strength: "", salt: "" }];
+  $("out").innerHTML = medCard(found[0], { level: "ok", flags: [], good: [], typed: true }, 0); icons();
+};
+
+/* ---------- 2. what Gemma read, the code checks, and the dose (typed or spoken) ---------- */
+function medCard(m, c, i) {
+  const badge = { ok: ["circle-check", "Looks fine"], careful: ["triangle-alert", "Check this"], stop: ["octagon-x", "Don't take this one"] }[c.level] || ["circle-check", "Looks fine"];
+  return `<div class="card med" id="med${i}">
+    <h3>${esc(m.name)} ${esc(m.strength)}</h3>
+    <div class="sub">${esc([m.form, m.salt].filter(Boolean).join(" · "))}</div>
+    ${m.what_for ? `<div class="for">${esc(m.what_for)}${m.what_for_urdu ? `<span class="ur">${esc(m.what_for_urdu)}</span>` : ""}</div>` : ""}
+    ${c.typed ? "" : `<span class="badge ${c.level}"><i data-lucide="${badge[0]}"></i>${badge[1]}</span>`}
+    ${c.flags?.length || c.good?.length ? `<ul class="flags">${c.flags.map(f => `<li>${esc(f)}</li>`).join("")}${(c.good || []).map(g => `<li>${esc(g)}</li>`).join("")}</ul>` : ""}
+    ${c.level === "stop" ? `<p class="err">Please don't take this one. Show it to your pharmacist.</p>` : `
+    <label class="lbl" for="say${i}">How do you take it?</label>
+    <div class="say"><textarea id="say${i}" placeholder="e.g. 1 tablet morning and night after food for 5 days, or: subah aur raat khane ke baad">${esc(m.dose_written)}</textarea>
+      <button class="mic" id="mic${i}" onclick="talk(${i})" aria-label="Say it instead"><i data-lucide="mic"></i></button></div>
+    <button class="btn full" style="margin-top:10px" id="go${i}" onclick="understand(${i})"><i data-lucide="sparkles"></i>Set the routine</button>
+    <div id="und${i}"></div>`}
+  </div>`;
+}
+async function understand(i, audio) {
+  const text = $(`say${i}`).value.trim();
+  if (!text && !audio) { toast("Type or say how you take it", "keyboard"); return; }
+  $(`und${i}`).innerHTML = `<div class="reading">${pulse}<span>${audio ? "Listening to what you said…" : "Gemma 4 is working it out…"}</span></div>`;
+  $(`go${i}`).disabled = true;
+  try {
+    const r = await api("api/dose", audio ? { medicine: found[i], audio } : { medicine: found[i], text });
+    const d = r.dose, c = r.check;
+    found[i].pending = { amount: d.amount, food: d.food, days: c.days, as_needed: d.as_needed, times: c.times };
+    if (audio && r.heard) $(`say${i}`).value = r.heard;
+    $(`und${i}`).innerHTML = `<div class="understood">
+      ${r.heard || d.heard ? `<div class="heard">You said: “${esc(r.heard || d.heard)}”</div>` : ""}
+      <div class="chips">
+        ${d.amount ? `<span class="chip"><i data-lucide="pill"></i>${esc(d.amount)}</span>` : ""}
+        ${c.times.map((t, k) => `<span class="chip"><i data-lucide="alarm-clock"></i><input type="time" value="${t}" onchange="found[${i}].pending.times[${k}]=this.value"></span>`).join("")}
+        ${FOOD[d.food] ? `<span class="chip"><i data-lucide="utensils"></i>${FOOD[d.food]}</span>` : ""}
+        <span class="chip"><i data-lucide="calendar-days"></i>${c.days ? `${c.days} days` : "every day"}</span>
+      </div>
+      ${c.notes.length ? `<ul class="flags">${c.notes.map(n => `<li>${esc(n)}</li>`).join("")}</ul>` : ""}
+      <div class="acts"><button class="btn dark" onclick="addToRoutine(${i})"><i data-lucide="check"></i>Add to my routine</button></div>
+    </div>`;
+    icons();
+  } catch (e) { $(`und${i}`).innerHTML = `<p class="err">${esc(e.message)}</p>`; }
+  $(`go${i}`).disabled = false;
+}
+/* speaking: record on the phone, the server turns it into words, Gemma 4 understands them */
+let rec = null;
+async function talk(i) {
+  if (rec) { rec.stop(); return; }
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true }), chunks = [];
+    rec = new MediaRecorder(stream);
+    rec.ondataavailable = e => chunks.push(e.data);
+    rec.onstop = () => {
+      stream.getTracks().forEach(t => t.stop()); $(`mic${i}`).classList.remove("rec"); rec = null;
+      const fr = new FileReader(); fr.onload = () => understand(i, fr.result); fr.readAsDataURL(new Blob(chunks, { type: chunks[0]?.type || "audio/webm" }));
+    };
+    rec.start(); $(`mic${i}`).classList.add("rec"); toast("Listening. Tap the mic again when you're done.", "mic");
+  } catch { toast("The microphone isn't available. Type it instead.", "mic-off"); }
+}
+
+/* ---------- 3. confirmed, saved on this phone ---------- */
+function addToRoutine(i) {
+  const m = found[i], p = m.pending;
+  routine.push({ id: Date.now() + i, name: m.name, strength: m.strength || "", salt: m.salt || "", amount: p.amount || "", food: p.food,
+                 days: p.days || null, as_needed: !!p.as_needed, times: [...new Set(p.times)].sort(), start: todayKey() });
+  save("anatono.routine", routine);
+  $(`med${i}`).outerHTML = `<div class="card"><div class="row"><i data-lucide="circle-check"></i><b>${esc(m.name)} added.</b></div></div>`;
+  icons(); render(); toast(`${m.name} added to your routine`);
+}
+function dropMed(id) { routine = routine.filter(r => r.id !== id); save("anatono.routine", routine); render(); }
+
+/* ---------- today: every dose in order, tick it when taken ---------- */
+const activeToday = r => !r.as_needed && (!r.days || (new Date(todayKey()) - new Date(r.start)) / 864e5 < r.days);
+function render() {
+  $("today").textContent = new Date().toLocaleDateString(undefined, { weekday: "long", day: "numeric", month: "short" });
+  const taken = load("anatono.taken." + todayKey(), {}), now = new Date().toTimeString().slice(0, 5);
+  const doses = routine.filter(activeToday).flatMap(r => r.times.map(t => ({ r, t, key: `${r.id}@${t}` }))).sort((a, b) => a.t.localeCompare(b.t));
+  $("todayCard").hidden = !doses.length;
+  $("doses").innerHTML = doses.map(({ r, t, key }) => `<div class="dose${taken[key] ? " done" : ""}"><div class="tm">${ampm(t)}</div>
+    <div class="what"><b>${esc(r.name)} ${esc(r.strength)}</b><span>${esc(describe(r))}</span></div>
+    <button class="tick${taken[key] ? " on" : ""}" onclick="tick('${key}')" aria-label="Taken"><i data-lucide="check"></i></button></div>`).join("");
+  const next = doses.find(d => !taken[d.key] && d.t >= now) || doses.find(d => !taken[d.key]);
+  $("nextCard").hidden = !next;
+  if (next) { $("nextTime").textContent = ampm(next.t); $("nextWhat").textContent = `${next.r.name} ${next.r.strength}, ${describe(next.r)}`;
+              $("nextLabel").textContent = next.t >= now ? "Next dose" : "Missed earlier today"; }
+  $("mine").innerHTML = routine.length ? routine.map(r => `<div class="mine"><div class="what"><b>${esc(r.name)} ${esc(r.strength)}</b>
+      <span>${r.as_needed ? "only when needed" : r.times.map(ampm).join(" · ")}${describe(r) ? " · " + esc(describe(r)) : ""}</span></div>
+      <button class="icon-btn" onclick="dropMed(${r.id})" aria-label="Remove"><i data-lucide="trash-2"></i></button></div>`).join("")
+    : `<p class="empty">Nothing yet. Add your first medicine above.</p>`;
+  $("mineActs").hidden = !routine.length;
+  icons();
+}
+function tick(key) { const k = "anatono.taken." + todayKey(), t = load(k, {}); t[key] = !t[key]; save(k, t); render(); if (t[key]) toast("Well done. Marked as taken."); }
+
+/* ---------- reminders: the phone's own calendar (rings with the app closed), plus in-app alerts ---------- */
+$("calBtn").onclick = async () => {
+  try {
+    const r = await fetch("api/calendar", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ routine: routine.filter(r => !r.as_needed) }) });
+    const a = Object.assign(document.createElement("a"), { href: URL.createObjectURL(await r.blob()), download: "anatono-reminders.ics" });
+    a.click(); toast("Open the file to add the alarms to your calendar", "calendar-check");
+  } catch { toast("Couldn't make the calendar file. Is the server running?", "triangle-alert"); }
+};
+$("notifBtn").onclick = async () => {
+  if (!("Notification" in window)) { toast("This browser can't show alerts. Use the calendar button.", "bell-off"); return; }
+  const p = await Notification.requestPermission();
+  toast(p === "granted" ? "Alerts are on while Anatono is open" : "Alerts are off. Use the calendar button instead.", p === "granted" ? "bell-ring" : "bell-off");
+};
+setInterval(() => {
+  if (!("Notification" in window) || Notification.permission !== "granted") return;
+  const now = new Date().toTimeString().slice(0, 5), k = "anatono.alerted." + todayKey(), done = load(k, {});
+  routine.filter(activeToday).forEach(r => r.times.forEach(t => {
+    const key = `${r.id}@${t}`; if (t !== now || done[key]) return;
+    new Notification(`Time for ${r.name} ${r.strength}`.trim(), { body: describe(r) || "Your medicine", icon: "icon-512.png" });
+    done[key] = true; save(k, done);
+  }));
+  render();
+}, 20000);
+
+render();
+</script>
+</body></html>
