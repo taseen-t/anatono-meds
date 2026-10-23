@@ -9,9 +9,9 @@ Made by **Taseen Tariq** at Hack Day Faisalabad, 23 October 2026.
 **Try it:** [anatono.site](https://anatono.site) (landing page) · [anatono.site/app.html](https://anatono.site/app.html)
 (the app) · [Android app (APK)](https://anatono.site/anatono.apk)
 
-[![Watch the one-minute demo](site/demo-poster.jpg)](https://anatono.site/demo.mp4)
+[![Watch the 30-second demo](site/demo-poster.jpg)](https://anatono.site/demo.mp4)
 
-**▶ [Watch the one-minute demo](https://anatono.site/demo.mp4)**: a real run of the app, with captions.
+**▶ [Watch the 30-second demo](https://anatono.site/demo.mp4)**: a real run of the app (Gemma 4's waits shown sped up), with captions.
 
 > **Verify in 30 seconds**
 > | | |

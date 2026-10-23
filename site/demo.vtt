@@ -1,31 +1,25 @@
 WEBVTT
 
-00:00.262 --> 00:05.692
-This is Anatono. It helps elders and their families never miss a dose.
+00:00.204 --> 00:03.074
+Meet Anatono. Never miss a dose.
 
-00:06.848 --> 00:12.518
-Snap a medicine or a prescription, and Gemma 4 reads it, through the Gemini API.
+00:03.990 --> 00:06.540
+Snap a prescription, and Gemma 4 reads it.
 
-00:13.429 --> 00:21.419
-Then plain code, not the model, checks every medicine: the dates, missing details, the same ingredient twice.
+00:07.972 --> 00:10.122
+Then plain code checks each one.
 
-00:22.063 --> 00:24.693
+00:10.499 --> 00:12.889
 Type how you take it, even in Roman Urdu.
 
-00:25.483 --> 00:29.473
-Gemma 4 understands it, and code sets the exact times.
+00:13.262 --> 00:16.692
+Gemma 4 understands it, and code sets the times.
 
-00:30.405 --> 00:34.475
-Confirm, and calendar alarms ring even when the app is closed.
+00:17.083 --> 00:19.793
+Calendar alarms ring, even with the app closed.
 
-00:36.335 --> 00:39.685
-An expired pack? Code says: don't take it.
+00:20.841 --> 00:23.391
+Expired? Code says: don't take it.
 
-00:43.020 --> 00:53.170
-Gemma 4 does all the reading and understanding. Gemini Flash-Lite only turns speech into text. It's also an agent skill, and open source under MIT.
-
-00:54.424 --> 00:57.014
-It's live at anatono dot site.
-
-01:00.029 --> 01:03.779
-Gemma 4 reads. Code checks. You confirm.
+00:24.537 --> 00:29.087
+Open source, with an agent skill. Live at anatono.site.

@@ -188,23 +188,6 @@
   .demo2 { max-width: 980px; margin: 30px auto 0; text-align: center; }
   .demo2 video { display: block; width: 100%; aspect-ratio: 16 / 9; border-radius: 26px; border: 2px solid #2E5A54; background: #F2FAF5; }
   .demo2 small { display: block; margin-top: 10px; color: #BFD8CF; }
-  .race2 { display: grid; grid-template-columns: 1fr 2.6fr; gap: 14px; max-width: 1180px; margin: 34px auto 0; }
-  .rc { position: relative; height: 330px; border-radius: 26px; overflow: hidden; text-align: center; padding-top: 24px; }
-  .rc small { position: relative; z-index: 2; font: 600 15px Figtree; opacity: .85; }
-  .rc .big { position: relative; z-index: 2; font: 400 46px/1 "EB Garamond", serif; letter-spacing: -1px; margin-top: 4px; }
-  .rc.slow { border: 1.5px solid rgba(255,255,255,.16); }
-  .typing { position: absolute; left: 22px; right: 22px; top: 38%; text-align: left; font: 500 15px Figtree; color: #D5E7E0; }
-  .typing div { padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,.09); white-space: nowrap; overflow: hidden; }
-  .typing div b { font-weight: 500; opacity: .5; margin-right: 6px; }
-  .caret { display: inline-block; width: 2px; height: 16px; vertical-align: -3px; background: currentColor; margin-left: 2px; animation: caret 1s steps(1) infinite; }
-  @keyframes caret { 50% { opacity: 0; } }
-  .rc.fast { background: radial-gradient(45% 55% at 26% 40%, rgba(255,138,107,.9) 0, transparent 70%), radial-gradient(40% 50% at 74% 28%, rgba(159,227,196,.85) 0, transparent 70%),
-             radial-gradient(55% 60% at 62% 88%, rgba(255,169,70,.65) 0, transparent 70%), #2a5a52; }
-  .rc.fast::before { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,.28), transparent 45%, rgba(0,0,0,.22)); }
-  .rc.fast .arc { position: absolute; inset: 0; width: 100%; height: 100%; }
-  .arct { font: 600 21px Figtree; fill: #fff; }
-  .rc .capsule { width: 112px; height: 52px; margin-left: -56px; top: calc(54% - 26px); }
-  .rc .capsule .face b { top: 30px; }
 
   /* ---------- section 4: how it works, pinned while you scroll ---------- */
   .how { position: relative; height: 260vh; }
@@ -477,7 +460,6 @@
     .how-card { height: 460px; width: 100%; max-width: 360px; justify-self: center; } .how-text { justify-self: start; }
     .easy-grid { grid-template-columns: 1fr; gap: 10px; margin-top: 50px; } .easy-demo { top: 80px; z-index: 2; width: 100%; max-width: 400px; justify-self: center; }
     .ef { min-height: 40vh; } .trust2 { grid-template-columns: 1fr; padding: 32px 24px; }
-    .race2 { grid-template-columns: 1fr; } .rc { height: 280px; }
     .check2 { grid-template-columns: 1fr; gap: 30px; padding: 90px 0 40px; } .deck { height: 420px; } .vc { width: 300px; margin-left: -150px; }
     .collage { height: auto; display: grid; gap: 18px; } .rv { position: relative; inset: auto; width: auto; } .rv .sample { bottom: auto; top: 14px; }
     .reviews { margin: 30px 6px 0; border-radius: 32px; padding: 80px 0; }
@@ -571,20 +553,11 @@
     <h2>One photo, <em>not ten minutes</em></h2>
     <p class="lead">Typing in every medicine, strength, time and day by hand takes about ten minutes. With Anatono it's one photo and one sentence.</p>
   </div>
-  <div class="race2">
-    <div class="rc slow"><small>By hand</small><div class="big">~10 min</div>
-      <div class="typing" id="typed"></div></div>
-    <div class="rc fast"><small>Anatono</small><div class="big">1 photo</div>
-      <svg class="arc" viewBox="0 0 840 340" preserveAspectRatio="xMidYMid slice"><path id="ap" d="M -60 320 C 150 250, 330 186, 420 184 C 520 182, 700 150, 920 90" fill="none"/>
-        <text class="arct" dy="7"><textPath href="#ap" id="atp">"subah aur raat, khane ke baad, paanch din"  ·  8:00 am and 9:00 pm, after food, for 5 days  ·  reminders set  ·  </textPath></text></svg>
-      <div class="capsule"><div class="body"></div><div class="face"><i></i><i></i><b></b></div></div>
-    </div>
-  </div>
   <div class="demo2 reveal" id="demo">
     <video controls playsinline preload="metadata" poster="demo-poster.jpg">
       <source src="demo.mp4" type="video/mp4"><track kind="captions" src="demo.vtt" srclang="en" label="English">
     </video>
-    <small>See it work: a real run of the app, one minute.</small>
+    <small>See it work: a real run of the app, in under 30 seconds.</small>
   </div>
 </section>
 
@@ -769,12 +742,12 @@ function fill(tp) {
   const u = tp.getComputedTextLength(), path = document.querySelector(tp.getAttribute("href"));
   tp.textContent = tp.dataset.unit.repeat(Math.ceil(path.getTotalLength() / u) + 2); return u;
 }
-const lines = [[$("tin"), 0.7], [$("tout"), 0.7], [$("atp"), 1.8]];
+const lines = [[$("tin"), 0.7], [$("tout"), 0.7]];
 let lens = lines.map(([tp]) => fill(tp)), off = 0;
 document.fonts.ready.then(() => { lens = lines.map(([tp]) => fill(tp)); });          // measure again once the fonts are in
 /* anything moving pauses while its section is off screen */
 const io = new IntersectionObserver(es => es.forEach(e => e.target.classList.toggle("off", !e.isIntersecting)));
-document.querySelectorAll(".hero, .apps, .speed2, .how, .final2").forEach(el => io.observe(el));
+document.querySelectorAll(".hero, .apps, .how, .final2").forEach(el => io.observe(el));
 (function frame() {
   off += 1;
   lines.forEach(([tp, speed], i) => { if (!tp.closest(".off")) tp.setAttribute("startOffset", (off * speed % lens[i]) - lens[i]); });
@@ -888,21 +861,6 @@ const band = [["si:googlecalendar", "Google Calendar"], ["si:apple", "Apple Cale
               ["si:protoncalendar", "Proton Calendar"], ["si:android", "Android"], ["si:apple", "iPhone"], ["si:googlechrome", "Chrome"], ["si:safari", "Safari"]];
 $("track").innerHTML = [...band, ...band, ...band, ...band].map(([i, s]) => i.startsWith("si:")
   ? `<span><b class="brand" style="--i:url(${SI}${i.slice(3)}.svg)"></b>${s}</span>` : `<span><i data-lucide="${i}"></i>${s}</span>`).join("");
-
-/* section 3: the slow card fills in a form by hand, field by field, at a person's typing speed */
-const byHand = [["Medicine", "Amoxil 500 mg"], ["Dose", "1 tablet"], ["Time", "8:00 am, 9:00 pm"], ["Food", "after meals"], ["Days", "5"],
-                ["Medicine", "Brufen syrup"], ["Dose", "2 spoons"], ["Time", "2:00 pm"], ["Food", "after lunch"], ["Days", "3"]];
-let hf = 0, hc = 0;
-function typeByHand() {
-  const box = $("typed"), [label, value] = byHand[hf];
-  if ($("speed").classList.contains("off")) return setTimeout(typeByHand, 500);
-  if (hc === 0) { if (hf % 5 === 0) box.innerHTML = ""; box.insertAdjacentHTML("beforeend", `<div><b>${label}</b><span></span><i class="caret"></i></div>`); }
-  box.lastElementChild.querySelector("span").textContent = value.slice(0, ++hc);
-  if (hc < value.length) return setTimeout(typeByHand, 70 + Math.random() * 90);        // next letter
-  box.lastElementChild.querySelector(".caret").remove(); hc = 0; hf = (hf + 1) % byHand.length;
-  setTimeout(typeByHand, hf % 5 === 0 ? 1600 : 450);                                     // next field, or a new medicine
-}
-typeByHand();
 
 /* section 6: made for you. Each group has an icon, a line, and a sample reminder; it rotates until someone taps a tag */
 const groups = [
