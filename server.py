@@ -1,6 +1,7 @@
 """Anatono server: the website + app in site/, and three API routes. Run: python3 server.py  (http://localhost:8600)
 The Gemini API key stays here on the server; the browser never sees it."""
 import json
+from pathlib import Path
 
 import uvicorn
 from starlette.applications import Starlette
@@ -55,9 +56,9 @@ async def calendar(request):
                     headers={"Content-Disposition": 'attachment; filename="anatono-reminders.ics"'})
 
 
-app = Starlette(routes=[Route("/api/read", read, methods=["POST"]), Route("/api/dose", dose, methods=["POST"]),
-                        Route("/api/calendar", calendar, methods=["POST"]),
-                        Mount("/", StaticFiles(directory="site", html=True))])
+api_routes = [Route("/api/read", read, methods=["POST"]), Route("/api/dose", dose, methods=["POST"]),
+              Route("/api/calendar", calendar, methods=["POST"])]
+app = Starlette(routes=api_routes + [Mount("/", StaticFiles(directory=Path(__file__).parent / "site", html=True, check_dir=False))])
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8600)
