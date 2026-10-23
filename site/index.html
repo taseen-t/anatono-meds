@@ -176,27 +176,77 @@
 
   /* ---------- 1 photo, not 10 minutes ---------- */
   /* ---------- section 3: one photo, not ten minutes ---------- */
-  .speed2 { position: relative; z-index: 1; background: var(--ink); color: #EAF6EF; border-radius: 48px; margin: -48px 10px 0; padding: 110px 30px 40px; }
+  .speed2 { position: relative; z-index: 1; background: var(--ink); color: #EAF6EF; border-radius: 48px; margin: -48px 10px 0; padding: 84px 30px 30px; }
   .speed2 .copy { text-align: center; }
   .speed2 h2 { font-size: clamp(44px, 6vw, 86px); }
-  .speed2 .lead { color: #BFD8CF; max-width: 560px; margin: 20px auto 0; }
-  .race2 { display: grid; grid-template-columns: 1fr 2.6fr; gap: 14px; max-width: 1180px; margin: 56px auto 0; }
-  .rc { position: relative; height: 520px; border-radius: 28px; overflow: hidden; text-align: center; padding-top: 34px; }
+  .speed2 .lead { color: #BFD8CF; max-width: 560px; margin: 14px auto 0; }
+  .race2 { display: grid; grid-template-columns: 1fr 2.6fr; gap: 14px; max-width: 1180px; margin: 34px auto 0; }
+  .rc { position: relative; height: 330px; border-radius: 26px; overflow: hidden; text-align: center; padding-top: 24px; }
   .rc small { position: relative; z-index: 2; font: 600 15px Figtree; opacity: .85; }
-  .rc .big { position: relative; z-index: 2; font: 400 54px/1 "EB Garamond", serif; letter-spacing: -1px; margin-top: 6px; }
+  .rc .big { position: relative; z-index: 2; font: 400 46px/1 "EB Garamond", serif; letter-spacing: -1px; margin-top: 4px; }
   .rc.slow { border: 1.5px solid rgba(255,255,255,.16); }
-  .typing { position: absolute; left: 0; right: 0; top: 50%; display: flex; justify-content: flex-end; align-items: center; padding-right: 22px;
-            white-space: nowrap; overflow: hidden; font: 500 19px Figtree; color: #BFD8CF;
-            mask-image: linear-gradient(90deg, transparent, #000 45%); -webkit-mask-image: linear-gradient(90deg, transparent, #000 45%); }
-  .caret { display: inline-block; width: 2px; height: 22px; background: currentColor; margin-left: 2px; animation: caret 1s steps(1) infinite; }
+  .typing { position: absolute; left: 22px; right: 22px; top: 38%; text-align: left; font: 500 15px Figtree; color: #D5E7E0; }
+  .typing div { padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,.09); white-space: nowrap; overflow: hidden; }
+  .typing div b { font-weight: 500; opacity: .5; margin-right: 6px; }
+  .caret { display: inline-block; width: 2px; height: 16px; vertical-align: -3px; background: currentColor; margin-left: 2px; animation: caret 1s steps(1) infinite; }
   @keyframes caret { 50% { opacity: 0; } }
   .rc.fast { background: radial-gradient(45% 55% at 26% 40%, rgba(255,138,107,.9) 0, transparent 70%), radial-gradient(40% 50% at 74% 28%, rgba(159,227,196,.85) 0, transparent 70%),
              radial-gradient(55% 60% at 62% 88%, rgba(255,169,70,.65) 0, transparent 70%), #2a5a52; }
   .rc.fast::before { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,.28), transparent 45%, rgba(0,0,0,.22)); }
   .rc.fast .arc { position: absolute; inset: 0; width: 100%; height: 100%; }
   .arct { font: 600 21px Figtree; fill: #fff; }
-  .rc .capsule { width: 112px; height: 52px; margin-left: -56px; top: calc(50% - 26px); }
+  .rc .capsule { width: 112px; height: 52px; margin-left: -56px; top: calc(54% - 26px); }
   .rc .capsule .face b { top: 30px; }
+
+  /* ---------- section 4: how it works, pinned while you scroll ---------- */
+  .how { position: relative; height: 260vh; }
+  .how-pin { position: sticky; top: 0; height: 100vh; display: grid; grid-template-columns: 1fr 360px 1fr; align-items: center; gap: 56px; padding: 0 6%; overflow: hidden; }
+  .how-wave { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 0; }
+  .how-wave path { fill: none; stroke: var(--sand); stroke-width: 130; stroke-linecap: round; opacity: .6; }
+  .how-nav { list-style: none; margin: 0; padding: 0; position: relative; z-index: 1; font: 400 21px "EB Garamond", serif; }
+  .how-nav li { padding: 6px 0 6px 14px; border-left: 3px solid color-mix(in srgb, var(--ink) 12%, transparent); opacity: .45; transition: opacity .3s, border-color .3s; cursor: pointer; }
+  .how-nav li.on { opacity: 1; border-color: var(--coral); }
+  .how-card { position: relative; z-index: 1; height: 500px; border-radius: 26px; overflow: hidden; color: #fff;
+              background: radial-gradient(60% 40% at 25% 18%, #3c7a6d, transparent 70%), radial-gradient(55% 45% at 85% 85%, #8a4f3e, transparent 70%), #10241f;
+              box-shadow: 0 30px 60px -30px rgba(11,59,54,.55); }
+  .st { position: absolute; inset: 0; padding: 26px 22px; opacity: 0; transform: translateY(16px); transition: opacity .45s, transform .45s; }
+  .st.on { opacity: 1; transform: none; }
+  .how-text { position: relative; z-index: 1; max-width: 330px; justify-self: end; }
+  .how-text h3 { font-size: 34px; }
+  .how-text p { margin-top: 14px; font: 500 16px/1.45 Figtree; color: var(--sub); }
+  .strip { position: relative; margin: 30px auto 0; width: 270px; height: 170px; border-radius: 18px; transform: rotate(-6deg); overflow: hidden; color: #2b3a37;
+           background: linear-gradient(135deg, #f4f6f5, #c9d1ce 45%, #eef1f0 60%, #b9c2bf); padding: 14px 16px; box-shadow: 0 20px 40px -18px #000; }
+  .strip b { font: 800 22px Figtree; color: #c0392b; } .strip span { display: block; font: 600 12px Figtree; }
+  .strip .bl { display: grid; grid-template-columns: repeat(3, 44px); gap: 12px 22px; margin-top: 12px; }
+  .strip .bl i { height: 26px; border-radius: 13px; background: radial-gradient(circle at 35% 30%, #fff, #c5cdca 70%); box-shadow: inset 0 -2px 3px rgba(0,0,0,.2); }
+  .strip em { position: absolute; right: 12px; bottom: 9px; font: 600 10px Figtree; font-style: normal; letter-spacing: .04em; }
+  .scan { position: absolute; left: 0; right: 0; height: 3px; background: var(--mint); box-shadow: 0 0 16px 4px rgba(159,227,196,.8); animation: scan 2.2s ease-in-out infinite alternate; }
+  @keyframes scan { from { top: 4%; } to { top: 94%; } }
+  .how .chips { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: 34px; }
+  .how .chips span { display: inline-flex; align-items: center; gap: 6px; padding: 8px 12px; border-radius: 12px; font: 600 13px Figtree; background: rgba(255,255,255,.14);
+                     border: 1px solid rgba(255,255,255,.2); }
+  .how .chips span.ok { background: rgba(159,227,196,.25); border-color: var(--mint); }
+  .how .chips svg.lucide { width: 15px; height: 15px; }
+  .st.on .chips span { animation: pop .45s backwards; }
+  .st.on .chips span:nth-child(2) { animation-delay: .25s; } .st.on .chips span:nth-child(3) { animation-delay: .5s; } .st.on .chips span:nth-child(4) { animation-delay: .75s; }
+  @keyframes pop { from { opacity: 0; transform: translateY(8px) scale(.94); } }
+  .said { font: 600 21px/1.45 Figtree; margin-top: 18px; }
+  .said mark { color: inherit; border-radius: 6px; padding: 0 4px; }
+  .c1 { background: rgba(255,138,107,.55) !important; } .c2 { background: rgba(240,215,255,.4) !important; }
+  .c3 { background: rgba(159,227,196,.45) !important; } .c4 { background: rgba(255,169,70,.5) !important; }
+  .msg { position: absolute; left: 18px; right: 18px; bottom: 70px; display: flex; justify-content: space-between; align-items: center; background: #fff; color: #667;
+         border-radius: 14px; padding: 13px 14px; font: 500 14px Figtree; }
+  .msg svg.lucide { color: var(--ink); }
+  .rt { display: flex; gap: 14px; align-items: center; background: rgba(255,255,255,.93); color: #111; border-radius: 16px; padding: 13px 14px; margin-top: 12px; font: 700 15px Figtree; }
+  .rt:first-child { margin-top: 20px; }
+  .rt b { font: 700 13px Figtree; background: var(--ink); color: #fff; border-radius: 9px; padding: 6px 8px; white-space: nowrap; }
+  .rt small { display: block; font: 500 13px Figtree; opacity: .6; margin-top: 2px; }
+  .flag, .cal { display: flex; align-items: center; gap: 8px; margin-top: 16px; font: 600 14px Figtree; }
+  .flag { color: var(--mint); }
+  .cal { width: fit-content; background: var(--cta); color: #1a1a1a; border: 2px solid #1a1a1a; border-radius: 12px; padding: 10px 14px; }
+  .pillbar { position: absolute; left: 50%; bottom: 20px; transform: translateX(-50%); display: flex; align-items: center; gap: 7px; white-space: nowrap;
+             padding: 7px 14px; border-radius: 20px; background: rgba(0,0,0,.45); border: 1.5px solid var(--sun); font: 600 12px Figtree; }
+  .pillbar svg.lucide { width: 14px; height: 14px; }
 
   /* ---------- made for you ---------- */
   .foryou { margin-top: 100px; padding: 80px 64px; display: grid; grid-template-columns: 1.2fr .8fr; gap: 40px; position: relative; overflow: hidden; }
@@ -309,7 +359,9 @@
     .links, .seg, .foryou .sign { display: none; }
     .stage { height: 560px; } .phone2 { transform: scale(.84); } .tile { width: 72px; height: 72px; border-radius: 19px; } .tile svg.lucide { width: 32px; height: 32px; }
     .apps { margin: 10px 6px 0; border-radius: 32px; padding-top: 80px; }
-    .race2 { grid-template-columns: 1fr; } .rc { height: 380px; }
+    .how { height: 240vh; } .how-pin { grid-template-columns: 1fr; gap: 18px; padding: 70px 20px 20px; align-content: center; } .how-nav { display: none; }
+    .how-card { height: 400px; } .how-text { justify-self: start; }
+    .race2 { grid-template-columns: 1fr; } .rc { height: 280px; }
     .foryou, .check, .grid, .duo, .faq, .stats { grid-template-columns: 1fr; padding-left: 22px; padding-right: 22px; }
     .feat:nth-child(even) { margin-top: 0; }
     .mascot { right: 2%; top: 560px; width: 90px; } .bubble { display: none; }
@@ -397,12 +449,41 @@
   </div>
   <div class="race2">
     <div class="rc slow"><small>By hand</small><div class="big">~10 min</div>
-      <div class="typing"><span id="typed"></span><i class="caret"></i></div></div>
+      <div class="typing" id="typed"></div></div>
     <div class="rc fast"><small>Anatono</small><div class="big">1 photo</div>
-      <svg class="arc" viewBox="0 0 840 520" preserveAspectRatio="xMidYMid slice"><path id="ap" d="M -60 420 C 150 310, 330 262, 420 260 C 520 258, 700 200, 920 110" fill="none"/>
+      <svg class="arc" viewBox="0 0 840 340" preserveAspectRatio="xMidYMid slice"><path id="ap" d="M -60 320 C 150 250, 330 186, 420 184 C 520 182, 700 150, 920 90" fill="none"/>
         <text class="arct" dy="7"><textPath href="#ap" id="atp">"subah aur raat, khane ke baad, paanch din"  ·  8:00 am and 9:00 pm, after food, for 5 days  ·  reminders set  ·  </textPath></text></svg>
       <div class="capsule"><div class="body"></div><div class="face"><i></i><i></i><b></b></div></div>
     </div>
+  </div>
+</section>
+
+<!-- SECTION 4: how it works, the card changes as you scroll -->
+<section class="how" id="steps">
+  <div class="how-pin">
+    <svg class="how-wave" viewBox="0 0 1440 900" preserveAspectRatio="none" aria-hidden="true"><path d="M 260 1000 C 420 640, 660 700, 800 420 S 1120 -40, 1320 -120"/></svg>
+    <ol class="how-nav"><li class="on">Snap the medicine</li><li>Say how you take it</li><li>Reminders, set</li></ol>
+    <div class="how-card">
+      <div class="st on">
+        <div class="strip"><b>Amoxil</b><span>500 mg · Amoxicillin</span><div class="bl"><i></i><i></i><i></i><i></i><i></i><i></i></div><em>EXP 03/2027 · B2231</em><div class="scan"></div></div>
+        <div class="chips"><span><i data-lucide="pill"></i>Amoxil 500 mg</span><span><i data-lucide="flask-conical"></i>Amoxicillin</span><span class="ok"><i data-lucide="circle-check"></i>Expires 03/2027</span></div>
+        <div class="pillbar"><i data-lucide="scan-line"></i>Reading with Gemma 4</div>
+      </div>
+      <div class="st">
+        <p class="said">"Doctor ne kaha <mark class="c1">subah</mark> aur <mark class="c2">raat</mark>, um, <mark class="c3">khane ke baad</mark>, <mark class="c4">paanch din</mark> tak"</p>
+        <div class="chips"><span class="c1">8:00 am</span><span class="c2">9:00 pm</span><span class="c3">after food</span><span class="c4">5 days</span></div>
+        <div class="msg"><span>Type or speak…</span><i data-lucide="mic"></i></div>
+        <div class="pillbar"><i data-lucide="sparkles"></i>Understanding…</div>
+      </div>
+      <div class="st">
+        <div class="rt"><b>8:00 am</b><div>Amoxil 500 mg<small>1 tablet · after breakfast</small></div></div>
+        <div class="rt"><b>9:00 pm</b><div>Amoxil 500 mg<small>1 tablet · after dinner</small></div></div>
+        <div class="flag"><i data-lucide="shield-check"></i>Not expired · no double dose</div>
+        <div class="cal"><i data-lucide="calendar-plus"></i>Add to calendar</div>
+        <div class="pillbar"><i data-lucide="bell-ring"></i>Reminders set for 5 days</div>
+      </div>
+    </div>
+    <div class="how-text"><h3 id="howT">Snap the medicine</h3><p id="howP"></p></div>
   </div>
 </section>
 
@@ -528,7 +609,7 @@ let lens = lines.map(([tp]) => fill(tp)), off = 0;
 document.fonts.ready.then(() => { lens = lines.map(([tp]) => fill(tp)); });          // measure again once the fonts are in
 /* anything moving pauses while its section is off screen */
 const io = new IntersectionObserver(es => es.forEach(e => e.target.classList.toggle("off", !e.isIntersecting)));
-document.querySelectorAll(".hero, .apps, .speed2").forEach(el => io.observe(el));
+document.querySelectorAll(".hero, .apps, .speed2, .how").forEach(el => io.observe(el));
 (function frame() {
   off += 1;
   lines.forEach(([tp, speed], i) => { if (!tp.closest(".off")) tp.setAttribute("startOffset", (off * speed % lens[i]) - lens[i]); });
@@ -643,11 +724,20 @@ const band = [["si:googlecalendar", "Google Calendar"], ["si:apple", "Apple Cale
 $("track").innerHTML = [...band, ...band, ...band, ...band].map(([i, s]) => i.startsWith("si:")
   ? `<span><b class="brand" style="--i:url(${SI}${i.slice(3)}.svg)"></b>${s}</span>` : `<span><i data-lucide="${i}"></i>${s}</span>`).join("");
 
-/* section 3: the slow card types it out by hand, letter by letter */
-const byHand = "Amoxil 500 mg, 1 tablet, 8:00 am, after breakfast, 5 days. Amoxil 500 mg, 1 tablet, 9:00 pm, after dinner, 5 days. Brufen syrup, 2 spoons, 2:00 pm. ";
-let hi = 0;
-setInterval(() => { if ($("speed").classList.contains("off")) return;
-  const t = $("typed"); t.textContent = (t.textContent + byHand[hi++ % byHand.length]).slice(-60); }, 150);
+/* section 3: the slow card fills in a form by hand, field by field, at a person's typing speed */
+const byHand = [["Medicine", "Amoxil 500 mg"], ["Dose", "1 tablet"], ["Time", "8:00 am, 9:00 pm"], ["Food", "after meals"], ["Days", "5"],
+                ["Medicine", "Brufen syrup"], ["Dose", "2 spoons"], ["Time", "2:00 pm"], ["Food", "after lunch"], ["Days", "3"]];
+let hf = 0, hc = 0;
+function typeByHand() {
+  const box = $("typed"), [label, value] = byHand[hf];
+  if ($("speed").classList.contains("off")) return setTimeout(typeByHand, 500);
+  if (hc === 0) { if (hf % 5 === 0) box.innerHTML = ""; box.insertAdjacentHTML("beforeend", `<div><b>${label}</b><span></span><i class="caret"></i></div>`); }
+  box.lastElementChild.querySelector("span").textContent = value.slice(0, ++hc);
+  if (hc < value.length) return setTimeout(typeByHand, 70 + Math.random() * 90);        // next letter
+  box.lastElementChild.querySelector(".caret").remove(); hc = 0; hf = (hf + 1) % byHand.length;
+  setTimeout(typeByHand, hf % 5 === 0 ? 1600 : 450);                                     // next field, or a new medicine
+}
+typeByHand();
 
 /* made for you */
 const groups = {
@@ -701,6 +791,23 @@ lucide.createIcons();
 gsap.registerPlugin(ScrollTrigger);
 document.querySelectorAll(".reveal").forEach(el => gsap.to(el, { opacity: 1, y: 0, duration: .9, ease: "power3.out",
   scrollTrigger: { trigger: el, start: "top 85%" } }));
+/* section 4: the step follows the scroll; the list on the left jumps to a step */
+const howSteps = [["Snap the medicine", "Take a photo, or pick one from your gallery. Gemma 4 reads the name, strength, batch and expiry, even from a handwritten prescription."],
+  ["Say how you take it", "Speak or type it, in Urdu, English or both. Gemma 4 turns what you said into times, food and days."],
+  ["Reminders, set", "Anatono checks for expiry and double doses, you confirm, and the reminders ring on time, even when the app is closed."]];
+let howI = -1;
+function showStep(i) {
+  if (i === howI) return; howI = i;
+  document.querySelectorAll(".how-card .st").forEach((el, k) => el.classList.toggle("on", k === i));
+  document.querySelectorAll(".how-nav li").forEach((el, k) => el.classList.toggle("on", k === i));
+  $("howT").textContent = howSteps[i][0]; $("howP").textContent = howSteps[i][1];
+  gsap.fromTo(".how-text", { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: .4 });
+}
+showStep(0);
+ScrollTrigger.create({ trigger: "#steps", start: "top top", end: "bottom bottom", onUpdate: st => showStep(Math.min(2, Math.floor(st.progress * 3))) });
+document.querySelectorAll(".how-nav li").forEach((li, k) => li.onclick = () => {
+  const el = $("steps"); window.scrollTo({ top: el.offsetTop + (k + .5) / 3 * (el.offsetHeight - innerHeight) }); });
+
 gsap.from(".hero h1", { y: 40, opacity: 0, duration: 1, ease: "power3.out" });
 gsap.from(".hero .lead, .avail", { y: 20, opacity: 0, duration: .8, stagger: .1, delay: .2 });   // not the button: its hover transition fights the tween and it ends up on top of the line below
 </script>

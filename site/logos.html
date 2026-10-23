@@ -60,6 +60,101 @@
   .strip.mini .cell.today b { box-shadow: none; } .strip.mini small { display: none; }
 </style>
 
+
+<style>
+  /* K: the two "o"s are dose marks: one taken (filled), one to take (open) */
+  .word .dose { display: inline-block; width: .44em; height: .44em; border-radius: 50%; margin: 0 .04em; border: .055em solid #0B3B36; box-sizing: border-box; }
+  .word .dose.taken { background: #FF8A6B; border-color: #FF8A6B; }
+  .opt.dark .word .dose { border-color: #EAF6EF; }
+  /* O: the eyes look around */
+  .look { animation: look 4s ease-in-out infinite; }
+  @keyframes look { 0%, 30%, 100% { transform: translateX(0); } 40%, 60% { transform: translateX(-5px); } 70%, 90% { transform: translateX(5px); } }
+  svg.big2 { width: 100%; max-width: 660px; height: auto; overflow: visible; }
+</style>
+
+<section class="opt">
+  <div class="label">K · THE TWO "O"S ARE DOSES: MORNING TAKEN (CORAL), NIGHT STILL TO TAKE (OPEN)</div>
+  <div class="word">anat<span class="dose taken"></span>n<span class="dose"></span></div>
+  <div class="marks">
+    <svg viewBox="0 0 100 100"><rect width="100" height="100" rx="24" fill="#0B3B36"/><circle cx="32" cy="50" r="14" fill="#FF8A6B"/><circle cx="68" cy="50" r="12" fill="none" stroke="#EAF6EF" stroke-width="5"/></svg>
+    <svg class="s" viewBox="0 0 100 100"><rect width="100" height="100" rx="24" fill="#0B3B36"/><circle cx="32" cy="50" r="15" fill="#FF8A6B"/><circle cx="68" cy="50" r="12" fill="none" stroke="#EAF6EF" stroke-width="7"/></svg>
+    <svg class="xs" viewBox="0 0 100 100"><rect width="100" height="100" rx="24" fill="#0B3B36"/><circle cx="32" cy="50" r="17" fill="#FF8A6B"/><circle cx="68" cy="50" r="13" fill="none" stroke="#EAF6EF" stroke-width="9"/></svg>
+  </div>
+  <div class="in-nav"><div class="word">anat<span class="dose taken"></span>n<span class="dose"></span></div><small>in the nav bar</small></div>
+</section>
+
+<section class="opt">
+  <div class="label">L · THE "T" CARRIES THE LINE: ITS CROSSBAR SWEEPS OVER "ONO" AND ENDS IN A CAPSULE</div>
+  <svg class="big2" viewBox="0 0 660 190" id="svgL"><text id="wordL" x="10" y="160" font-family="EB Garamond" font-weight="500" font-size="132" fill="#0B3B36" letter-spacing="-2">anatono</text>
+    <path id="sweepL" fill="none" stroke="#0B3B36" stroke-width="7" stroke-linecap="round"/><g id="capL"></g></svg>
+  <div class="marks"></div>
+</section>
+
+<section class="opt">
+  <div class="label">M · STANDING CAPSULE: "ANA" ON TOP, "ONO" BELOW, AND THE SEAM IS THE T'S CROSSBAR (ANA·T·ONO READS DOWN)</div>
+  <svg viewBox="0 0 280 340" style="width:220px;height:auto">
+    <rect x="60" y="8" width="160" height="324" rx="80" fill="#fff"/><path d="M60 170 V88 A80 80 0 0 1 220 88 V170 Z" fill="#FF8A6B"/>
+    <rect x="60" y="8" width="160" height="324" rx="80" fill="none" stroke="#0B3B36" stroke-width="7"/>
+    <line x1="60" y1="170" x2="220" y2="170" stroke="#0B3B36" stroke-width="10" stroke-linecap="round"/>
+    <path d="M140 132 V214 q0 18 18 18" fill="none" stroke="#0B3B36" stroke-width="10" stroke-linecap="round"/>
+    <text x="140" y="118" text-anchor="middle" font-family="Figtree" font-weight="800" font-size="50" fill="#fff" letter-spacing="-1">ana</text>
+    <text x="140" y="282" text-anchor="middle" font-family="Figtree" font-weight="800" font-size="50" fill="#0B3B36" letter-spacing="-1">ono</text></svg>
+  <div class="marks">
+    <svg viewBox="0 0 100 100"><rect width="100" height="100" rx="24" fill="#0B3B36"/><g transform="translate(50 50) scale(.27) translate(-140 -170)">
+      <rect x="60" y="8" width="160" height="324" rx="80" fill="#fff"/><path d="M60 170 V88 A80 80 0 0 1 220 88 V170 Z" fill="#FF8A6B"/>
+      <line x1="60" y1="170" x2="220" y2="170" stroke="#0B3B36" stroke-width="12"/>
+      <text x="140" y="118" text-anchor="middle" font-family="Figtree" font-weight="800" font-size="56" fill="#fff">ana</text>
+      <text x="140" y="282" text-anchor="middle" font-family="Figtree" font-weight="800" font-size="56" fill="#0B3B36">ono</text></g></svg>
+    <svg class="s" viewBox="0 0 100 100"><rect width="100" height="100" rx="24" fill="#0B3B36"/><rect x="34" y="12" width="32" height="76" rx="16" fill="#fff"/><path d="M34 50 V28 A16 16 0 0 1 66 28 V50 Z" fill="#FF8A6B"/></svg>
+    <svg class="xs" viewBox="0 0 100 100"><rect width="100" height="100" rx="24" fill="#0B3B36"/><rect x="32" y="10" width="36" height="80" rx="18" fill="#fff"/><path d="M32 50 V28 A18 18 0 0 1 68 28 V50 Z" fill="#FF8A6B"/></svg>
+  </div>
+</section>
+
+<section class="opt">
+  <div class="label">N · TUBE LETTERS DRAWN LIKE THE MASCOT: MINT INSIDE, DARK OUTLINE, THE LAST "O" IS THE CORAL DOSE</div>
+  <svg class="big2" viewBox="-24 -44 746 168"><g fill="none" stroke-linecap="round" stroke-linejoin="round"><g stroke="#0B3B36" stroke-width="32"><circle cx="40" cy="60" r="40"/><path d="M80 20 V100" transform="translate(0 0)"/><path d="M0 20 V100 M0 60 A40 40 0 0 1 80 60 V100" transform="translate(108 0)"/><circle cx="256" cy="60" r="40"/><path d="M80 20 V100" transform="translate(216 0)"/><path d="M25 -20 V75 A25 25 0 0 0 50 100 M0 20 H50" transform="translate(324 0)"/><circle cx="442" cy="60" r="40"/><path d="M0 20 V100 M0 60 A40 40 0 0 1 80 60 V100" transform="translate(510 0)"/><circle cx="658" cy="60" r="40"/></g><g stroke-width="17"><g stroke="#9FE3C4"><circle cx="40" cy="60" r="40"/><path d="M80 20 V100" transform="translate(0 0)"/></g><g stroke="#9FE3C4"><path d="M0 20 V100 M0 60 A40 40 0 0 1 80 60 V100" transform="translate(108 0)"/></g><g stroke="#9FE3C4"><circle cx="256" cy="60" r="40"/><path d="M80 20 V100" transform="translate(216 0)"/></g><g stroke="#9FE3C4"><path d="M25 -20 V75 A25 25 0 0 0 50 100 M0 20 H50" transform="translate(324 0)"/></g><g stroke="#9FE3C4"><circle cx="442" cy="60" r="40"/></g><g stroke="#9FE3C4"><path d="M0 20 V100 M0 60 A40 40 0 0 1 80 60 V100" transform="translate(510 0)"/></g><g stroke="#FF8A6B"><circle cx="658" cy="60" r="40"/></g></g></g></svg>
+  <div class="marks">
+    <svg viewBox="0 0 100 100"><rect width="100" height="100" rx="24" fill="#F2FAF5" stroke="#cfe3d8"/><g transform="translate(20 20) scale(.5)" fill="none" stroke-linecap="round">
+      <circle cx="40" cy="60" r="40" stroke="#0B3B36" stroke-width="32"/><path d="M80 20 V100" stroke="#0B3B36" stroke-width="32"/>
+      <circle cx="40" cy="60" r="40" stroke="#9FE3C4" stroke-width="17"/><path d="M80 20 V100" stroke="#9FE3C4" stroke-width="17"/></g></svg>
+    <svg class="s" viewBox="0 0 100 100"><rect width="100" height="100" rx="24" fill="#F2FAF5" stroke="#cfe3d8"/><circle cx="50" cy="50" r="24" fill="none" stroke="#0B3B36" stroke-width="20"/><circle cx="50" cy="50" r="24" fill="none" stroke="#FF8A6B" stroke-width="10"/></svg>
+    <svg class="xs" viewBox="0 0 100 100"><rect width="100" height="100" rx="24" fill="#0B3B36"/><circle cx="50" cy="50" r="24" fill="none" stroke="#FF8A6B" stroke-width="16"/></svg>
+  </div>
+  <div class="in-nav"><svg viewBox="-24 -44 746 168" style="height:30px;width:auto"><g fill="none" stroke-linecap="round" stroke-linejoin="round"><g stroke="#0B3B36" stroke-width="32"><circle cx="40" cy="60" r="40"/><path d="M80 20 V100" transform="translate(0 0)"/><path d="M0 20 V100 M0 60 A40 40 0 0 1 80 60 V100" transform="translate(108 0)"/><circle cx="256" cy="60" r="40"/><path d="M80 20 V100" transform="translate(216 0)"/><path d="M25 -20 V75 A25 25 0 0 0 50 100 M0 20 H50" transform="translate(324 0)"/><circle cx="442" cy="60" r="40"/><path d="M0 20 V100 M0 60 A40 40 0 0 1 80 60 V100" transform="translate(510 0)"/><circle cx="658" cy="60" r="40"/></g><g stroke-width="17"><g stroke="#9FE3C4"><circle cx="40" cy="60" r="40"/><path d="M80 20 V100" transform="translate(0 0)"/></g><g stroke="#9FE3C4"><path d="M0 20 V100 M0 60 A40 40 0 0 1 80 60 V100" transform="translate(108 0)"/></g><g stroke="#9FE3C4"><circle cx="256" cy="60" r="40"/><path d="M80 20 V100" transform="translate(216 0)"/></g><g stroke="#9FE3C4"><path d="M25 -20 V75 A25 25 0 0 0 50 100 M0 20 H50" transform="translate(324 0)"/></g><g stroke="#9FE3C4"><circle cx="442" cy="60" r="40"/></g><g stroke="#9FE3C4"><path d="M0 20 V100 M0 60 A40 40 0 0 1 80 60 V100" transform="translate(510 0)"/></g><g stroke="#FF8A6B"><circle cx="658" cy="60" r="40"/></g></g></g></svg><small>in the nav bar</small></div>
+</section>
+
+<section class="opt">
+  <div class="label">O · THE WORD HAS ANATONO'S FACE: THE LAST TWO "O"S ARE ITS EYES, THE "N" ITS NOSE, A SMILE AND CHEEKS UNDER</div>
+  <svg class="big2" viewBox="0 0 660 200" id="svgO"><text id="wordO" x="10" y="140" font-family="EB Garamond" font-weight="500" font-size="132" fill="#0B3B36" letter-spacing="-2">anatono</text>
+    <g id="faceO"></g></svg>
+  <div class="marks">
+    <svg viewBox="0 0 100 100"><rect width="100" height="100" rx="24" fill="#9FE3C4"/><circle cx="34" cy="44" r="13" fill="#fff" stroke="#0B3B36" stroke-width="5"/><circle cx="66" cy="44" r="13" fill="#fff" stroke="#0B3B36" stroke-width="5"/>
+      <circle cx="35" cy="45" r="5" fill="#0B3B36"/><circle cx="67" cy="45" r="5" fill="#0B3B36"/><path d="M40 68 q10 9 20 0" fill="none" stroke="#0B3B36" stroke-width="5" stroke-linecap="round"/>
+      <ellipse cx="24" cy="64" rx="6" ry="3.5" fill="#FFBCF2"/><ellipse cx="76" cy="64" rx="6" ry="3.5" fill="#FFBCF2"/></svg>
+  </div>
+</section>
+
+<script>
+/* L and O need the real letter positions, so they are drawn once the font has loaded */
+document.fonts.ready.then(() => {
+  const cap = (x, y, r, k) => `<g transform="translate(${x} ${y}) rotate(${r}) scale(${k})"><rect x="-38" y="-18" width="76" height="36" rx="18" fill="#fff" stroke="#0B3B36" stroke-width="6"/><path d="M0 -18 H-20 A18 18 0 0 0 -20 18 H0 Z" fill="#FF8A6B" stroke="#0B3B36" stroke-width="6" stroke-linejoin="round"/></g>`;
+  // L: start at the t's crossbar, sweep over "ono", end in a capsule
+  const wL = document.getElementById("wordL"), fs = 132, base = 160, t = wL.getExtentOfChar(3), end = wL.getExtentOfChar(6);
+  const x0 = t.x + t.width * .55, y0 = base - fs * .41, x1 = end.x + end.width + 34, y1 = base - fs * .78;
+  document.getElementById("sweepL").setAttribute("d", `M ${x0} ${y0} C ${x0 + 90} ${y0 - 4}, ${x1 - 150} ${y1 - 8}, ${x1 - 30} ${y1}`);
+  document.getElementById("capL").innerHTML = cap(x1, y1 - 2, -18, .62);
+  document.getElementById("svgL").setAttribute("viewBox", `0 0 ${x1 + 40} 190`);
+  // O: pupils in the two last "o"s, a smile under the "n", cheeks beside
+  const wO = document.getElementById("wordO"), bO = 140, mid = i => (wO.getStartPositionOfChar(i).x + wO.getEndPositionOfChar(i).x) / 2, yE = bO - fs * .2;
+  const e1 = mid(4), e2 = mid(6), n = mid(5);
+  document.getElementById("faceO").innerHTML =
+    `<g class="look"><circle cx="${e1}" cy="${yE}" r="11" fill="#0B3B36"/><circle cx="${e2}" cy="${yE}" r="11" fill="#0B3B36"/>` +
+    `<circle cx="${e1 + 4}" cy="${yE - 4}" r="3.5" fill="#fff"/><circle cx="${e2 + 4}" cy="${yE - 4}" r="3.5" fill="#fff"/></g>` +
+    `<path d="M ${n - 20} ${bO + 22} q 20 18 40 0" fill="none" stroke="#FF8A6B" stroke-width="7" stroke-linecap="round"/>` +
+    `<ellipse cx="${e1 - 22}" cy="${bO + 16}" rx="13" ry="7" fill="#FFBCF2"/><ellipse cx="${e2 + 22}" cy="${bO + 16}" rx="13" ry="7" fill="#FFBCF2"/>`;
+});
+</script>
+
 <section class="opt">
   <div class="label">H · THE WORD IS THE CAPSULE: "ANAT" IN CORAL, "ONO" IN WHITE, SPLIT DOWN THE SEAM, INSIDE ONE PILL OUTLINE</div>
   <svg class="capword" viewBox="0 0 620 180">
