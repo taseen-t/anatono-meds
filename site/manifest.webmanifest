@@ -1,0 +1,14 @@
+{
+  "name": "Anatono · your medicines",
+  "short_name": "Anatono",
+  "description": "Snap a medicine or prescription, say how you take it, and never miss a dose.",
+  "start_url": "/app.html",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#F2FAF5",
+  "theme_color": "#0B3B36",
+  "icons": [
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}
