@@ -53,14 +53,25 @@
 
   /* reading + results */
   .thumb { width: 100%; max-height: 220px; object-fit: cover; border-radius: 14px; border: 2px solid var(--ink); margin-top: 14px; }
-  /* wide screens: the app on the left, the whole prescription on the right */
-  .page { display: none; }
+  /* wide screens: one screen, no page scroll. The settings on the left (only that column scrolls when results get long),
+     and on the right a blank panel with the upload button, where the photo shows once it's added */
+  .stage { display: none; }
   @media (min-width: 900px) {
-    .app.has-photo { max-width: 1180px; display: grid; grid-template-columns: 480px 1fr; column-gap: 40px; align-items: start; }
-    .app.has-photo > * { grid-column: 1; }
-    .app.has-photo .page { display: block; grid-column: 2; grid-row: 1 / span 20; position: sticky; top: 16px; }
-    .page img { width: 100%; max-height: calc(100vh - 32px); object-fit: contain; border-radius: 16px; border: 2px solid var(--ink); background: #fff; }
-    .app.has-photo .thumb { display: none; }
+    body { height: 100vh; height: 100dvh; overflow: hidden; }
+    .app { max-width: none; height: 100vh; height: 100dvh; padding: 16px 28px 22px; display: grid; grid-template-columns: minmax(400px, 480px) 1fr; gap: 32px; }
+    .side { min-height: 0; overflow-y: auto; padding: 0 10px 10px 2px; scrollbar-width: thin; }
+    .side .pick, .thumb { display: none; }
+    .stage { display: grid; place-items: center; position: relative; min-height: 0; margin: 6px 0 5px; background: #fff; border: 2px solid var(--ink);
+             border-radius: 22px; box-shadow: 0 5px 0 var(--ink); overflow: hidden; }
+    .stage::before { content: ""; position: absolute; inset: 14px; border: 2px dashed #C9DDD3; border-radius: 14px; pointer-events: none; transition: border-color .2s; }
+    .stage.drag::before { border-color: var(--coral); }
+    .drop { position: relative; display: grid; justify-items: center; gap: 12px; max-width: 340px; padding: 20px; text-align: center; }
+    .drop > svg.lucide { width: 46px; height: 46px; color: var(--coral); }
+    .drop .btn { margin-top: 8px; padding: 14px 26px; }
+    .stage img { display: none; position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; padding: 18px; }
+    .stage .again { display: none; position: absolute; right: 18px; bottom: 18px; box-shadow: 0 3px 0 #1a1a1a; }
+    .app.has-photo .stage img { display: block; } .app.has-photo .stage .again { display: inline-flex; }
+    .app.has-photo .drop, .app.has-photo .stage::before { display: none; }
   }
   .reading { display: flex; gap: 12px; align-items: center; margin-top: 14px; font-weight: 600; }
   .pulse { width: 46px; height: 30px; flex: none; }
@@ -111,6 +122,7 @@
   </symbol></defs></svg>
 
 <div class="app">
+ <div class="side">
   <header><a href="index.html" aria-label="Anatono home"><svg class="wm" viewBox="4 18 532 154"><use href="#wordmark"/></svg></a><small id="today"></small></header>
 
   <h1>Your <em>medicines</em></h1>
@@ -145,11 +157,20 @@
     </div>
   </div>
 
-  <aside class="page"><img id="page" alt="Your prescription"></aside>
-
   <footer>Anatono helps you remember what your doctor prescribed. It isn't medical advice and never changes a dose.<br>
     Photos go to <span id="engWho">Gemma 4 (Google Gemini API)</span> to be read. Your routine stays on this phone.<br>
     Made by Taseen Tariq.</footer>
+ </div>
+
+ <!-- wide screens only: the photo panel. The buttons point at the same file input as "From gallery" -->
+ <aside class="stage" id="stage">
+  <div class="drop"><i data-lucide="image-plus"></i><h2>Your <em>photo</em> goes here</h2>
+    <p class="muted">The strip, the box or the whole prescription. Drop it here, or pick one from your computer.</p>
+    <label class="btn" for="gal"><i data-lucide="upload"></i>Upload a photo</label>
+    <button class="link" onclick="$('sample').click()">or try a sample</button></div>
+  <img id="page" alt="Your photo">
+  <label class="btn light again" for="gal"><i data-lucide="upload"></i>Another photo</label>
+ </aside>
 </div>
 <div class="toast" id="toast"></div>
 
@@ -247,6 +268,11 @@ async function readPiece(n) {
   }
 }
 $("cam").onchange = $("gal").onchange = async e => { const f = e.target.files[0]; e.target.value = ""; if (f) readPhoto(await shrink(f)); };
+/* wide screens: a photo dropped on the right panel is read like one picked from the gallery */
+$("stage").ondragover = e => { e.preventDefault(); $("stage").classList.add("drag"); };
+$("stage").ondragleave = () => $("stage").classList.remove("drag");
+$("stage").ondrop = async e => { e.preventDefault(); $("stage").classList.remove("drag");
+  const f = e.dataTransfer.files[0]; if (f && f.type.startsWith("image/")) readPhoto(await shrink(f)); };
 $("sample").onclick = async () => { const b = await (await fetch("samples/prescription.jpg")).blob(); readPhoto(await shrink(b)); };
 /* no photo: our own name box (not the browser's pop-up) */
 $("typeName").onclick = () => {
