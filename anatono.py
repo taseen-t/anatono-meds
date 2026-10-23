@@ -233,7 +233,7 @@ def check_medicine(m, d, routine=(), today=None):
             flags.append(("careful", f"You already take {r.get('name')}, which has the same ingredient "
                                      f"({m.get('salt')}). Taking both could double the dose: ask your doctor."))
     for w in d.get("warning_signs") or []:
-        flags.append(("careful", f"Gemma noticed: {w}"))
+        flags.append(("careful", f"Spotted on the pack: {w}"))
     level = ("stop" if any(f[0] == "stop" for f in flags) or sum(f[0] == "careful" for f in flags) >= 3
              else "careful" if flags else "ok")
     return {"level": level, "flags": [f[1] for f in flags], "good": good}
@@ -278,7 +278,7 @@ def check_dose(d):
     if not str(d.get("amount") or "").strip():
         notes.append("How much each time wasn't clear.")
     if d.get("unclear"):
-        notes.append(f"Gemma wasn't sure about: {d['unclear']}")
+        notes.append(f"Not sure about: {d['unclear']}")
     return {"times": times, "days": days, "notes": notes}
 
 
