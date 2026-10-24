@@ -469,10 +469,6 @@
   .reveal { opacity: 0; transform: translateY(40px); }
 
   /* ---------- page animations (the script adds these elements; nothing with reduced motion) ---------- */
-  /* the reading line: a thin coral pulse across the top that fills as you read, with a beat where each section starts */
-  .readline { position: fixed; left: 0; top: 0; z-index: 60; height: 16px; pointer-events: none; clip-path: inset(0 100% 0 0); }
-  .readline svg { display: block; overflow: visible; }
-  .readline path { fill: none; stroke: var(--coral); stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
   /* section headings rise out of their line word by word: room in each word's window for the italic slant and the descenders */
   .w-mask { padding: 0 .08em .18em; margin: 0 -.08em -.18em; }
   /* the menu's Reminders | Medicine check switch: a dark green panel sweeps across with the pulse in the middle */
@@ -1059,22 +1055,6 @@ if (!still) {
   gsap.fromTo("#demo video", { scale: .8 }, { scale: 1, ease: "none",
     scrollTrigger: { trigger: "#demo", start: "top bottom", end: "center 60%", scrub: .5 } });
 
-  /* a thin coral pulse across the top fills as you read, and beats where each section starts */
-  const line = document.createElement("div");
-  line.className = "readline"; line.setAttribute("aria-hidden", "true"); document.body.append(line);
-  let beats = [], read = 0;
-  function drawLine() {
-    const W = innerWidth, max = document.documentElement.scrollHeight - innerHeight || 1;
-    const at = [];
-    for (const s of document.querySelectorAll("body > section:not(.hero), footer")) {
-      const p = s.offsetTop / max;          // on phones, beats closer than 24 px would run into each other
-      if (p < .98 && (!at.length || (p - at.at(-1)) * W > 24)) at.push(p);
-    }
-    line.innerHTML = `<svg width="${W}" height="16"><path d="M0 10 H${W}"/>${at.map(p => `<path d="M${p * W - 12} 10 l5 -8 l6 13 l4 -5"/>`).join("")}</svg>`;
-    const spikes = line.querySelectorAll("path");
-    beats = at.map((p, i) => [p, spikes[i + 1], p * W]);
-  }
-
   /* the menu bar hides on the way down and comes back on the way up; a pill slides to the menu link of the section you're in */
   const nav = document.querySelector("nav"), secs = [...document.querySelectorAll("section[id]")];
   const pills = [...nav.querySelectorAll(".seg, .links")].map(g => { const p = document.createElement("i"); p.className = "pill"; g.prepend(p); return [g, p]; });
@@ -1090,13 +1070,9 @@ if (!still) {
     });
   }
 
-  drawLine(); pillTo(true);
-  ScrollTrigger.addEventListener("refresh", () => { drawLine(); pillTo(true); });
+  pillTo(true);
+  ScrollTrigger.addEventListener("refresh", () => pillTo(true));
   ScrollTrigger.create({ start: 0, end: "max", onUpdate: st => {
-    line.style.clipPath = `inset(0 ${(1 - st.progress) * 100}% 0 0)`;
-    beats.forEach(([p, el, x]) => { if ((read < p) !== (st.progress < p))
-      gsap.fromTo(el, { scaleY: 2.2 }, { scaleY: 1, duration: .9, ease: "elastic.out(1, .35)", svgOrigin: `${x} 10` }); });
-    read = st.progress;
     if (Date.now() > keepNav) nav.classList.toggle("away", st.direction > 0 && scrollY > 300);
     pillTo();
   } });
