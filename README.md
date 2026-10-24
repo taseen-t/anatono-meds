@@ -16,7 +16,7 @@ Made by **Taseen Tariq** at Hack Day Faisalabad, 23 October 2026.
 > **Verify in 30 seconds**
 > | | |
 > |---|---|
-> | **Model** | **Gemma 4** (`gemma-4-26b-a4b-it`; `gemma-4-31b-it` only as a fallback) through the **Gemini API** (`google-genai`). [`anatono.py` line 24](anatono.py#L24) |
+> | **Model** | **Gemma 4** (`gemma-4-26b-a4b-it`; `gemma-4-31b-it` only as a fallback) through the **Gemini API** (`google-genai`). Licence: [Apache 2.0](https://ai.google.dev/gemma/apache_2). [`anatono.py` line 24](anatono.py#L24) |
 > | **Where Gemma is called** | `ask()` in [`anatono.py` line 69](anatono.py#L69) → `ask_gemma()` ([line 85](anatono.py#L85)). It reads every photo (`read_photo`) and understands every dose (`understand_dose`) |
 > | **Voice** | `gemini-3.5-flash-lite` **only writes down what was said** ([line 28](anatono.py#L28)), because Gemma 4 on the API doesn't take audio. Gemma 4 does all the understanding. |
 > | **Harness** | Plain-code checks after every answer: expiry, impossible dates, missing batch / registration number, same ingredient twice, prescription shorthand (`1+0+1`, `BD`, `TDS`) cross-checked against Gemma's times, max 6 a day, 1–365 days. `python3 anatono.py` runs the self-check. |
