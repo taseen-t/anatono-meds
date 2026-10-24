@@ -1,5 +1,7 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<style>@view-transition { navigation: auto; }</style>
+<link rel="stylesheet" href="vt.css"><script src="vt.js"></script>
 <title>Anatono · never miss a medicine</title>
 <meta name="description" content="Snap your medicine, say or type how you take it, and Anatono reminds you on time. Reads prescriptions, checks expiry and warning signs. Powered by Gemma 4.">
 <!-- link previews (WhatsApp, Facebook, X, LinkedIn): the share card is og.png, drawn from ../og-card.html -->
@@ -468,7 +470,8 @@
     .mascot { right: 2%; top: 560px; width: 90px; } .bubble { display: none; }
     footer .cols { grid-template-columns: 1fr 1fr; } .prods { grid-template-columns: 1fr; } .pt { width: 96px; }
   }
-</style></head>
+</style>
+<link rel="stylesheet" href="touches.css"></head>
 <body>
 
 <!-- Anatono, the mascot: a capsule with a face, ringing a little reminder bell -->
@@ -499,7 +502,7 @@
 <div class="top">Anatono now reads handwritten prescriptions, in Urdu and English. <a href="app.html">Try it free ›</a>
   <button class="x" aria-label="Close" onclick="this.parentElement.remove()"><i data-lucide="x"></i></button></div>
 <nav>
-  <a class="logo" href="#"><svg class="wm" viewBox="4 18 532 154" role="img" aria-label="Anatono"><use href="#wordmark"/></svg></a>
+  <a class="logo" href="#"><svg class="wm vt-logo" viewBox="4 18 532 154" role="img" aria-label="Anatono"><use href="#wordmark"/></svg></a>
   <div class="seg"><a href="#hero">Reminders</a><a href="#check">Medicine check</a></div>
   <div class="links"><a href="#foryou">Families</a><a href="#how">How it works</a><a href="#faq">FAQ</a></div>
   <a class="btn sm" href="app.html"><i data-lucide="smartphone"></i>Get Anatono</a>
@@ -966,4 +969,5 @@ setInterval(() => {
     `<path d="${FD}" stroke="#fff" stroke-width="7" pathLength="100" stroke-dasharray="14 100" stroke-dashoffset="${off.toFixed(1)}"/></g></svg>`);
 }, 90);
 </script>
+<script src="touches.js"></script>
 </body></html>

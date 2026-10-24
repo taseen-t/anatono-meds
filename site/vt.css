@@ -1,0 +1,41 @@
+/* Page changes between the landing page and the app; vt.js sets the type (grow / sheet / back) from what was clicked.
+   Both pages also have "@view-transition { navigation: auto; }" inline at the top of <head> (it skips some changes when
+   it only lives in a linked file). */
+.vt-logo { view-transition-name: wordmark; }
+::view-transition-group(wordmark) { animation-duration: .7s; animation-timing-function: cubic-bezier(.6, 0, .2, 1); }
+::view-transition { background: #0B3B36; }
+
+/* grow: the coral button grows to fill the screen, then the app shows */
+html.vt-grow body { view-transition-name: cta; }
+html:active-view-transition-type(grow) {
+  &::view-transition-group(cta) { animation-duration: .6s; animation-timing-function: cubic-bezier(.65, 0, .25, 1);
+                                  background: #FFC7B5; border-radius: 12px; overflow: hidden; }
+  &::view-transition-old(cta) { animation: vt-out .12s both; }
+  &::view-transition-new(cta) { animation: vt-in .3s .45s both; }
+  &::view-transition-old(root) { animation: vt-out .2s .4s both; }
+  &::view-transition-new(root) { animation: vt-in .2s .4s both; }
+}
+
+/* sheet: the app slides up over the landing page, which sinks back */
+html:active-view-transition-type(sheet) {
+  &::view-transition-old(root) { animation: vt-sink .6s cubic-bezier(.6, 0, .2, 1) both; mix-blend-mode: normal; }
+  &::view-transition-new(root) { animation: vt-rise .6s cubic-bezier(.2, .8, .2, 1) both; mix-blend-mode: normal; }
+}
+
+/* back: the app slides down and away, the landing page comes forward */
+html:active-view-transition-type(back) {
+  &::view-transition-old(root) { animation: vt-drop .55s cubic-bezier(.6, 0, .4, 1) both; mix-blend-mode: normal; z-index: 2; }
+  &::view-transition-new(root) { animation: vt-unsink .55s cubic-bezier(.2, .8, .2, 1) both; mix-blend-mode: normal; }
+}
+
+@keyframes vt-in { from { opacity: 0; } }
+@keyframes vt-out { to { opacity: 0; } }
+@keyframes vt-rise { from { transform: translateY(100%); } }
+@keyframes vt-sink { to { transform: scale(.93); opacity: .35; border-radius: 24px; } }
+@keyframes vt-drop { to { transform: translateY(100%); } }
+@keyframes vt-unsink { from { transform: scale(.93); opacity: .35; } }
+
+/* reduced motion: nothing moves, the browser's plain cross-fade */
+@media (prefers-reduced-motion: reduce) {
+  .vt-logo, html.vt-grow body { view-transition-name: none; }
+}
