@@ -18,11 +18,15 @@
 <script src="https://cdn.jsdelivr.net/npm/lucide@0.460.0/dist/umd/lucide.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.3.26/dist/lenis.min.js"></script>
 <style>
   :root { --bg: #F2FAF5; --sand: #E1EEE6; --ink: #0B3B36; --sub: #2E5A54; --cta: #FFC7B5; --coral: #FF8A6B;
           --mint: #9FE3C4; --deep: #0E2A27; --band: #0B3B36; --pink: #FFBCF2; --lav: #F0D7FF; --sun: #FFA946; }
   * { box-sizing: border-box; }
   html { scroll-behavior: smooth; }
+  html.lenis { scroll-behavior: auto; }            /* Lenis does the smooth scrolling when it runs */
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
   body { margin: 0; background: var(--bg); color: var(--ink); font: 400 16px/1.3 Figtree, Arial, sans-serif;
          -webkit-font-smoothing: antialiased; overflow-x: hidden; }
   a { color: inherit; text-decoration: none; }
@@ -62,8 +66,18 @@
   footer svg.word { display: block; width: min(100%, 1100px); height: auto; margin: 60px auto 0; }
   .seg { display: flex; background: color-mix(in srgb, var(--ink) 8%, transparent); border-radius: 10px; padding: 3px; }
   .seg a { font: 600 13px Figtree; padding: 7px 12px; border-radius: 8px; }
-  .seg a:first-child { background: var(--bg); box-shadow: 0 1px 2px rgba(0,0,0,.08); }
+  .seg:not(:has(.pill)) a:first-child { background: var(--bg); box-shadow: 0 1px 2px rgba(0,0,0,.08); }
   .links { margin-left: auto; display: flex; gap: 22px; font: 500 14px Figtree; }
+  /* the menu bar hides on the way down and comes back on the way up (a key's focus keeps it); a pill slides to the
+     section you're in (the script adds the pills; without them Reminders keeps its still highlight) */
+  nav { transition: translate .4s cubic-bezier(.3, .7, .3, 1); }
+  nav.away:not(:has(:focus-visible)) { translate: 0 calc(-100% - 20px); }
+  .seg, .links { position: relative; }
+  .seg a, .links a { position: relative; z-index: 1; }
+  .pill { position: absolute; left: 0; top: 3px; bottom: 3px; border-radius: 8px; background: var(--bg); box-shadow: 0 1px 2px rgba(0,0,0,.08); opacity: 0;
+          transition: translate .45s cubic-bezier(.3, 1.3, .5, 1), width .45s cubic-bezier(.3, 1.3, .5, 1), opacity .25s; }
+  .links .pill { top: -7px; bottom: -7px; margin-left: -11px; padding: 0 11px; box-sizing: content-box; box-shadow: none;
+                 background: color-mix(in srgb, var(--ink) 8%, transparent); }
 
   /* ---------- hero ---------- */
   .hero { position: relative; overflow: hidden; margin-top: -70px; padding: 70px 0 40px; }
@@ -453,6 +467,27 @@
   .legal { display: flex; justify-content: space-between; margin-top: 24px; font-size: 13px; opacity: .7; }
 
   .reveal { opacity: 0; transform: translateY(40px); }
+
+  /* ---------- page animations (the script adds these elements; nothing with reduced motion) ---------- */
+  /* the reading line: a thin coral pulse across the top that fills as you read, with a beat where each section starts */
+  .readline { position: fixed; left: 0; top: 0; z-index: 60; height: 16px; pointer-events: none; clip-path: inset(0 100% 0 0); }
+  .readline svg { display: block; overflow: visible; }
+  .readline path { fill: none; stroke: var(--coral); stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+  /* section headings rise out of their line word by word: room in each word's window for the italic slant and the descenders */
+  .w-mask { padding: 0 .08em .18em; margin: 0 -.08em -.18em; }
+  /* the menu's Reminders | Medicine check switch: a dark green panel sweeps across with the pulse in the middle */
+  .wipe { position: fixed; inset: 0; z-index: 150; display: grid; place-items: center; background: var(--ink); }
+  .wipe svg { width: min(240px, 50vw); overflow: visible; }
+  .wipe path { fill: none; stroke: var(--coral); stroke-width: 7; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1; }
+  /* first visit only: the logo draws itself, then the page shows */
+  .intro { position: fixed; inset: 0; z-index: 200; display: grid; place-items: center; background: var(--bg); animation: introOut .3s .6s forwards; }
+  .intro svg { width: min(320px, 70vw); }
+  .intro path { stroke-dasharray: 1; animation: draw .45s .05s cubic-bezier(.6, 0, .3, 1) backwards; }
+  .intro g { animation: fadeIn .3s .25s backwards; }
+  @keyframes draw { from { stroke-dashoffset: 1; } }
+  @keyframes fadeIn { from { opacity: 0; } }
+  @keyframes introOut { to { opacity: 0; visibility: hidden; } }
+
   @media (max-width: 900px) {
     .links, .seg { display: none; } nav .btn.sm { margin-left: auto; }
     .foryou2 { grid-template-columns: 1fr; gap: 40px; padding: 70px 22px; margin: 30px 6px 0; border-radius: 32px; } .fy-card { transform: none; }
@@ -498,6 +533,22 @@
     </symbol>
   </defs>
 </svg>
+<script>
+/* first visit only: the heartbeat logo draws itself for under a second, then the page shows. Not with reduced motion, and
+   not when coming from the app (the logo glides across then). The hero's own entrance waits for it (introDelay) */
+let introDelay = 0;
+try {
+  if (!localStorage.getItem("anatono.intro") && !matchMedia("(prefers-reduced-motion: reduce)").matches && !document.referrer.startsWith(location.origin)) {
+    localStorage.setItem("anatono.intro", "1"); introDelay = .7;
+    const wm = document.getElementById("wordmark"), el = document.createElement("div");
+    el.className = "intro"; el.setAttribute("aria-hidden", "true");
+    el.innerHTML = `<svg viewBox="${wm.getAttribute("viewBox")}">${wm.innerHTML}</svg>`;
+    el.querySelector("path").setAttribute("pathLength", 1);
+    el.onanimationend = e => e.animationName === "introOut" && el.remove();
+    document.body.append(el); setTimeout(() => el.remove(), 1500);
+  }
+} catch {}
+</script>
 
 <div class="top">Anatono now reads handwritten prescriptions, in Urdu and English. <a href="app.html">Try it free ›</a>
   <button class="x" aria-label="Close" onclick="this.parentElement.remove()"><i data-lucide="x"></i></button></div>
@@ -687,7 +738,7 @@
 <section class="wrap faq2" id="faq">
   <div class="center reveal"><div class="eyebrow">FAQs</div><h2>Good <em>questions.</em></h2></div>
   <div class="faq-box reveal">
-    <div class="faq-q"><h4>Questions</h4><div id="faqList"></div></div>
+    <div class="faq-q" data-lenis-prevent><h4>Questions</h4><div id="faqList"></div></div>
     <div class="faq-a"><h4>Answer</h4><div class="chat" id="faqChat"></div></div>
   </div>
 </section>
@@ -929,6 +980,17 @@ lucide.createIcons();
 
 /* scroll reveals */
 gsap.registerPlugin(ScrollTrigger);
+/* smooth glide scrolling (Lenis) for the wheel, the trackpad and links to a part of this page; touch keeps the phone's own
+   scrolling. GSAP's clock drives it, so the scroll animations stay in step. Not with reduced motion */
+const still = matchMedia("(prefers-reduced-motion: reduce)").matches, lenis = still ? null : new Lenis();
+if (lenis) {
+  lenis.on("scroll", ScrollTrigger.update);
+  gsap.ticker.add(t => lenis.raf(t * 1000)); gsap.ticker.lagSmoothing(0);
+  addEventListener("click", e => {
+    const a = e.target.closest?.('a[href^="#"]');
+    if (a && !e.defaultPrevented) { e.preventDefault(); lenis.scrollTo(a.getAttribute("href")); }
+  });
+}
 document.querySelectorAll(".reveal").forEach(el => gsap.to(el, { opacity: 1, y: 0, duration: .9, ease: "power3.out",
   scrollTrigger: { trigger: el, start: "top 85%" } }));
 /* section 4: the step follows the scroll; the list on the left jumps to a step */
@@ -946,7 +1008,8 @@ function showStep(i) {
 showStep(0);
 ScrollTrigger.create({ trigger: "#steps", start: "top top", end: "bottom bottom", onUpdate: st => showStep(Math.min(2, Math.floor(st.progress * 3))) });
 document.querySelectorAll(".how-nav li").forEach((li, k) => li.onclick = () => {
-  const el = $("steps"); window.scrollTo({ top: el.offsetTop + (k + .5) / 3 * (el.offsetHeight - innerHeight) }); });
+  const el = $("steps"), y = el.offsetTop + (k + .5) / 3 * (el.offsetHeight - innerHeight);
+  lenis ? lenis.scrollTo(y) : window.scrollTo({ top: y }); });
 
 /* section 5: the feature in the middle of the screen lights up, and the demo card shows it */
 const efs = document.querySelectorAll(".ef"), dms = document.querySelectorAll(".dm");
@@ -960,8 +1023,8 @@ if (matchMedia("(min-width: 901px)").matches)
   document.querySelectorAll(".rv").forEach((c, i) => gsap.fromTo(c, { y: 60 + (i % 3) * 50 }, { y: -40 - (i % 3) * 40, ease: "none",
     scrollTrigger: { trigger: ".collage", start: "top bottom", end: "bottom top", scrub: true } }));
 
-gsap.from(".hero h1", { y: 40, opacity: 0, duration: 1, ease: "power3.out" });
-gsap.from(".hero .lead, .avail", { y: 20, opacity: 0, duration: .8, stagger: .1, delay: .2 });   // not the button: its hover transition fights the tween and it ends up on top of the line below
+gsap.from(".hero h1", { y: 40, opacity: 0, duration: 1, ease: "power3.out", delay: introDelay });
+gsap.from(".hero .lead, .avail", { y: 20, opacity: 0, duration: .8, stagger: .1, delay: .2 + introDelay });   // not the button: its hover transition fights the tween and it ends up on top of the line below
 /* the browser-tab icon beats with the footer logo: Chrome won't animate an SVG favicon by itself, so redraw it */
 const fav = document.querySelector('link[rel="icon"]'), FD = "M12 54 H30 L40 18 L55 84 L65 54 H88";
 let ft = 0;
@@ -973,6 +1036,89 @@ setInterval(() => {
     `<g fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="${FD}" stroke="#FF8A6B" stroke-width="9" transform="translate(0 54) scale(1 ${sy.toFixed(3)}) translate(0 -54)"/>` +
     `<path d="${FD}" stroke="#fff" stroke-width="7" pathLength="100" stroke-dasharray="14 100" stroke-dashoffset="${off.toFixed(1)}"/></g></svg>`);
 }, 90);
+
+/* the page animations; none of them with reduced motion. Start states are set from here, so nothing stays hidden if this fails */
+if (!still) {
+  /* section headings rise out of their line one word at a time, then go back to plain text (split once the fonts are in) */
+  document.fonts.ready.then(() => document.querySelectorAll("section h2").forEach(h => {
+    const sp = SplitText.create(h, { type: "words", mask: "words", wordsClass: "w" });
+    gsap.from(sp.words, { yPercent: 115, duration: .8, ease: "power3.out", stagger: .06, onComplete: () => sp.revert(),
+      scrollTrigger: { trigger: h, start: "top 88%" } });
+  }));
+
+  /* the phone's screen, the cards and the sky photo open out of a small rounded window. The window ends a little outside
+     each box, so the cards' hard shadows are never cut off */
+  document.querySelectorAll(".phone2 .screen, .how-card, .easy-demo, .fy-card, .deck, .final2 .sky").forEach(el => {
+    const r = parseFloat(getComputedStyle(el).borderTopLeftRadius) || 0;
+    gsap.fromTo(el, { clipPath: () => `inset(${el.offsetHeight * .3}px ${el.offsetWidth * .25}px round 48px)` },
+      { clipPath: `inset(-14px -14px round ${r + 14}px)`, duration: 1, ease: "power3.out", clearProps: "clipPath",
+        scrollTrigger: { trigger: el, start: "top 85%" } });
+  });
+
+  /* the demo video starts smaller and widens to full size as it scrolls in */
+  gsap.fromTo("#demo video", { scale: .8 }, { scale: 1, ease: "none",
+    scrollTrigger: { trigger: "#demo", start: "top bottom", end: "center 60%", scrub: .5 } });
+
+  /* a thin coral pulse across the top fills as you read, and beats where each section starts */
+  const line = document.createElement("div");
+  line.className = "readline"; line.setAttribute("aria-hidden", "true"); document.body.append(line);
+  let beats = [], read = 0;
+  function drawLine() {
+    const W = innerWidth, max = document.documentElement.scrollHeight - innerHeight || 1;
+    const at = [];
+    for (const s of document.querySelectorAll("body > section:not(.hero), footer")) {
+      const p = s.offsetTop / max;          // on phones, beats closer than 24 px would run into each other
+      if (p < .98 && (!at.length || (p - at.at(-1)) * W > 24)) at.push(p);
+    }
+    line.innerHTML = `<svg width="${W}" height="16"><path d="M0 10 H${W}"/>${at.map(p => `<path d="M${p * W - 12} 10 l5 -8 l6 13 l4 -5"/>`).join("")}</svg>`;
+    const spikes = line.querySelectorAll("path");
+    beats = at.map((p, i) => [p, spikes[i + 1], p * W]);
+  }
+
+  /* the menu bar hides on the way down and comes back on the way up; a pill slides to the menu link of the section you're in */
+  const nav = document.querySelector("nav"), secs = [...document.querySelectorAll("section[id]")];
+  const pills = [...nav.querySelectorAll(".seg, .links")].map(g => { const p = document.createElement("i"); p.className = "pill"; g.prepend(p); return [g, p]; });
+  let here, keepNav = 0;
+  function pillTo(force) {
+    const mid = innerHeight / 2, s = secs.find(x => { const r = x.getBoundingClientRect(); return r.top <= mid && r.bottom > mid; });
+    if (s === here && !force) return;
+    here = s;
+    pills.forEach(([g, p]) => {      // Reminders stands for the whole page except the medicine check
+      const a = (s && g.querySelector(`a[href="#${s.id}"]`)) || (g.matches(".seg") ? g.querySelector("a") : null);
+      p.style.opacity = a ? 1 : 0;
+      if (a) { p.style.width = a.offsetWidth + "px"; p.style.translate = a.offsetLeft + "px"; }
+    });
+  }
+
+  drawLine(); pillTo(true);
+  ScrollTrigger.addEventListener("refresh", () => { drawLine(); pillTo(true); });
+  ScrollTrigger.create({ start: 0, end: "max", onUpdate: st => {
+    line.style.clipPath = `inset(0 ${(1 - st.progress) * 100}% 0 0)`;
+    beats.forEach(([p, el, x]) => { if ((read < p) !== (st.progress < p))
+      gsap.fromTo(el, { scaleY: 2.2 }, { scaleY: 1, duration: .9, ease: "elastic.out(1, .35)", svgOrigin: `${x} 10` }); });
+    read = st.progress;
+    if (Date.now() > keepNav) nav.classList.toggle("away", st.direction > 0 && scrollY > 300);
+    pillTo();
+  } });
+
+  /* the menu's Reminders | Medicine check switch: a dark green panel sweeps across, the coral pulse beats once in the
+     middle, and the page is already there when the panel leaves */
+  document.querySelectorAll(".seg a").forEach(a => a.addEventListener("click", e => {
+    e.preventDefault(); e.stopPropagation();
+    const w = document.createElement("div"), to = a.getAttribute("href");
+    w.className = "wipe"; w.setAttribute("aria-hidden", "true");
+    w.innerHTML = `<svg viewBox="0 0 100 100"><path d="${FD}" pathLength="1"/></svg>`;
+    document.body.append(w);
+    const pulse = w.querySelector("svg");
+    gsap.timeline({ onComplete: () => w.remove() })
+      .fromTo(w, { xPercent: -100 }, { xPercent: 0, duration: .35, ease: "power3.in" })
+      .fromTo(w.querySelector("path"), { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: .3, ease: "power1.inOut" }, .2)
+      .add(() => { keepNav = Date.now() + 1000; nav.classList.remove("away"); lenis.scrollTo(to, { immediate: true, force: true }); }, .5)
+      .to(pulse, { scale: 1.2, duration: .12, ease: "power2.out" }, .5)
+      .to(pulse, { scale: 1, duration: .4, ease: "elastic.out(1, .4)" })
+      .to(w, { xPercent: 100, duration: .4, ease: "power3.out" }, .75);
+  }));
+}
 </script>
 <script src="touches.js"></script>
 </body></html>
