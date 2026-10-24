@@ -8,8 +8,9 @@
 /* grow: the coral button grows to fill the screen, then the app shows */
 html.vt-grow body { view-transition-name: cta; }
 html:active-view-transition-type(grow) {
-  &::view-transition-group(cta) { animation-duration: .6s; animation-timing-function: cubic-bezier(.65, 0, .25, 1);
-                                  background: #FFC7B5; border-radius: 12px; overflow: hidden; }
+  &::view-transition-group(cta) { animation-duration: .6s; animation-timing-function: cubic-bezier(.65, 0, .25, 1); }
+  /* the coral fill (the app's own snapshot is see-through), turning into the app's mint as the app fades in */
+  &::view-transition-image-pair(cta) { background: #FFC7B5; border-radius: 12px; overflow: hidden; animation: vt-paint .3s .45s both; }
   &::view-transition-old(cta) { animation: vt-out .12s both; }
   &::view-transition-new(cta) { animation: vt-in .3s .45s both; }
   &::view-transition-old(root) { animation: vt-out .2s .4s both; }
@@ -28,6 +29,7 @@ html:active-view-transition-type(back) {
   &::view-transition-new(root) { animation: vt-unsink .55s cubic-bezier(.2, .8, .2, 1) both; mix-blend-mode: normal; }
 }
 
+@keyframes vt-paint { to { background: #F2FAF5; border-radius: 0; } }
 @keyframes vt-in { from { opacity: 0; } }
 @keyframes vt-out { to { opacity: 0; } }
 @keyframes vt-rise { from { transform: translateY(100%); } }
