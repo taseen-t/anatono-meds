@@ -61,7 +61,7 @@
   @media (min-width: 900px) {
     body { height: 100vh; height: 100dvh; overflow: hidden; }
     .app { max-width: none; height: 100vh; height: 100dvh; padding: 16px 28px 22px; display: grid; grid-template-columns: minmax(400px, 480px) 1fr; gap: 32px; }
-    .side { min-height: 0; overflow-y: auto; padding: 0 10px 10px 2px; scrollbar-width: thin; }
+    .side { min-height: 0; overflow-y: auto; overflow-x: hidden; padding: 0 10px 10px 2px; scrollbar-width: thin; }
     .side .pick, .thumb { display: none; }
     .stage { display: grid; place-items: center; position: relative; min-height: 0; margin: 6px 0 5px; background: #fff; border: 2px solid var(--ink);
              border-radius: 22px; box-shadow: 0 5px 0 var(--ink); overflow: hidden; }
@@ -79,6 +79,20 @@
   .pulse { width: 46px; height: 30px; flex: none; }
   .pulse path { stroke-dasharray: 100; animation: trace 1.4s linear infinite; }
   @keyframes trace { from { stroke-dashoffset: 100; } to { stroke-dashoffset: -100; } }
+  /* while the AI reads: blank medicine cards that pulse (only added when motion is allowed) */
+  .skel { border-color: var(--sand); box-shadow: 0 5px 0 var(--sand); animation: skel .9s ease-in-out infinite alternate; }
+  .skel i { display: block; height: 14px; width: 40%; border-radius: 7px; background: var(--sand); margin-top: 10px; }
+  .skel i:first-child { height: 22px; width: 60%; margin-top: 0; }
+  .skel i:nth-child(3) { height: 26px; width: 28%; margin-top: 14px; }
+  .skel i:last-child { height: 84px; width: auto; border-radius: 14px; margin-top: 16px; }
+  @keyframes skel { to { opacity: .45; } }
+  /* the card deal-in (read results) and the beating check (saved) are Web Animations in the script. A tall card can tilt
+     past the edge while it deals in: this clip (and .side's on wide screens) keeps the page from scrolling sideways */
+  .app { overflow-x: clip; }
+  .saved-ok { position: relative; display: grid; flex: none; width: 28px; height: 28px; }
+  .saved-ok svg { position: relative; width: 100%; height: 100%; fill: none; stroke: var(--ink); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .saved-ok circle { fill: var(--mint); } .saved-ok path { stroke-width: 2.6; stroke-dasharray: 100; }
+  .saved-ok .ring { position: absolute; inset: 0; border-radius: 50%; border: 2px solid var(--ok); opacity: 0; }
   .med h3 { margin: 0; font: 700 21px Figtree; } .med .sub { color: var(--sub); font-size: 14px; margin-top: 2px; }
   .badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 11px; border-radius: 10px; font: 700 13px Figtree; margin-top: 12px; }
   .badge.ok { background: #DDF3E7; color: var(--ok); } .badge.careful { background: #FCEFD8; color: var(--warn); } .badge.stop { background: #FBE1DC; color: var(--stop); }
@@ -223,6 +237,9 @@ const FOOD = { before: "before food", after: "after food", with: "with food" };
 const describe = m => [m.amount, FOOD[m.food], m.days ? `for ${m.days} days` : ""].filter(Boolean).join(", ");
 const ampm = t => { const [h, m] = t.split(":").map(Number); return `${(h % 12) || 12}:${String(m).padStart(2, "0")} ${h < 12 ? "am" : "pm"}`; };
 const pulse = `<svg class="pulse" viewBox="0 0 46 30"><path d="M2 16 H12 L17 3 L25 27 L30 16 H44" pathLength="100" fill="none" stroke="#FF8A6B" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+const moving = !matchMedia("(prefers-reduced-motion: reduce)").matches;
+// while the AI reads, three blank medicine cards pulse under the reading line (in #tail, so the answer or an error replaces them)
+const skels = moving ? [0, .2, .4].map(d => `<div class="card skel" style="animation-delay:${d}s"><i></i><i></i><i></i><i></i></div>`).join("") : "";
 
 /* ---------- 1. a photo in (camera or gallery), shrunk on the phone before it's sent ---------- */
 async function shrink(file) {
@@ -240,7 +257,7 @@ async function readPhoto(dataUrl) {
   readPiece(0);
 }
 async function readPiece(n) {
-  $("tail").innerHTML = `<div class="reading">${pulse}<span>${ENG()} is reading ${n ? "the rest of the page" : "it"}. This can take a minute.</span></div>`;
+  $("tail").innerHTML = `<div class="reading">${pulse}<span>${ENG()} is reading ${n ? "the rest of the page" : "it"}. This can take a minute.</span></div>${skels}`;
   try {
     // medicines already read count as the routine, so the code can spot the same salt twice across parts
     const rt = routine.concat(found), key = `read:${engine}:${n}:${await sha(photo)}`;
@@ -252,6 +269,9 @@ async function readPiece(n) {
     const start = found.length;
     found.push(...fresh.map(([m]) => m));
     $("cards").insertAdjacentHTML("beforeend", fresh.map(([m, c], i) => medCard(m, c || { level: "ok", flags: [], good: [] }, start + i)).join(""));
+    // the new cards deal in one after another, like from a deck (the start state comes from here, so they can't stay hidden)
+    if (moving) fresh.forEach((_, i) => $(`med${start + i}`).animate([{ transform: "translateY(30px) rotate(-5deg)", opacity: 0 }, { transform: "none", opacity: 1 }],
+      { duration: 550, delay: i * 120, easing: "cubic-bezier(.2, .8, .2, 1)", fill: "backwards" }));
     const left = (r.pieces || 1) - n - 1;
     $("tail").innerHTML = left > 0 ? `<div class="more"><p>We read long prescriptions in parts only because ${ENG()}'s connection is slow right now.
         Part ${n + 1} of ${r.pieces} is done${fresh.length ? "" : " (no medicines in it)"}.</p>
@@ -352,7 +372,15 @@ function addToRoutine(i) {
   routine.push({ id: Date.now() + i, name: m.name, strength: m.strength || "", salt: m.salt || "", amount: p.amount || "", food: p.food,
                  days: p.days || null, as_needed: !!p.as_needed, times: [...new Set(p.times)].sort(), start: todayKey() });
   save("anatono.routine", routine);
-  $(`med${i}`).outerHTML = `<div class="card"><div class="row"><i data-lucide="circle-check"></i><b>${esc(m.name)} added.</b></div></div>`;
+  $(`med${i}`).outerHTML = `<div class="card" id="ok${i}"><div class="row"><span class="saved-ok"><span class="ring"></span>
+    <svg viewBox="0 0 28 28" aria-hidden="true"><circle cx="14" cy="14" r="12"/><path d="M8.5 14.5l3.8 3.8 7.2-8" pathLength="100"/></svg></span><b>${esc(m.name)} added.</b></div></div>`;
+  // the check draws itself in its circle, then the circle beats once while a ring spreads out behind it
+  if (moving) {
+    const [ring, svg] = $(`ok${i}`).querySelector(".saved-ok").children;
+    svg.querySelector("path").animate([{ strokeDashoffset: "100" }, { strokeDashoffset: "0" }], { duration: 400, delay: 100, easing: "ease-out", fill: "backwards" });
+    svg.animate([{ transform: "scale(1)" }, { transform: "scale(1.18)" }, { transform: "scale(.96)" }, { transform: "scale(1)" }], { duration: 450, delay: 500, easing: "ease-in-out" });
+    ring.animate([{ transform: "scale(1)", opacity: .8 }, { transform: "scale(2.2)", opacity: 0 }], { duration: 700, delay: 500, easing: "ease-out" });
+  }
   icons(); render(); toast(`${m.name} added to your routine`);
 }
 function dropMed(id) { routine = routine.filter(r => r.id !== id); save("anatono.routine", routine); render(); }

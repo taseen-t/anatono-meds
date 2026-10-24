@@ -1,2 +1,14 @@
-/* Small touches on the landing page (buttons shine and press, magnetic buttons, the mascot watching the pointer).
-   Being built by the terminal Claude: see the handover note. */
+/* Small touches on the landing page: a light sweeps across a button once on hover, and it squishes a little when pressed.
+   They use the separate `scale` and `translate` properties (translate is the magnetic pull from touches.js), because
+   `.btn:hover` already uses `transform` for its lift. The transition restates the page's own transform and box-shadow ones.
+   Nothing here with reduced motion. */
+@media (prefers-reduced-motion: no-preference) {
+  .btn { position: relative; overflow: hidden;
+         transition: transform .2s, box-shadow .2s, scale .12s, translate var(--pull, .5s cubic-bezier(.3, 1.6, .5, 1)); }
+  .btn:hover { --pull: .15s ease-out; }            /* follows the pointer quickly, springs back slowly */
+  .btn:active { scale: .95; }
+  .btn::after { content: ""; position: absolute; top: -2px; bottom: -2px; left: -45%; width: 30%; background: rgba(255, 255, 255, .5);
+                transform: skewX(-20deg); pointer-events: none; }
+  @media (hover: hover) { .btn:hover::after { animation: shine .65s ease-out; } }
+  @keyframes shine { to { translate: 600%; } }     /* 6 of its own widths: from left of the button to past its right edge */
+}
