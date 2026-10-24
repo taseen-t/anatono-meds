@@ -26,12 +26,6 @@ Made by **Taseen Tariq** at Hack Day Faisalabad, 23 October 2026.
 
 ## How it works
 
-```
-photo (camera or gallery) ──► Gemma 4 reads it ──► code checks it ──► the person sees what was read + any warnings
-"subah aur raat khane ke baad" ──► Gemma 4 understands it ──► code turns it into times and days ──► the person confirms
-                                                                  └──► reminders: on the phone + calendar alarms (.ics)
-```
-
 1. **Read.** Gemma 4 reads the name, salt, strength, maker, batch, dates and registration number off a pack, or every
    line of a handwritten prescription, plus what each medicine is for in English and Urdu.
 2. **Check.** Code, not the model, decides `ok` / `careful` / `stop`. An expired medicine gets no reminders.
@@ -40,12 +34,107 @@ photo (camera or gallery) ──► Gemma 4 reads it ──► code checks it �
 4. **Confirm and remind.** Nothing is saved until the person taps "Add to my routine". Reminders show in the app and go
    into the phone's own calendar, so they ring even when the app is closed.
 
+### The complete flow
+
+Colours show where each step runs: **on the phone**, **plain code on the server** (`anatono.py`), or **a Google
+model**. The model only reads and understands; code makes every decision.
+
+```mermaid
+flowchart TD
+  start(["Open the app"]) --> src{"How do you add a medicine?"}
+  src -->|"Take a photo · From gallery · Try a sample"| shrink["Photo shrunk to 1600 px,<br/>SHA-256 of the photo"]
+  src -->|"No photo? Type the name"| typed["A card from the typed name"]
+  shrink --> seen{"Read this photo before?"}
+  seen -->|"yes"| cached["Send what was read,<br/>not the photo"]
+  seen -->|"no"| tall{"A tall page?<br/>(a full prescription)"}
+  tall -->|"yes"| cut["Cut into 2 overlapping halves,<br/>read part 1 first"]
+  tall -->|"no"| read
+  cut --> read["Gemma 4 reads it:<br/>name, salt, strength, maker, batch,<br/>dates, reg. no., dose as written"]
+  read --> checks
+  cached --> checks["Code checks each medicine:<br/>expired? made-on after expiry?<br/>batch, expiry, maker, reg. no. printed?<br/>same salt as your routine? warning signs?"]
+  checks --> level{"Level, set by code"}
+  checks -.-> explain["Gemma 4: what it's for,<br/>in English and Urdu"]
+  explain -.-> cards
+  level -->|"stop: expired, or 3+ cautions"| stopc["Don't take this one.<br/>Show it to your pharmacist.<br/>No dose form, no reminders"]
+  level -->|"careful"| cards["A card per medicine,<br/>with the reasons"]
+  level -->|"ok"| cards
+  cards --> more{"More of a long<br/>prescription left?"}
+  more -->|"Read the remaining medicines"| read
+  more -->|"no"| how
+  typed --> how{"How do you take it?<br/>English, Urdu, Roman Urdu"}
+  how -->|"type it"| understand
+  how -->|"tap the mic"| hear["Gemini Flash-Lite writes down<br/>the words, nothing more"]
+  hear --> understand["Gemma 4 understands it:<br/>amount, times, food, days,<br/>only when needed"]
+  understand --> dosecheck["Code: morning 8:00, afternoon 14:00,<br/>evening 18:00, night 21:00;<br/>1+0+1 cross-checked; max 6 a day;<br/>1-365 days; notes on anything unclear"]
+  dosecheck --> confirm["You see what was understood<br/>and can change the times"]
+  confirm -->|"Add to my routine"| saved[("Saved on this phone<br/>(nothing is saved before this tap)")]
+  saved --> today["Today: a tick per dose,<br/>the next dose"]
+  saved --> ics["Add to my calendar:<br/>.ics alarms that ring<br/>with the app closed"]
+  saved --> alerts["Alerts while<br/>Anatono is open"]
+
+  classDef phone fill:#E1EEE6,stroke:#0B3B36,color:#0B3B36
+  classDef code fill:#FFE7A8,stroke:#0B3B36,color:#0B3B36
+  classDef model fill:#FFC7B5,stroke:#0B3B36,color:#0B3B36
+  classDef stop fill:#FBE1DC,stroke:#C2412D,color:#C2412D
+  class start,src,shrink,typed,seen,cached,cards,more,how,confirm,saved,today,ics,alerts phone
+  class tall,cut,checks,level,dosecheck code
+  class read,explain,hear,understand model
+  class stopc stop
+```
+
 ### Read once, not twice
 
 A prescription that was already read isn't sent to the model again. The phone keeps what was read (keyed by a SHA-256
 of the photo and the part), and the server keeps every answer in memory too. On a repeat, only the code
 checks run again, because they depend on today's date and on what's already in the routine. Typed doses and the
 "what is it for" lines are kept the same way.
+
+## Architecture
+
+```mermaid
+flowchart LR
+  subgraph phone["On the phone"]
+    app["Web app<br/>site/app.html"]
+    apk["Android app<br/>anatono.apk<br/>(Trusted Web Activity)"]
+    ios["Native iPhone app<br/>(SwiftUI, same API)"]
+    store[("localStorage:<br/>routine, ticks,<br/>what was read")]
+    cal["Phone calendar<br/>(.ics alarms)"]
+  end
+
+  subgraph vercel["anatono.site on Vercel"]
+    static["Static files: site/<br/>landing page, app,<br/>demo video, APK"]
+    server["server.py (Starlette)<br/>POST /api/read<br/>POST /api/explain<br/>POST /api/dose<br/>POST /api/calendar"]
+    core["anatono.py<br/>ask(): one call per question,<br/>answers kept in memory<br/>checks · dose rules · .ics"]
+  end
+
+  subgraph google["Google Gemini API"]
+    gemma["Gemma 4<br/>gemma-4-26b-a4b-it<br/>(31b only as a fallback)"]
+    lite["Gemini Flash-Lite<br/>voice notes to words only"]
+  end
+
+  skill["Agent skill<br/>skills/anatono-nuskha"]
+
+  apk -->|"opens"| app
+  static -->|"served to"| app
+  app <-->|"read / save"| store
+  app -->|"photo, dose, routine (JSON)"| server
+  ios -->|"same JSON"| server
+  server --> core
+  server -->|"anatono-reminders.ics"| cal
+  skill -->|"imports"| core
+  core -->|"photos, typed doses"| gemma
+  core -->|"recordings"| lite
+```
+
+- **The phone keeps everything personal.** The routine, the ticks and what was read live in the browser's
+  `localStorage`; there is no account and no database.
+- **The server holds the key and the rules.** `GEMINI_API_KEY` is a Vercel environment variable, so the browser never
+  sees it. `server.py` is a thin layer of four routes; `anatono.py` has the prompts, the model calls, the code checks,
+  the dose rules and the calendar file.
+- **The model reads, the code decides.** Gemma 4 turns a photo or a sentence into JSON. `check_medicine()` and
+  `check_dose()` in plain Python decide `ok` / `careful` / `stop` and the exact reminder times, so a wrong guess by the
+  model can't quietly become a wrong dose.
+- **The agent skill** runs the same pipeline from the command line (photo in, checks and `.ics` out), no server needed.
 
 ## Run it
 
