@@ -558,7 +558,7 @@
     <p class="lead">Typing in every medicine, strength, time and day by hand takes about ten minutes. With Anatono it's one photo and one sentence.</p>
   </div>
   <div class="demo2 reveal" id="demo">
-    <video controls playsinline preload="metadata" poster="demo-poster.jpg">
+    <video controls muted loop playsinline preload="metadata" poster="demo-poster.jpg">
       <source src="demo.mp4" type="video/mp4"><track kind="captions" src="demo.vtt" srclang="en" label="English">
     </video>
     <small>See it work: a real run of the app, in under 30 seconds.</small>
@@ -865,6 +865,11 @@ const band = [["si:googlecalendar", "Google Calendar"], ["si:apple", "Apple Cale
               ["si:protoncalendar", "Proton Calendar"], ["si:android", "Android"], ["si:apple", "iPhone"], ["si:googlechrome", "Chrome"], ["si:safari", "Safari"]];
 $("track").innerHTML = [...band, ...band, ...band, ...band].map(([i, s]) => i.startsWith("si:")
   ? `<span><b class="brand" style="--i:url(${SI}${i.slice(3)}.svg)"></b>${s}</span>` : `<span><i data-lucide="${i}"></i>${s}</span>`).join("");
+
+/* section 3: the demo plays by itself, muted, while it's on screen (with reduced motion it waits for a tap on play) */
+const demoVideo = document.querySelector("#demo video");
+if (!matchMedia("(prefers-reduced-motion: reduce)").matches)
+  new IntersectionObserver(([e]) => e.isIntersecting ? demoVideo.play().catch(() => {}) : demoVideo.pause(), { threshold: .5 }).observe(demoVideo);
 
 /* section 6: made for you. Each group has an icon, a line, and a sample reminder; it rotates until someone taps a tag */
 const groups = [
