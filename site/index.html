@@ -63,7 +63,7 @@
   @keyframes glint { 0% { stroke-dashoffset: 10; } 45%, 100% { stroke-dashoffset: -100; } }
   @keyframes beat { 0%, 12%, 32%, 100% { transform: scaleY(1); } 17% { transform: scaleY(1.14); } 22% { transform: scaleY(.92); } 27% { transform: scaleY(1.07); } }
   @media (prefers-reduced-motion: reduce) { footer .glint, footer .beat { animation: none; } footer .glint { display: none; } }
-  footer svg.word { display: block; width: min(100%, 1100px); height: auto; margin: 60px auto 0; }
+  footer svg.word { display: block; width: min(100%, 1100px); height: auto; margin: 60px auto 0; overflow: visible; }   /* the beat stretches the spike past the viewBox */
   .seg { display: flex; background: color-mix(in srgb, var(--ink) 8%, transparent); border-radius: 10px; padding: 3px; }
   .seg a { font: 600 13px Figtree; padding: 7px 12px; border-radius: 8px; }
   .seg:not(:has(.pill)) a:first-child { background: var(--bg); box-shadow: 0 1px 2px rgba(0,0,0,.08); }
@@ -552,7 +552,7 @@ try {
   <a class="logo" href="#"><svg class="wm vt-logo" viewBox="4 18 532 154" role="img" aria-label="Anatono"><use href="#wordmark"/></svg></a>
   <div class="seg"><a href="#hero">Reminders</a><a href="#check">Medicine check</a></div>
   <div class="links"><a href="#foryou">Families</a><a href="#how">How it works</a><a href="#faq">FAQ</a></div>
-  <a class="btn sm" href="app.html"><i data-lucide="smartphone"></i>Get Anatono</a>
+  <a class="btn sm" href="app.html"><i data-lucide="globe"></i>Try on web</a>
 </nav>
 
 <!-- HERO -->
